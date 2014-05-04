@@ -8,16 +8,16 @@ import javax.microedition.khronos.opengles.GL10;
 
 class Paddle {
     private float posX = 0.0f;
-    private float posY = 0.0f;
+    private float posY = -0.7f;
 
     private FloatBuffer vertexBuffer;
     private FloatBuffer colorBuffer;
     
     private static final float[] vertices = {
-        -1.0f, -1.0f,
-        -1.0f,  1.0f,
-         1.0f, -1.0f,
-         1.0f,  1.0f,
+        -1.0f, -0.2f, // bottom left
+        -1.0f,  0.2f, // top left
+         1.0f, -0.2f, // bottom right
+         1.0f,  0.2f, // top right
     };
     
     private static final float[] colors = {
@@ -60,7 +60,7 @@ class Paddle {
         gl.glPushMatrix();
         gl.glLoadIdentity();
         gl.glTranslatef( posX, posY, 0.0f );
-        gl.glScalef( 0.5f, 0.5f, 0.5f );
+        gl.glScalef( 0.1f, 0.1f, 0.1f );
 
         gl.glEnableClientState( GL10.GL_VERTEX_ARRAY );
         gl.glEnableClientState( GL10.GL_COLOR_ARRAY );
