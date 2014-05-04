@@ -6,21 +6,21 @@ import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
-class Paddle {
-    private float posX = 0.0f;
-    private float posY = -0.7f;
+class Quad {
+    private float mPosX = 0.0f;
+    private float mPosY = -0.7f;
 
-    private FloatBuffer vertexBuffer;
-    private FloatBuffer colorBuffer;
+    private FloatBuffer mVertexBuffer;
+    private FloatBuffer mColorBuffer;
     
-    private static final float[] vertices = {
+    private static final float[] mVertices = {
         -1.0f, -0.2f, // bottom left
         -1.0f,  0.2f, // top left
          1.0f, -0.2f, // bottom right
          1.0f,  0.2f, // top right
     };
     
-    private static final float[] colors = {
+    private static final float[] mColors = {
         0.0f,  0.0f,  0.0f,  1.0f,
         1.0f,  0.0f,  0.0f,  1.0f,
         0.0f,  0.0f,  1.0f,  1.0f,
@@ -30,28 +30,28 @@ class Paddle {
     private static final int FLOAT_SIZE_BYTES = Float.SIZE / 8;
     
     
-    public Paddle() {
-        ByteBuffer vbb = ByteBuffer.allocateDirect( vertices.length * FLOAT_SIZE_BYTES );
+    public Quad() {
+        ByteBuffer vbb = ByteBuffer.allocateDirect( mVertices.length * FLOAT_SIZE_BYTES );
         vbb.order( ByteOrder.nativeOrder() );
-        vertexBuffer = vbb.asFloatBuffer();
-        vertexBuffer.put( vertices );
-        vertexBuffer.position( 0 );
+        mVertexBuffer = vbb.asFloatBuffer();
+        mVertexBuffer.put( mVertices );
+        mVertexBuffer.position( 0 );
 
-        ByteBuffer cbb = ByteBuffer.allocateDirect( colors.length * FLOAT_SIZE_BYTES );
+        ByteBuffer cbb = ByteBuffer.allocateDirect( mColors.length * FLOAT_SIZE_BYTES );
         cbb.order( ByteOrder.nativeOrder() );
-        colorBuffer = cbb.asFloatBuffer();
-        colorBuffer.put( colors );
-        colorBuffer.position( 0 );
+        mColorBuffer = cbb.asFloatBuffer();
+        mColorBuffer.put( mColors );
+        mColorBuffer.position( 0 );
     }
     
     
     public void setPosition( float x, float y ) {
-        this.posX = x;
-        this.posY = y;
+        this.mPosX = x;
+        this.mPosY = y;
     }
     
     public void setXPosition( float x) {
-    	this.posX = x;
+    	this.mPosX = x;
     }
 
 
@@ -59,14 +59,14 @@ class Paddle {
         gl.glMatrixMode( GL10.GL_MODELVIEW );
         gl.glPushMatrix();
         gl.glLoadIdentity();
-        gl.glTranslatef( posX, posY, 0.0f );
+        gl.glTranslatef( mPosX, mPosY, 0.0f );
         gl.glScalef( 0.1f, 0.1f, 0.1f );
 
         gl.glEnableClientState( GL10.GL_VERTEX_ARRAY );
         gl.glEnableClientState( GL10.GL_COLOR_ARRAY );
         
-        gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, vertexBuffer );
-        gl.glColorPointer( 4, GL10.GL_FLOAT, 0, colorBuffer );
+        gl.glVertexPointer( 2, GL10.GL_FLOAT, 0, mVertexBuffer );
+        gl.glColorPointer( 4, GL10.GL_FLOAT, 0, mColorBuffer );
         
         gl.glDrawArrays( GL10.GL_TRIANGLE_STRIP, 0, 4 );
         
