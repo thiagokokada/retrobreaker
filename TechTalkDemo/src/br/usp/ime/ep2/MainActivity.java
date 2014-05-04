@@ -1,4 +1,4 @@
-package com.demo;
+package br.usp.ime.ep2;
 
 import android.app.Activity;
 import android.opengl.GLSurfaceView;

@@ -1,4 +1,4 @@
-package com.demo;
+package br.usp.ime.ep2;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -22,11 +22,11 @@ class TouchSurfaceView extends GLSurfaceView {
 
     private class Renderer implements GLSurfaceView.Renderer {
 
-        private Quad quad;
+        private Paddle quad;
 
 
         public Renderer() {
-            quad = new Quad();
+            quad = new Paddle();
         }
 
 
@@ -69,7 +69,7 @@ class TouchSurfaceView extends GLSurfaceView {
             queueEvent( new Runnable() {
                 @Override
                 public void run() {
-                    quad.setPosition( x, y );
+                    quad.setXPosition( x );
                 }
             } );
         }

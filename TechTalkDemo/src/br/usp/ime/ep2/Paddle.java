@@ -1,4 +1,4 @@
-package com.demo;
+package br.usp.ime.ep2;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -6,7 +6,7 @@ import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
-class Quad {
+class Paddle {
     private float posX = 0.0f;
     private float posY = 0.0f;
 
@@ -30,7 +30,7 @@ class Quad {
     private static final int FLOAT_SIZE_BYTES = Float.SIZE / 8;
     
     
-    public Quad() {
+    public Paddle() {
         ByteBuffer vbb = ByteBuffer.allocateDirect( vertices.length * FLOAT_SIZE_BYTES );
         vbb.order( ByteOrder.nativeOrder() );
         vertexBuffer = vbb.asFloatBuffer();
@@ -48,6 +48,10 @@ class Quad {
     public void setPosition( float x, float y ) {
         this.posX = x;
         this.posY = y;
+    }
+    
+    public void setXPosition( float x) {
+    	this.posX = x;
     }
 
 
