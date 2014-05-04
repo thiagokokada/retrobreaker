@@ -19,21 +19,33 @@ class TouchSurfaceView extends GLSurfaceView {
     private float[] mUnprojectViewMatrix = new float[16];
     private float[] mUnprojectProjMatrix = new float[16];
     
-
     private class Renderer implements GLSurfaceView.Renderer {
 
-        private Quad quad;
+        private Quad mPaddle;
 
+        private final float[] paddle_vertices = {
+            -1.0f, -0.2f, // bottom left
+            -1.0f,  0.2f, // top left
+             1.0f, -0.2f, // bottom right
+             1.0f,  0.2f, // top right
+        };
+        
+        private final float[] initial_colors = {
+            0.0f,  0.0f,  0.0f,  1.0f,
+            1.0f,  0.0f,  0.0f,  1.0f,
+            0.0f,  0.0f,  1.0f,  1.0f,
+            0.0f,  1.0f,  0.0f,  1.0f,
+        };
 
         public Renderer() {
-            quad = new Quad();
+            mPaddle = new Quad(paddle_vertices, initial_colors, 0.0f, -0.7f, 0.1f);
         }
 
 
         @Override
         public void onDrawFrame( GL10 gl ) {
             gl.glClear( GL10.GL_COLOR_BUFFER_BIT );
-            quad.draw( gl );
+            mPaddle.draw( gl );
         }
 
 
@@ -69,7 +81,7 @@ class TouchSurfaceView extends GLSurfaceView {
             queueEvent( new Runnable() {
                 @Override
                 public void run() {
-                    quad.setXPosition( x );
+                    mPaddle.setXPosition( x );
                 }
             } );
         }

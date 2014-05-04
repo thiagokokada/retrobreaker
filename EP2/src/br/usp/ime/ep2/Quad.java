@@ -7,30 +7,25 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 class Quad {
-    private float mPosX = 0.0f;
-    private float mPosY = -0.7f;
-
+    private float mPosX;
+    private float mPosY;
+    private float mScale;
+    private float[] mVertices;
+    private float[] mColors; 
+    
     private FloatBuffer mVertexBuffer;
     private FloatBuffer mColorBuffer;
-    
-    private static final float[] mVertices = {
-        -1.0f, -0.2f, // bottom left
-        -1.0f,  0.2f, // top left
-         1.0f, -0.2f, // bottom right
-         1.0f,  0.2f, // top right
-    };
-    
-    private static final float[] mColors = {
-        0.0f,  0.0f,  0.0f,  1.0f,
-        1.0f,  0.0f,  0.0f,  1.0f,
-        0.0f,  0.0f,  1.0f,  1.0f,
-        0.0f,  1.0f,  0.0f,  1.0f,
-    };
     
     private static final int FLOAT_SIZE_BYTES = Float.SIZE / 8;
     
     
-    public Quad() {
+    public Quad(float[] vertices, float[] colors, float pos_x, float pos_y ,float scale) {
+    	mVertices = vertices;
+    	mColors = colors;
+    	mPosX = pos_x;
+    	mPosY = pos_y;
+    	mScale = scale;
+    	
         ByteBuffer vbb = ByteBuffer.allocateDirect( mVertices.length * FLOAT_SIZE_BYTES );
         vbb.order( ByteOrder.nativeOrder() );
         mVertexBuffer = vbb.asFloatBuffer();
@@ -60,7 +55,7 @@ class Quad {
         gl.glPushMatrix();
         gl.glLoadIdentity();
         gl.glTranslatef( mPosX, mPosY, 0.0f );
-        gl.glScalef( 0.1f, 0.1f, 0.1f );
+        gl.glScalef( mScale, mScale, mScale );
 
         gl.glEnableClientState( GL10.GL_VERTEX_ARRAY );
         gl.glEnableClientState( GL10.GL_COLOR_ARRAY );
