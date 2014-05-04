@@ -3,6 +3,9 @@ package br.usp.ime.ep2;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import br.usp.ime.ep2.Constants.Colors;
+import br.usp.ime.ep2.Constants.Forms;
+
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
@@ -23,22 +26,9 @@ class TouchSurfaceView extends GLSurfaceView {
 
 		private Quad mPaddle;
 
-		private final float[] paddle_vertices = {
-				-1.0f, -0.2f, // bottom left
-				-1.0f,  0.2f, // top left
-				1.0f, -0.2f, // bottom right
-				1.0f,  0.2f, // top right
-		};
-
-		private final float[] initial_colors = {
-				0.0f,  0.0f,  0.0f,  1.0f,
-				1.0f,  0.0f,  0.0f,  1.0f,
-				0.0f,  0.0f,  1.0f,  1.0f,
-				0.0f,  1.0f,  0.0f,  1.0f,
-		};
 
 		public Renderer() {
-			mPaddle = new Quad(paddle_vertices, initial_colors, 0.0f, -0.7f, 0.1f);
+			mPaddle = new Quad(Forms.PADDLE, Colors.RAINBOW, 0.0f, -0.7f, 0.1f);
 		}
 
 		@Override
