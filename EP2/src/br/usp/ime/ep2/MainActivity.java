@@ -6,31 +6,28 @@ import android.os.Bundle;
 
 public class MainActivity extends Activity {
 
-    private GLSurfaceView mGlSurfaceView;
+	private GLSurfaceView mGlSurfaceView;
 
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-    @Override
-    protected void onCreate( Bundle savedInstanceState ) {
-        super.onCreate( savedInstanceState );
+		mGlSurfaceView = new TouchSurfaceView(this);
+		setContentView(mGlSurfaceView);
 
-        mGlSurfaceView = new TouchSurfaceView( this );
-        setContentView( mGlSurfaceView );
-        
-        mGlSurfaceView.requestFocus();
-        mGlSurfaceView.setFocusableInTouchMode( true );
-    }
+		mGlSurfaceView.requestFocus();
+		mGlSurfaceView.setFocusableInTouchMode(true);
+	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		mGlSurfaceView.onResume();
+	}
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mGlSurfaceView.onResume();
-    }
-
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mGlSurfaceView.onPause();
-    }
+	@Override
+	protected void onPause() {
+		super.onPause();
+		mGlSurfaceView.onPause();
+	}
 }
