@@ -10,9 +10,12 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
 import android.opengl.Matrix;
+import android.util.Log;
 import android.view.MotionEvent;
 
 class TouchSurfaceView extends GLSurfaceView {
+	
+	private static final String TAG = TouchSurfaceView.class.getSimpleName();
 
 	private Renderer mRenderer;
 
@@ -25,16 +28,23 @@ class TouchSurfaceView extends GLSurfaceView {
 	private class Renderer implements GLSurfaceView.Renderer {
 
 		private Quad mPaddle;
-
+		private Quad[][] mBlocks;
 
 		public Renderer() {
+			//TODO: Get the width/height values automatically
 			mPaddle = new Quad(Forms.PADDLE, Colors.RAINBOW, 0.0f, -0.7f, 0.1f);
+			mBlocks = Utils.createLevel(8, 12, -0.55f, 0.7f, 0.1f, 0.04f);
 		}
 
 		@Override
 		public void onDrawFrame(GL10 gl) {
 			gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 			mPaddle.draw(gl);
+			for (int i=0; i<mBlocks.length; i++) {
+				for (int j=0; j<mBlocks[i].length; j++) {
+					mBlocks[i][j].draw(gl);
+				}
+			}
 		}
 
 		@Override
