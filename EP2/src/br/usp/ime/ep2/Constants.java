@@ -10,6 +10,13 @@ public class Constants {
 				1.0f, -0.2f, // bottom right
 				1.0f,  0.2f, // top right
 		};
+		
+		public static final float[] BALL = {
+			-0.25f, -0.25f, // bottom left
+			-0.25f,  0.25f, // top left
+			0.25f, -0.25f, // bottom right
+			0.25f,  0.25f, // top right
+	};
 
 	}
 	
