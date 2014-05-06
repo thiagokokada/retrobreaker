@@ -2,12 +2,7 @@ package br.usp.ime.ep2;
 
 public class Constants {
 	
-	public static final float SCREEN_LOWER_X = -1.0f;
-	public static final float SCREEN_HIGHER_X = 1.0f;
-	public static final float SCREEN_LOWER_Y = -1.0f;
-	public static final float SCREEN_HIGHER_Y = 1.0f;
-	
-	public static final int MS_PER_FRAME = 100;
+	public static final int MS_PER_FRAME = 300;
 	public static final int NANOS_PER_MS = 1000000;
 	
 	public static final class Forms {

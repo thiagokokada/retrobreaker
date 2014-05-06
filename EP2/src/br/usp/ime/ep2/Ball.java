@@ -6,8 +6,8 @@ public class Ball extends Quad {
 	private static final String TAG = Ball.class.getSimpleName();
 	
 	//only for ball (to calculate the trajectory)
-	private float mLastPosX;
-	private float mLastPosY;
+	private float mPrevPosX;
+	private float mPrevPosY;
 	//for the trajectory equation
 	private float mSlope;
 	private float mTrajectoryIncrement = 0.05f;
@@ -18,12 +18,20 @@ public class Ball extends Quad {
 			float last_x, float last_y, float scale) {
 		super(vertices, colors, pos_x, pos_y, scale);
 		
-		this.mLastPosX = last_x;
-		this.mLastPosY = last_y;
+		this.mPrevPosX = last_x;
+		this.mPrevPosY = last_y;
 		
-		mSlope = (mPosY - mLastPosY)/(mPosX - mLastPosX);
+		mSlope = (mPosY - mPrevPosY)/(mPosX - mPrevPosX);
 		
 		mPrevCurrentTime = 0;
+	}
+	
+	public float getXPos() {
+		return mPosX;
+	}
+	
+	public float getYPos() {
+		return mPosY;
 	}
 	
 	private float getYinEquation(float x2) {
@@ -35,46 +43,43 @@ public class Ball extends Quad {
 		return  (y2 - mPosY)/mSlope + mPosX;
 	}
 	
-	public boolean move() {
-		Log.i(TAG, "prevX: "+mPosX+", prevY: "+mPosY);
-		if ((mPosX > mLastPosX) && (mPosY > mLastPosY)) {//right upward
-			mLastPosX = mPosX;
-			mLastPosY = mPosY;
+	public void turnToPerpendicularDirection(boolean hitedSide) {
+		mSlope = -1 * (1/mSlope);
+		if (hitedSide) {//right or left side
+			mPrevPosX = getXinEquation(mPrevPosY);
+		} else { //top or bottom
+			mPrevPosY = getYinEquation(mPrevPosX);
+		}
+	}
+	
+	public void move() {
+//		Log.i(TAG, "prevX: "+mPosX+", prevY: "+mPosY);
+		if ((mPosX > mPrevPosX) && (mPosY > mPrevPosY)) {//right upward
+			mPrevPosX = mPosX;
+			mPrevPosY = mPosY;
 			float x2 = mPosX + mTrajectoryIncrement;
 			mPosY = getYinEquation(x2);
 			mPosX = x2;
-		} else if ((mPosX < mLastPosX) && (mPosY > mLastPosY)) {//left upward
-			mLastPosX = mPosX;
-			mLastPosY = mPosY;
+		} else if ((mPosX < mPrevPosX) && (mPosY > mPrevPosY)) {//left upward
+			mPrevPosX = mPosX;
+			mPrevPosY = mPosY;
 			float x2 = mPosX - mTrajectoryIncrement;
 			mPosY = getYinEquation(x2);	
 			mPosX = x2;
-		} else if ((mPosX < mLastPosX) && (mPosY < mLastPosY)) {//left downward
-			mLastPosX = mPosX;
-			mLastPosY = mPosY;
+		} else if ((mPosX < mPrevPosX) && (mPosY < mPrevPosY)) {//left downward
+			mPrevPosX = mPosX;
+			mPrevPosY = mPosY;
 			float x2 = mPosX - mTrajectoryIncrement;
 			mPosY = getYinEquation(x2);
 			mPosX = x2;
-		} else if ((mPosX > mLastPosX) && (mPosY < mLastPosY)) {//right downward
-			mLastPosX = mPosX;
-			mLastPosY = mPosY;
+		} else if ((mPosX > mPrevPosX) && (mPosY < mPrevPosY)) {//right downward
+			mPrevPosX = mPosX;
+			mPrevPosY = mPosY;
 			float x2 = mPosX + mTrajectoryIncrement;
 			mPosY = getYinEquation(x2);
 			mPosX = x2;
 		}
-		Log.i(TAG, "currentX: "+mPosX+", currentY: "+mPosY);
-		
-		return !detectColision();
-	}
-	
-	private boolean detectColision() {
-		if ((mPosX > Constants.SCREEN_HIGHER_X) //collided in the right side
-				|| (mPosX < Constants.SCREEN_LOWER_X) //collided in the left side 
-				|| (mPosY > Constants.SCREEN_HIGHER_Y) //collided in the top side
-				|| (mPosY < Constants.SCREEN_LOWER_Y)) {//collided in the bottom side
-			return true;
-		}
-		return false;
+//		Log.i(TAG, "currentX: "+mPosX+", currentY: "+mPosY);
 	}
 
 }

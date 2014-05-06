@@ -8,6 +8,13 @@ import android.util.Log;
 
 public class Game {
 	private static final String TAG = Game.class.getSimpleName();
+
+	private static final int SCREEN_INITIAL_X = 0;
+	private static final int SCREEN_INITIAL_Y = 0;
+	private float SCREEN_HIGHER_Y;
+	private float SCREEN_LOWER_Y;
+	private float SCREEN_HIGHER_X;
+	private float SCREEN_LOWER_X;
 	
 	private long mPrevCurrentBeginFrameTime;
 	
@@ -15,6 +22,11 @@ public class Game {
 	private Ball mBall;
 	
 	public Game() {
+		SCREEN_HIGHER_Y = 1.0f;
+		SCREEN_LOWER_Y = -1.0f;
+		SCREEN_HIGHER_X = 1.0f;
+		SCREEN_LOWER_X = -1.0f;		
+		
 		resetElements();
 	}
 	
@@ -44,14 +56,43 @@ public class Game {
 		
 		mCurrentBeginFrameTime = System.nanoTime();
 		double elapsedTime = (mCurrentBeginFrameTime - mPrevCurrentBeginFrameTime)/Constants.NANOS_PER_MS;
-		Log.i(TAG, "elapsedTime: "+elapsedTime);
+//		Log.i(TAG, "elapsedTime: "+elapsedTime);
 		if (elapsedTime < Constants.MS_PER_FRAME)//it doesn't reach next frame yet
 			return;
 		
 		//Now it's time to update next frame. 
 		//I'm considering the ball is being updated in the same rate as the frame.
 		mBall.move();
+		detectColision();
 		
 		mPrevCurrentBeginFrameTime = mCurrentBeginFrameTime;
+	}
+	
+	private boolean detectColision() {
+		boolean result = false;
+		
+		float ballXPos = mBall.getXPos();
+		float ballYPos = mBall.getYPos();
+		
+		//detecting collision between ball and wall
+		if ((ballXPos > SCREEN_HIGHER_X) 			//collided in the right side
+				|| (ballXPos < SCREEN_LOWER_X)) {	//collided in the left side 
+			mBall.turnToPerpendicularDirection(true);
+			result = true;
+		} else if ((ballYPos > SCREEN_HIGHER_Y)	//collided in the top part
+				|| (ballYPos < SCREEN_LOWER_Y)) {	//collided in the bottom part
+			mBall.turnToPerpendicularDirection(false);
+			result = true;
+		}
+		return result;
+	}
+
+	public void updateScreenMeasures(float screenWidth, float screenHeight) {
+		Log.i(TAG, "screenWidth: "+screenWidth+", screenHeight: "+screenHeight);
+		SCREEN_LOWER_X = SCREEN_INITIAL_X - screenWidth/2;
+		SCREEN_HIGHER_X = SCREEN_INITIAL_X + screenWidth/2;
+		SCREEN_LOWER_Y = SCREEN_INITIAL_Y - screenHeight/2;
+		SCREEN_HIGHER_Y = SCREEN_INITIAL_Y + screenHeight/2;
+		
 	}
 }
