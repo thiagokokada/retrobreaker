@@ -29,22 +29,19 @@ class TouchSurfaceView extends GLSurfaceView {
 
 	private class Renderer implements GLSurfaceView.Renderer {
 
-		private Quad mPaddle;
-		private Ball mBall;
+		private Game mGame;
 
 
 		public Renderer() {
-			mPaddle = new Quad(Forms.PADDLE, Colors.RAINBOW, 0.0f, -0.7f, 0.1f);
-			mBall = new Ball(Forms.BALL, Colors.RAINBOW, 0.0f, 0.0f, -0.05f, -0.05f, 0.1f);
+			mGame = new Game();
 			
 		}
 
 		@Override
 		public void onDrawFrame(GL10 gl) {
 			gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-			mPaddle.draw(gl);
-			mBall.updateState();
-			mBall.draw(gl);
+			mGame.updateState();
+			mGame.drawElements(gl);
 		}
 
 		@Override
@@ -74,11 +71,11 @@ class TouchSurfaceView extends GLSurfaceView {
 			gl.glDisable(GL10.GL_DEPTH_TEST);
 		}
 
-		public void updateQuadPosition(final float x, final float y) {
+		public void updatePaddlePosition(final float x, final float y) {
 			queueEvent(new Runnable() {
 				@Override
 				public void run() {
-					mPaddle.setXPosition(x);
+					mGame.updatePaddleXPosition(x);
 				}
 			} );
 		}
@@ -111,7 +108,7 @@ class TouchSurfaceView extends GLSurfaceView {
 			resultWorldPos[2] /= resultWorldPos[3];
 			resultWorldPos[3] = 1.0f;
 
-			mRenderer.updateQuadPosition(resultWorldPos[0], resultWorldPos[1]);
+			mRenderer.updatePaddlePosition(resultWorldPos[0], resultWorldPos[1]);
 			break;
 		}
 		return true;

@@ -35,23 +35,6 @@ public class Ball extends Quad {
 		return  (y2 - mPosY)/mSlope + mPosX;
 	}
 	
-	public void updateState() {
-		long mCurrentTime;
-		
-		if (mPrevCurrentTime == 0) {
-			mPrevCurrentTime = System.nanoTime();
-		}
-		
-		mCurrentTime = System.nanoTime();
-		double elapsedTime = (mCurrentTime - mPrevCurrentTime)/Constants.NANOS_PER_MS;
-		Log.i(TAG, "elapsedTime: "+elapsedTime);
-		if (elapsedTime < Constants.MS_PER_FRAME)
-			return;
-		move();
-		
-		mPrevCurrentTime = mCurrentTime;
-	}
-	
 	public boolean move() {
 		Log.i(TAG, "prevX: "+mPosX+", prevY: "+mPosY);
 		if ((mPosX > mLastPosX) && (mPosY > mLastPosY)) {//right upward
