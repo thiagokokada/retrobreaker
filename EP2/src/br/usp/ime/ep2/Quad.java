@@ -7,8 +7,8 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 class Quad {
-	private float mPosX;
-	private float mPosY;
+	protected float mPosX;
+	protected float mPosY;
 	private float mScale;
 	private float[] mVertices;
 	private float[] mColors;
