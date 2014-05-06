@@ -4,7 +4,6 @@ import android.util.Log;
 
 public class Ball extends Quad {
 	private static final String TAG = Ball.class.getSimpleName();
-	private static final int FRAMES_PER_SECOND = 30;
 	
 	//only for ball (to calculate the trajectory)
 	private float mLastPosX;
