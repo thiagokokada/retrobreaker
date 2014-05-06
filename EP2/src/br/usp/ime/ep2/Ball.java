@@ -5,17 +5,16 @@ import android.util.Log;
 public class Ball extends Quad {
 	private static final String TAG = Ball.class.getSimpleName();
 	
-	//only for ball (to calculate the trajectory)
 	private float mPrevPosX;
 	private float mPrevPosY;
 	//for the trajectory equation
 	private float mSlope;
 	private float mTrajectoryIncrement = 0.05f;
-	
-	private long mPrevCurrentTime;
+
+	private int mSpeed; //how slow compared to Constans.MS_PER_FRAME
 
 	public Ball(float[] vertices, float[] colors, float pos_x, float pos_y,
-			float last_x, float last_y, float scale) {
+			float last_x, float last_y, float scale, int speed) {
 		super(vertices, colors, pos_x, pos_y, scale);
 		
 		this.mPrevPosX = last_x;
@@ -23,7 +22,7 @@ public class Ball extends Quad {
 		
 		mSlope = (mPosY - mPrevPosY)/(mPosX - mPrevPosX);
 		
-		mPrevCurrentTime = 0;
+		mSpeed = speed;
 	}
 	
 	public float getXPos() {
@@ -35,7 +34,6 @@ public class Ball extends Quad {
 	}
 	
 	private float getYinEquation(float x2) {
-		Log.i(TAG, "mSlope: "+mSlope);
 		return mPosY + mSlope * (x2 - mPosX);
 	}
 	
@@ -52,8 +50,12 @@ public class Ball extends Quad {
 		}
 	}
 	
+	public int getSpeed() {
+		return mSpeed;
+	}
+	
 	public void move() {
-//		Log.i(TAG, "prevX: "+mPosX+", prevY: "+mPosY);
+		Log.d(TAG, "prevX: "+mPosX+", prevY: "+mPosY);
 		if ((mPosX > mPrevPosX) && (mPosY > mPrevPosY)) {//right upward
 			mPrevPosX = mPosX;
 			mPrevPosY = mPosY;
@@ -79,7 +81,8 @@ public class Ball extends Quad {
 			mPosY = getYinEquation(x2);
 			mPosX = x2;
 		}
-//		Log.i(TAG, "currentX: "+mPosX+", currentY: "+mPosY);
+
+		Log.d(TAG, "currentX: "+mPosX+", currentY: "+mPosY);
 	}
 
 }
