@@ -1,5 +1,7 @@
 package br.usp.ime.ep2;
 
+import java.util.Date;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -10,9 +12,12 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
 import android.opengl.Matrix;
+import android.util.Log;
 import android.view.MotionEvent;
+import android.widget.Toast;
 
 class TouchSurfaceView extends GLSurfaceView {
+	private static final String TAG = TouchSurfaceView.class.getSimpleName();
 
 	private Renderer mRenderer;
 
@@ -25,18 +30,20 @@ class TouchSurfaceView extends GLSurfaceView {
 	private class Renderer implements GLSurfaceView.Renderer {
 
 		private Quad mPaddle;
-		private Quad mBall;
+		private Ball mBall;
 
 
 		public Renderer() {
 			mPaddle = new Quad(Forms.PADDLE, Colors.RAINBOW, 0.0f, -0.7f, 0.1f);
-			mBall = new Quad(Forms.BALL, Colors.RAINBOW, 0.0f, 0.0f, 0.1f);
+			mBall = new Ball(Forms.BALL, Colors.RAINBOW, 0.0f, 0.0f, -0.05f, -0.05f, 0.1f);
+			
 		}
 
 		@Override
 		public void onDrawFrame(GL10 gl) {
 			gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 			mPaddle.draw(gl);
+			mBall.updateState();
 			mBall.draw(gl);
 		}
 
