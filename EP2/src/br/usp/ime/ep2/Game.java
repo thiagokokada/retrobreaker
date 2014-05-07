@@ -41,10 +41,30 @@ public class Game {
 		
 		mPaddle = new Paddle(Colors.RAINBOW, 0.0f, -0.7f, 0.1f);
 		mBall = new Ball(Colors.RAINBOW, 0.0f, 0.0f, -0.05f, -0.05f, 0.1f, 4);
-		mBlocks = Utils.createLevel(8, 12, -0.55f, 0.7f, 0.1f, 0.04f);
+		createLevel(8, 12, -0.55f, 0.7f, 0.1f, 0.04f);
 		
 		mFramesWithoutBallMov = mBall.getSpeed();
 	}
+	
+	private void createLevel (int blocksX, int blocksY, float initialX, float initialY,
+			float spaceX, float spaceY) 
+	{
+		mBlocks = new Brick[blocksX][blocksY];
+		
+		float newPosX = initialX;
+		float newPosY = initialY;
+		
+		for (int i=0; i<mBlocks.length; i++) {
+			for (int j=0; j<mBlocks[i].length; j++) {
+				mBlocks[i][j] = new Brick(Colors.RAINBOW, newPosX, newPosY, 0.1f);
+				newPosX += spaceX;
+			}
+			newPosX = initialX;
+			newPosY -= spaceY;
+		}
+
+	}
+
 	
 	public void drawElements(GL10 gl) {
 		mPaddle.draw(gl);
