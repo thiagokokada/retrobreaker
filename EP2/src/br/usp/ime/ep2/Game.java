@@ -87,19 +87,28 @@ public class Game {
 	}
 	
 	private int detectColision() {	
-		float ballXPos = mBall.getXPos();
-		float ballYPos = mBall.getYPos();
+		float ballPosX = mBall.getPosX();
+		float ballPosY = mBall.getPosY();
 		
 		//detecting collision between ball and wall
-		if ((ballXPos > SCREEN_HIGHER_X) 			//collided in the right side
-				|| (ballXPos < SCREEN_LOWER_X)) {	//collided in the left side 
+		if ((ballPosX > SCREEN_HIGHER_X) 			//collided in the right side
+				|| (ballPosX < SCREEN_LOWER_X)) {	//collided in the left side 
 			return Collision.WALL_RIGHT_LEFT_SIDE;
-		} else if ((ballYPos > SCREEN_HIGHER_Y)	//collided in the top part
-				|| (ballYPos < SCREEN_LOWER_Y)) {	//collided in the bottom part
+		} else if ((ballPosY > SCREEN_HIGHER_Y)	//collided in the top part
+				|| (ballPosY < SCREEN_LOWER_Y)) {	//collided in the bottom part
 			return Collision.WALL_TOP_BOTTOM_SIDE;
 		}
 		
 		//detecting collision between the ball and the paddle
+		float paddleTopY = mPaddle.getPosY() + Forms.PADDLE[3];
+		float paddleLeftX = mPaddle.getPosX() + Forms.PADDLE[0];
+		float paddleRightX = mPaddle.getPosX() + Forms.PADDLE[4];
+		float ballBottomY = ballPosY + Forms.BALL[1];
+		float ballLeftX = ballPosX + Forms.BALL[0];
+		float ballRightX = ballPosX + Forms.BALL[4];
+		
+//		if ((ballBottomY <= paddleTopY) 
+//				&& (ballRightX))
 		
 		return -1;
 	}
