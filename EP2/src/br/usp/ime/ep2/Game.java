@@ -4,7 +4,6 @@ import javax.microedition.khronos.opengles.GL10;
 
 import br.usp.ime.ep2.Constants.Collision;
 import br.usp.ime.ep2.Constants.Colors;
-import br.usp.ime.ep2.Constants.Forms;
 import android.util.Log;
 
 public class Game {
@@ -96,19 +95,28 @@ public class Game {
 	}
 	
 	private int detectColision() {	
-		float ballXPos = mBall.getXPos();
-		float ballYPos = mBall.getYPos();
+		float ballPosX = mBall.getPosX();
+		float ballPosY = mBall.getPosY();
 		
 		//detecting collision between ball and wall
-		if ((ballXPos > SCREEN_HIGHER_X) 			//collided in the right side
-				|| (ballXPos < SCREEN_LOWER_X)) {	//collided in the left side 
+		if ((ballPosX > SCREEN_HIGHER_X) 			//collided in the right side
+				|| (ballPosX < SCREEN_LOWER_X)) {	//collided in the left side 
 			return Collision.WALL_RIGHT_LEFT_SIDE;
-		} else if ((ballYPos > SCREEN_HIGHER_Y)	//collided in the top part
-				|| (ballYPos < SCREEN_LOWER_Y)) {	//collided in the bottom part
+		} else if ((ballPosY > SCREEN_HIGHER_Y)	//collided in the top part
+				|| (ballPosY < SCREEN_LOWER_Y)) {	//collided in the bottom part
 			return Collision.WALL_TOP_BOTTOM_SIDE;
 		}
 		
 		//detecting collision between the ball and the paddle
+		float paddleTopY = mPaddle.getPosY() + Paddle.VERTICES[3];
+		float paddleLeftX = mPaddle.getPosX() + Paddle.VERTICES[0];
+		float paddleRightX = mPaddle.getPosX() + Paddle.VERTICES[4];
+		float ballBottomY = ballPosY + Ball.VERTICES[1];
+		float ballLeftX = ballPosX + Ball.VERTICES[0];
+		float ballRightX = ballPosX + Ball.VERTICES[4];
+		
+//		if ((ballBottomY <= paddleTopY) 
+//				&& (ballRightX))
 		
 		return -1;
 	}

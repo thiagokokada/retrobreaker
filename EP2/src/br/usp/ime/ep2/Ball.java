@@ -3,14 +3,15 @@ package br.usp.ime.ep2;
 import android.util.Log;
 
 public class Ball extends Quad {
-	private static final String TAG = Ball.class.getSimpleName();
 	
-	private static final float[] VERTICES = {
+	public static final float[] VERTICES = {
 		-0.25f, -0.25f, // bottom left
 		-0.25f,  0.25f, // top left
 		0.25f, -0.25f, // bottom right
 		0.25f,  0.25f, // top right
 	};
+	
+	private static final String TAG = Ball.class.getSimpleName();
 	
 	private float mPrevPosX;
 	private float mPrevPosY;
@@ -30,14 +31,6 @@ public class Ball extends Quad {
 		mSlope = (mPosY - mPrevPosY)/(mPosX - mPrevPosX);
 		
 		mSpeed = speed;
-	}
-	
-	public float getXPos() {
-		return mPosX;
-	}
-	
-	public float getYPos() {
-		return mPosY;
 	}
 	
 	private float getYinEquation(float x2) {
