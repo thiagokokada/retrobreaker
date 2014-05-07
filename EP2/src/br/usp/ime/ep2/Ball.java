@@ -25,14 +25,6 @@ public class Ball extends Quad {
 		mSpeed = speed;
 	}
 	
-	public float getXPos() {
-		return mPosX;
-	}
-	
-	public float getYPos() {
-		return mPosY;
-	}
-	
 	private float getYinEquation(float x2) {
 		return mPosY + mSlope * (x2 - mPosX);
 	}
