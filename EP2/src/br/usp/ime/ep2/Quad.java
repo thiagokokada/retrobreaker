@@ -37,6 +37,14 @@ class Quad {
 		mColorBuffer.put(mColors);
 		mColorBuffer.position(0);
 	}
+	
+	public float getPosX() {
+		return mPosX;
+	}
+	
+	public float getPosY() {
+		return mPosY;
+	}
 
 	public void setPosition(float x, float y) {
 		this.mPosX = x;
