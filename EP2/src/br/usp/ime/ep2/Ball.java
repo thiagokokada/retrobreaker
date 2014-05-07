@@ -5,6 +5,13 @@ import android.util.Log;
 public class Ball extends Quad {
 	private static final String TAG = Ball.class.getSimpleName();
 	
+	private static final float[] VERTICES = {
+		-0.25f, -0.25f, // bottom left
+		-0.25f,  0.25f, // top left
+		0.25f, -0.25f, // bottom right
+		0.25f,  0.25f, // top right
+	};
+	
 	private float mPrevPosX;
 	private float mPrevPosY;
 	//for the trajectory equation
@@ -13,9 +20,9 @@ public class Ball extends Quad {
 
 	private int mSpeed; //how slow compared to Constans.MS_PER_FRAME
 
-	public Ball(float[] vertices, float[] colors, float pos_x, float pos_y,
+	public Ball(float[] colors, float pos_x, float pos_y,
 			float last_x, float last_y, float scale, int speed) {
-		super(vertices, colors, pos_x, pos_y, scale);
+		super(VERTICES, colors, pos_x, pos_y, scale);
 		
 		this.mPrevPosX = last_x;
 		this.mPrevPosY = last_y;

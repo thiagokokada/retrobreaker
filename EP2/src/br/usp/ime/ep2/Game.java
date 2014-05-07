@@ -20,7 +20,7 @@ public class Game {
 	private long mPrevCurrentBeginFrameTime;
 	private int mFramesWithoutBallMov; 
 	
-	private Quad mPaddle;
+	private Paddle mPaddle;
 	private Ball mBall;
 	private Quad[][] mBlocks;
 	
@@ -36,8 +36,8 @@ public class Game {
 	public void resetElements() {
 		mPrevCurrentBeginFrameTime = 0;
 		
-		mPaddle = new Quad(Forms.PADDLE, Colors.RAINBOW, 0.0f, -0.7f, 0.1f);
-		mBall = new Ball(Forms.BALL, Colors.RAINBOW, 0.0f, 0.0f, -0.05f, -0.05f, 0.1f, 4);
+		mPaddle = new Paddle(Colors.RAINBOW, 0.0f, -0.7f, 0.1f);
+		mBall = new Ball(Colors.RAINBOW, 0.0f, 0.0f, -0.05f, -0.05f, 0.1f, 4);
 		mBlocks = Utils.createLevel(8, 12, -0.55f, 0.7f, 0.1f, 0.04f);
 		
 		mFramesWithoutBallMov = mBall.getSpeed();

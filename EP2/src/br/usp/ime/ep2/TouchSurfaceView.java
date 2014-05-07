@@ -1,21 +1,13 @@
 package br.usp.ime.ep2;
 
-import java.util.Date;
-
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
-
-import br.usp.ime.ep2.Constants.Colors;
-import br.usp.ime.ep2.Constants.Forms;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
 import android.opengl.Matrix;
-import android.util.Log;
 import android.view.MotionEvent;
-import android.view.WindowManager;
-import android.widget.Toast;
 
 class TouchSurfaceView extends GLSurfaceView {
 	
