@@ -11,6 +11,12 @@ public class Constants {
 				1.0f,  0.2f, // top right
 		};
 
+		public static final float[] BLOCK = {
+				-0.5f, -0.2f, // bottom left
+				-0.5f,  0.2f, // top left
+				0.5f, -0.2f, // bottom right
+				0.5f,  0.2f, // top right
+		};
 	}
 	
 	public static final class Colors {
