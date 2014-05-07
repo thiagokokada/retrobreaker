@@ -3,6 +3,9 @@ package br.usp.ime.ep2;
 import javax.microedition.khronos.opengles.GL10;
 
 import br.usp.ime.ep2.Constants.Colors;
+import br.usp.ime.ep2.forms.Ball;
+import br.usp.ime.ep2.forms.Brick;
+import br.usp.ime.ep2.forms.Paddle;
 import android.util.Log;
 
 public class Game {
@@ -25,7 +28,7 @@ public class Game {
 	
 	private Paddle mPaddle;
 	private Ball mBall;
-	private Quad[][] mBlocks;
+	private Brick[][] mBlocks;
 	
 	public Game() {
 		SCREEN_HIGHER_Y = 1.0f;

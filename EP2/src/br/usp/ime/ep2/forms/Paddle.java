@@ -1,4 +1,4 @@
-package br.usp.ime.ep2;
+package br.usp.ime.ep2.forms;
 
 public class Paddle extends Quad {
 	
