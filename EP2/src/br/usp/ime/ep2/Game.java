@@ -2,12 +2,16 @@ package br.usp.ime.ep2;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import br.usp.ime.ep2.Constants.Collision;
 import br.usp.ime.ep2.Constants.Colors;
 import android.util.Log;
 
 public class Game {
 	private static final String TAG = Game.class.getSimpleName();
+	
+	private static final int MS_PER_FRAME = 50;
+	private static final int NANOS_PER_MS = 1000000;
+	private static final int WALL_RIGHT_LEFT_SIDE = 1;
+	private static final int WALL_TOP_BOTTOM_SIDE = 2;
 
 	private static final int SCREEN_INITIAL_X = 0;
 	private static final int SCREEN_INITIAL_Y = 0;
@@ -66,8 +70,8 @@ public class Game {
 		}
 		
 		long mCurrentTime = System.nanoTime();
-		double elapsedFrameTime = (mCurrentTime - mPrevCurrentBeginFrameTime)/Constants.NANOS_PER_MS;
-		if (elapsedFrameTime < Constants.MS_PER_FRAME)//it doesn't reach next frame yet
+		double elapsedFrameTime = (mCurrentTime - mPrevCurrentBeginFrameTime)/NANOS_PER_MS;
+		if (elapsedFrameTime < MS_PER_FRAME)//it doesn't reach next frame yet
 			return;
 		
 		//Now it's time to update next frame. 
@@ -77,10 +81,10 @@ public class Game {
 		//I'm considering the ball is being updated in a different rate compared to the frame update rate.
 		if (mFramesWithoutBallMov == 0) {
 			switch (collisionType) {
-			case Collision.WALL_RIGHT_LEFT_SIDE:
+			case WALL_RIGHT_LEFT_SIDE:
 				mBall.turnToPerpendicularDirection(true);
 				break;
-			case Collision.WALL_TOP_BOTTOM_SIDE:
+			case WALL_TOP_BOTTOM_SIDE:
 				mBall.turnToPerpendicularDirection(false);
 				break;
 		}			
@@ -101,10 +105,10 @@ public class Game {
 		//detecting collision between ball and wall
 		if ((ballPosX > SCREEN_HIGHER_X) 			//collided in the right side
 				|| (ballPosX < SCREEN_LOWER_X)) {	//collided in the left side 
-			return Collision.WALL_RIGHT_LEFT_SIDE;
+			return WALL_RIGHT_LEFT_SIDE;
 		} else if ((ballPosY > SCREEN_HIGHER_Y)	//collided in the top part
 				|| (ballPosY < SCREEN_LOWER_Y)) {	//collided in the bottom part
-			return Collision.WALL_TOP_BOTTOM_SIDE;
+			return WALL_TOP_BOTTOM_SIDE;
 		}
 		
 		//detecting collision between the ball and the paddle
