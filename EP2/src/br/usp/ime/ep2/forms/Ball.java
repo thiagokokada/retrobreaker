@@ -19,7 +19,7 @@ public class Ball extends Quad {
 	private float mSlope;
 	private float mTrajectoryIncrement = 0.05f;
 
-	private int mSpeed; //how slow compared to Constans.MS_PER_FRAME
+	private int mSpeed; //how slow compared to Game.MS_PER_FRAME
 
 	public Ball(float[] colors, float pos_x, float pos_y,
 			float last_x, float last_y, float scale, int speed) {
