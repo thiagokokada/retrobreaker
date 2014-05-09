@@ -7,11 +7,13 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
 import android.opengl.Matrix;
+import android.util.Log;
 import android.view.MotionEvent;
 
 class TouchSurfaceView extends GLSurfaceView {
 	
 	private static final String TAG = TouchSurfaceView.class.getSimpleName();
+	private static final float WALL = 0.05f;
 
 	private Renderer mRenderer;
 
@@ -46,9 +48,9 @@ class TouchSurfaceView extends GLSurfaceView {
 			gl.glViewport(0, 0, width, height);
 			mScreenWidth = width;
 			mScreenHeight = height;
-			mGame.updateScreenMeasures((float) mScreenWidth / mScreenHeight, (float) mScreenHeight / mScreenWidth);
-
 			float ratio = (float) width / height;
+			mGame.updateScreenMeasures(2 * (ratio - WALL), 2.0f - WALL);
+
 			gl.glMatrixMode(GL10.GL_PROJECTION);
 			gl.glLoadIdentity();
 			gl.glOrthof(-ratio, ratio, -1.0f, 1.0f, -1.0f, 1.0f);
@@ -62,7 +64,6 @@ class TouchSurfaceView extends GLSurfaceView {
 		public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 			mScreenWidth = TouchSurfaceView.this.getWidth();
 			mScreenHeight = TouchSurfaceView.this.getHeight();
-			mGame.updateScreenMeasures((float) mScreenWidth / mScreenHeight, (float) mScreenHeight / mScreenWidth);
 			
 			gl.glDisable(GL10.GL_DITHER);
 			gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);
