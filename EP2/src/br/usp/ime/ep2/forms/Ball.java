@@ -17,7 +17,7 @@ public class Ball extends Quad {
 	private float mPrevPosY;
 	//for the trajectory equation
 	private float mSlope;
-	private float mTrajectoryIncrement = 0.05f;
+	private float mTrajectoryIncrement = 0.01f;
 
 	private int mSpeed; //how slow compared to Game.MS_PER_FRAME
 
