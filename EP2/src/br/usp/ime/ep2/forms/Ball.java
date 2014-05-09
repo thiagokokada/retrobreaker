@@ -17,20 +17,21 @@ public class Ball extends Quad {
 	private float mPrevPosY;
 	//for the trajectory equation
 	private float mSlope;
-	private float mTrajectoryIncrement = 0.01f;
+	private float mTrajectoryIncrement;
 
 	private int mSpeed; //how slow compared to Game.MS_PER_FRAME
 
 	public Ball(float[] colors, float pos_x, float pos_y,
-			float last_x, float last_y, float scale, int speed) {
+			float last_x, float last_y, float scale, int speed, float trajectory_inc) {
 		super(VERTICES, colors, pos_x, pos_y, scale);
 		
-		this.mPrevPosX = last_x;
-		this.mPrevPosY = last_y;
+		mPrevPosX = last_x;
+		mPrevPosY = last_y;
 		
 		mSlope = (mPosY - mPrevPosY)/(mPosX - mPrevPosX);
 		
 		mSpeed = speed;
+		mTrajectoryIncrement= trajectory_inc;
 	}
 	
 	private float getYinEquation(float x2) {
