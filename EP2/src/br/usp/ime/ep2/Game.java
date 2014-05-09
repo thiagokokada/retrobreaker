@@ -43,7 +43,7 @@ public class Game {
 		mPrevCurrentBeginFrameTime = 0;
 		
 		mPaddle = new Paddle(Colors.RAINBOW, 0.0f, -0.7f, 0.1f);
-		mBall = new Ball(Colors.RAINBOW, 0.0f, 0.0f, -0.05f, -0.05f, 0.1f, 4);
+		mBall = new Ball(Colors.RAINBOW, 0.0f, 0.0f, -0.05f, -0.05f, 0.1f, 1, 0.01f);
 		createLevel(Colors.RAINBOW, 8, 12, -0.55f, 0.7f, 0.1f, 0.04f);
 		
 		mFramesWithoutBallMov = mBall.getSpeed();
