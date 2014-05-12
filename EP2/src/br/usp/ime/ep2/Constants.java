@@ -11,6 +11,10 @@ public class Constants {
 	public static final double FPS_LIMIT = Math.floor((1.0/60.0) * MS_PER_SECONDS);
 	public static final boolean FPS_LIMITER = false;
 	
+	public static enum Collision {
+		NOT_AVAILABLE, WALL_RIGHT_LEFT_SIDE, WALL_TOP_BOTTOM_SIDE
+	}
+	
 	public static final class Colors {
 		
 		public static final float[] RAINBOW = {
@@ -21,5 +25,6 @@ public class Constants {
 		};
 		
 	}
+
 
 }

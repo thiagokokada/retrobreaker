@@ -2,6 +2,7 @@ package br.usp.ime.ep2;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import br.usp.ime.ep2.Constants.Collision;
 import br.usp.ime.ep2.Constants.Colors;
 import br.usp.ime.ep2.forms.Ball;
 import br.usp.ime.ep2.forms.Brick;
@@ -10,9 +11,6 @@ import android.util.Log;
 
 public class Game {
 	private static final String TAG = Game.class.getSimpleName();
-
-	private static final int WALL_RIGHT_LEFT_SIDE = 1;
-	private static final int WALL_TOP_BOTTOM_SIDE = 2;
 
 	private static final int SCREEN_INITIAL_X = 0;
 	private static final int SCREEN_INITIAL_Y = 0;
@@ -79,7 +77,7 @@ public class Game {
 	//Update next frame state
 	public void updateState() {
 
-		int collisionType = detectColision();	
+		Collision collisionType = detectColision();	
 
 		switch (collisionType) {
 		case WALL_RIGHT_LEFT_SIDE:
@@ -90,23 +88,26 @@ public class Game {
 			Log.d(TAG, "Top/Bottom side collision detected");
 			mBall.turnToPerpendicularDirection(false);
 			break;
+		default:
+			/* Nothing to do */
+			break;
 		}
 
 		mBall.move();
 
 	}
 
-	private int detectColision() {	
+	private Collision detectColision() {	
 		float ballPosX = mBall.getPosX();
 		float ballPosY = mBall.getPosY();
 		
 		//detecting collision between ball and wall
 		if ((ballPosX > SCREEN_HIGHER_X) 			//collided in the right side
 				|| (ballPosX < SCREEN_LOWER_X)) {	//collided in the left side 
-			return WALL_RIGHT_LEFT_SIDE;
+			return Collision.WALL_RIGHT_LEFT_SIDE;
 		} else if ((ballPosY > SCREEN_HIGHER_Y)	//collided in the top part
 				|| (ballPosY < SCREEN_LOWER_Y)) {	//collided in the bottom part
-			return WALL_TOP_BOTTOM_SIDE;
+			return Collision.WALL_TOP_BOTTOM_SIDE;
 		}
 		
 		//detecting collision between the ball and the paddle
@@ -120,7 +121,7 @@ public class Game {
 //		if ((ballBottomY <= paddleTopY) 
 //				&& (ballRightX))
 		
-		return -1;
+		return Collision.NOT_AVAILABLE;
 	}
 
 	public void updateScreenMeasures(float screenWidth, float screenHeight) {
