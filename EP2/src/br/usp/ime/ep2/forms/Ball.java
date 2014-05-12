@@ -56,7 +56,8 @@ public class Ball extends Quad {
 	}
 	
 	public void move() {
-		Log.d(TAG, "prevX: "+mPosX+", prevY: "+mPosY);
+		Log.v(TAG, "prevX: "+mPosX+", prevY: "+mPosY);
+		
 		if ((mPosX > mPrevPosX) && (mPosY > mPrevPosY)) {//right upward
 			mPrevPosX = mPosX;
 			mPrevPosY = mPosY;
@@ -83,7 +84,7 @@ public class Ball extends Quad {
 			mPosX = x2;
 		}
 
-		Log.d(TAG, "currentX: "+mPosX+", currentY: "+mPosY);
+		Log.v(TAG, "currentX: "+mPosX+", currentY: "+mPosY);
 	}
 
 }

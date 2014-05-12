@@ -108,14 +108,15 @@ public class Game {
 		if (mFramesWithoutBallMov == 0) {
 			switch (collisionType) {
 			case WALL_RIGHT_LEFT_SIDE:
+				Log.d(TAG, "Right/Left side collision detected");
 				mBall.turnToPerpendicularDirection(true);
 				break;
 			case WALL_TOP_BOTTOM_SIDE:
+				Log.d(TAG, "Top/Bottom side collision detected");
 				mBall.turnToPerpendicularDirection(false);
 				break;
 			}			
 
-			//Log.i(TAG, "time to move the ball");
 			mBall.move();
 			mFramesWithoutBallMov = mBall.getSpeed();
 		}
