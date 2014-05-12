@@ -7,6 +7,14 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 class Quad {
+
+	public static final float[] VERTICES = {
+		-1.0f, -1.0f, // bottom left
+		-1.0f,  1.0f, // top left
+		1.0f, -1.0f, // bottom right
+		1.0f,  1.0f, // top right
+	};
+	
 	protected float mPosX;
 	protected float mPosY;
 	private float mScale;
@@ -21,9 +29,9 @@ class Quad {
 	public Quad(float[] vertices, float[] colors, float pos_x, float pos_y, float scale) {
 		mVertices = vertices;
 		mColors = colors;
-		mPosX = pos_x;
-		mPosY = pos_y;
 		mScale = scale;
+		setPosX(pos_x);
+		setPosY(pos_y);
 
 		ByteBuffer vbb = ByteBuffer.allocateDirect(mVertices.length * FLOAT_SIZE_BYTES);
 		vbb.order(ByteOrder.nativeOrder());
@@ -46,15 +54,14 @@ class Quad {
 		return mPosY;
 	}
 
-	public void setPosition(float x, float y) {
-		this.mPosX = x;
-		this.mPosY = y;
+	public void setPosX(float x) {
+		mPosX = x;
 	}
 
-	public void setXPosition(float x) {
-		this.mPosX = x;
+	public void setPosY(float y) {
+		mPosY = y;
 	}
-
+	
 	public void draw(GL10 gl) {
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glPushMatrix();

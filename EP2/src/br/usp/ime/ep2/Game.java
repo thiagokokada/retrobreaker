@@ -71,7 +71,7 @@ public class Game {
 	}
 	
 	public void updatePaddleXPosition(float x) {
-		mPaddle.setXPosition(x);
+		mPaddle.setPosX(x);
 	}
 
 	//Update next frame state
