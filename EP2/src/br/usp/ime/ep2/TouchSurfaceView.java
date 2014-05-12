@@ -63,7 +63,7 @@ class TouchSurfaceView extends GLSurfaceView {
 			mScreenWidth = width;
 			mScreenHeight = height;
 			float ratio = (float) width / height;
-			mGame.updateScreenMeasures(2 * (ratio - WALL), 2.0f - WALL);
+			mGame.updateScreenMeasures((2.0f * ratio) - WALL, 2.0f - WALL);
 
 			gl.glMatrixMode(GL10.GL_PROJECTION);
 			gl.glLoadIdentity();
