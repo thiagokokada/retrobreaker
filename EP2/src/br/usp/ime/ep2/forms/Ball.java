@@ -1,5 +1,6 @@
 package br.usp.ime.ep2.forms;
 
+import br.usp.ime.ep2.Constants;
 import android.util.Log;
 
 public class Ball extends Quad {
@@ -28,7 +29,7 @@ public class Ball extends Quad {
 		
 		mSlope = (mPosY - mPrevPosY)/(mPosX - mPrevPosX);
 		
-		mTrajectoryIncrement= trajectory_inc;
+		mTrajectoryIncrement = getBallSpeed(trajectory_inc);
 	}
 	
 	private float getYinEquation(float x2) {
@@ -46,6 +47,10 @@ public class Ball extends Quad {
 		} else { //top or bottom
 			mPrevPosY = getYinEquation(mPrevPosX);
 		}
+	}
+	
+	private float getBallSpeed(float baseSpeed) {
+		return (float) (baseSpeed * Math.ceil(Constants.ANDROID_FPS_LIMIT / (Constants.MS_PER_SECONDS / Constants.FPS_LIMIT)));
 	}
 	
 	public void move() {
