@@ -14,7 +14,6 @@ class TouchSurfaceView extends GLSurfaceView {
 	
 	private static final String TAG = TouchSurfaceView.class.getSimpleName();
 	private static final float WALL = 0.05f;
-	
 
 	private long mPrevCurrentBeginFrameTime;
 
@@ -40,7 +39,7 @@ class TouchSurfaceView extends GLSurfaceView {
 			long currentTime = System.nanoTime();
 			double elapsedFrameTime = (currentTime - mPrevCurrentBeginFrameTime)/Constants.NANOS_PER_SECONDS;
 		
-			if (elapsedFrameTime < Constants.FPS_LIMIT) { //it doesn't reach next frame yet
+			if (Constants.FPS_LIMITER && elapsedFrameTime < Constants.FPS_LIMIT) { //it doesn't reach next frame yet
 				Log.v(TAG, "Frame rendered in " + elapsedFrameTime + "ms, faster than " + Constants.FPS_LIMIT + "ms, skipping this frame");
 				return;
 			}
