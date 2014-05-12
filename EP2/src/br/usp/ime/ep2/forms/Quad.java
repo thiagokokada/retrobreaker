@@ -6,16 +6,7 @@ import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import android.util.Log;
-
-class Quad {
-
-	public static final float[] VERTICES = {
-		-1.0f, -1.0f, // bottom left
-		-1.0f,  1.0f, // top left
-		1.0f, -1.0f, // bottom right
-		1.0f,  1.0f, // top right
-	};
+abstract class Quad {
 	
 	protected float mPosX;
 	protected float mPosY;
