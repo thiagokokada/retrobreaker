@@ -34,7 +34,20 @@ public class Game {
 	
 	public void resetElements() {
 		mPaddle = new Paddle(Colors.RAINBOW, 0.0f, -0.7f, 0.1f);
+		Log.d(TAG, "Created paddle:" + 
+				" BottomY: " + mPaddle.getBottomY() +
+				" TopY: " + mPaddle.getTopY() +
+				" LeftX: " + mPaddle.getLeftX() +
+				" RightX: " + mPaddle.getRightX()
+				);
+		
 		mBall = new Ball(Colors.RAINBOW, 0.0f, 0.0f, -0.05f, -0.05f, 0.1f, 0.01f);
+		Log.d(TAG, "Created ball:" + 
+				" BottomY: " + mBall.getBottomY() +
+				" TopY: " + mBall.getTopY() +
+				" LeftX: " + mBall.getLeftX() +
+				" RightX: " + mBall.getRightX()
+				);
 		createLevel(Colors.RAINBOW, 8, 12, -0.55f, 0.7f, 0.1f, 0.04f);
 	}
 	
@@ -109,17 +122,16 @@ public class Game {
 				|| (ballPosY < SCREEN_LOWER_Y)) {	//collided in the bottom part
 			return Collision.WALL_TOP_BOTTOM_SIDE;
 		}
-		
-		//detecting collision between the ball and the paddle
-		float paddleTopY = mPaddle.getPosY() + Paddle.VERTICES[3];
-		float paddleLeftX = mPaddle.getPosX() + Paddle.VERTICES[0];
-		float paddleRightX = mPaddle.getPosX() + Paddle.VERTICES[4];
-		float ballBottomY = ballPosY + Ball.VERTICES[1];
-		float ballLeftX = ballPosX + Ball.VERTICES[0];
-		float ballRightX = ballPosX + Ball.VERTICES[4];
-		
-//		if ((ballBottomY <= paddleTopY) 
+
+		//detect collision between ball and paddle
+//		if ((ballBottomY <= mPaddle.getLeftX) 
 //				&& (ballRightX))
+		
+		//detect collision between ball and blocks
+//		for (int i=0; i<mBlocks.length; i++) {
+//			for (int j=0; j<mBlocks[i].length; j++) {
+//			}
+//		}
 		
 		return Collision.NOT_AVAILABLE;
 	}

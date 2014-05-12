@@ -6,6 +6,8 @@ import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.util.Log;
+
 class Quad {
 
 	public static final float[] VERTICES = {
@@ -54,6 +56,22 @@ class Quad {
 		return mPosY;
 	}
 
+	public float getLeftX() {
+		return getPosX() + mVertices[0];		
+	}
+	
+	public float getBottomY() {
+		return getPosY() + mVertices[1];		
+	}
+	
+	public float getTopY() {
+		return getPosY() + mVertices[3];		
+	}
+
+	public float getRightX() {
+		return getPosX() + mVertices[4];		
+	}
+	
 	public void setPosX(float x) {
 		mPosX = x;
 	}
@@ -61,7 +79,7 @@ class Quad {
 	public void setPosY(float y) {
 		mPosY = y;
 	}
-	
+
 	public void draw(GL10 gl) {
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glPushMatrix();
