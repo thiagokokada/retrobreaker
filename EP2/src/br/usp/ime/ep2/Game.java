@@ -21,8 +21,6 @@ public class Game {
 	private float SCREEN_HIGHER_X;
 	private float SCREEN_LOWER_X;
 	
-	private int mFramesWithoutBallMov; 
-	
 	private Paddle mPaddle;
 	private Ball mBall;
 	private Brick[][] mBlocks;
@@ -38,10 +36,8 @@ public class Game {
 	
 	public void resetElements() {
 		mPaddle = new Paddle(Colors.RAINBOW, 0.0f, -0.7f, 0.1f);
-		mBall = new Ball(Colors.RAINBOW, 0.0f, 0.0f, -0.05f, -0.05f, 0.1f, 1, 0.01f);
+		mBall = new Ball(Colors.RAINBOW, 0.0f, 0.0f, -0.05f, -0.05f, 0.1f, 0.01f);
 		createLevel(Colors.RAINBOW, 8, 12, -0.55f, 0.7f, 0.1f, 0.04f);
-		
-		mFramesWithoutBallMov = mBall.getSpeed();
 	}
 	
 	private void createLevel (float[] colors,int blocksX, int blocksY, float initialX, float initialY,
@@ -85,24 +81,19 @@ public class Game {
 
 		int collisionType = detectColision();	
 
-		//I'm considering the ball is being updated in a different rate compared to the frame update rate.
-		if (mFramesWithoutBallMov == 0) {
-			switch (collisionType) {
-			case WALL_RIGHT_LEFT_SIDE:
-				Log.d(TAG, "Right/Left side collision detected");
-				mBall.turnToPerpendicularDirection(true);
-				break;
-			case WALL_TOP_BOTTOM_SIDE:
-				Log.d(TAG, "Top/Bottom side collision detected");
-				mBall.turnToPerpendicularDirection(false);
-				break;
-			}			
-
-			mBall.move();
-			mFramesWithoutBallMov = mBall.getSpeed();
+		switch (collisionType) {
+		case WALL_RIGHT_LEFT_SIDE:
+			Log.d(TAG, "Right/Left side collision detected");
+			mBall.turnToPerpendicularDirection(true);
+			break;
+		case WALL_TOP_BOTTOM_SIDE:
+			Log.d(TAG, "Top/Bottom side collision detected");
+			mBall.turnToPerpendicularDirection(false);
+			break;
 		}
 
-		mFramesWithoutBallMov--;
+		mBall.move();
+
 	}
 
 	private int detectColision() {	

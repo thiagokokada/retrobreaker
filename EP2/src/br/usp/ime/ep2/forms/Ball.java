@@ -19,10 +19,8 @@ public class Ball extends Quad {
 	private float mSlope;
 	private float mTrajectoryIncrement;
 
-	private int mSpeed; //how slow compared to Game.MS_PER_FRAME
-
 	public Ball(float[] colors, float pos_x, float pos_y,
-			float last_x, float last_y, float scale, int speed, float trajectory_inc) {
+			float last_x, float last_y, float scale, float trajectory_inc) {
 		super(VERTICES, colors, pos_x, pos_y, scale);
 		
 		mPrevPosX = last_x;
@@ -30,7 +28,6 @@ public class Ball extends Quad {
 		
 		mSlope = (mPosY - mPrevPosY)/(mPosX - mPrevPosX);
 		
-		mSpeed = speed;
 		mTrajectoryIncrement= trajectory_inc;
 	}
 	
@@ -49,10 +46,6 @@ public class Ball extends Quad {
 		} else { //top or bottom
 			mPrevPosY = getYinEquation(mPrevPosX);
 		}
-	}
-	
-	public int getSpeed() {
-		return mSpeed;
 	}
 	
 	public void move() {
