@@ -14,6 +14,14 @@ class TouchSurfaceView extends GLSurfaceView {
 	
 	private static final String TAG = TouchSurfaceView.class.getSimpleName();
 	private static final float WALL = 0.05f;
+	
+	private static final long MS_PER_SECONDS = 1000 /* milliseconds */;
+	private static final long NANOS_PER_SECONDS = 1000 /* nanoseconds */ * MS_PER_SECONDS;
+	
+	// ~60FPS, double arithmetics is too unreliable so we round it.
+	private static final double MS_PER_FRAME = Math.floor((1.0/60.0) * MS_PER_SECONDS);
+
+	private long mPrevCurrentBeginFrameTime;
 
 	private Renderer mRenderer;
 
@@ -29,13 +37,23 @@ class TouchSurfaceView extends GLSurfaceView {
 
 		public Renderer() {
 			mGame = new Game();
+			mPrevCurrentBeginFrameTime = 0;
 		}
 
 		@Override
 		public void onDrawFrame(GL10 gl) {
+			long currentTime = System.nanoTime();
+			double elapsedFrameTime = Math.floor((currentTime - mPrevCurrentBeginFrameTime)/NANOS_PER_SECONDS);
+		
+			if (elapsedFrameTime < MS_PER_FRAME) { //it doesn't reach next frame yet
+				Log.v(TAG, "Frame rendered in " + elapsedFrameTime + "ms, faster than " + MS_PER_FRAME + "ms, skipping this frame");
+				return;
+			}
+			
 			gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 			mGame.updateState();
 			mGame.drawElements(gl);
+			mPrevCurrentBeginFrameTime = currentTime;
 		}
 		
 //		@Override

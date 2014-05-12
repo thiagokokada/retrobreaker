@@ -10,10 +10,7 @@ import android.util.Log;
 
 public class Game {
 	private static final String TAG = Game.class.getSimpleName();
-	
-	private static final int MS_PER_SECONDS = 1000 /* milliseconds */;
-	private static final int NANOS_PER_SECONDS = 1000 /* nanoseconds */ * MS_PER_SECONDS;
-	private static final double MS_PER_FRAME = (1.0/60.0) * MS_PER_SECONDS; // 60 FPS
+
 	private static final int WALL_RIGHT_LEFT_SIDE = 1;
 	private static final int WALL_TOP_BOTTOM_SIDE = 2;
 
@@ -24,7 +21,6 @@ public class Game {
 	private float SCREEN_HIGHER_X;
 	private float SCREEN_LOWER_X;
 	
-	private long mPrevCurrentBeginFrameTime;
 	private int mFramesWithoutBallMov; 
 	
 	private Paddle mPaddle;
@@ -41,8 +37,6 @@ public class Game {
 	}
 	
 	public void resetElements() {
-		mPrevCurrentBeginFrameTime = 0;
-		
 		mPaddle = new Paddle(Colors.RAINBOW, 0.0f, -0.7f, 0.1f);
 		mBall = new Ball(Colors.RAINBOW, 0.0f, 0.0f, -0.05f, -0.05f, 0.1f, 1, 0.01f);
 		createLevel(Colors.RAINBOW, 8, 12, -0.55f, 0.7f, 0.1f, 0.04f);
@@ -89,19 +83,6 @@ public class Game {
 	//Update next frame state
 	public void updateState() {
 
-		if (mPrevCurrentBeginFrameTime == 0) {
-			mPrevCurrentBeginFrameTime = System.nanoTime();
-		}
-
-		long currentTime = System.nanoTime();
-		double elapsedFrameTime = (currentTime - mPrevCurrentBeginFrameTime)/NANOS_PER_SECONDS;
-		if (elapsedFrameTime < MS_PER_FRAME) { //it doesn't reach next frame yet
-			Log.v(TAG, "Frame rendering faster than " + MS_PER_FRAME + ", skipping this frame");
-			return;
-		}
-
-		//Now it's time to update next frame. 
-
 		int collisionType = detectColision();	
 
 		//I'm considering the ball is being updated in a different rate compared to the frame update rate.
@@ -122,7 +103,6 @@ public class Game {
 		}
 
 		mFramesWithoutBallMov--;
-		mPrevCurrentBeginFrameTime = currentTime;
 	}
 
 	private int detectColision() {	
