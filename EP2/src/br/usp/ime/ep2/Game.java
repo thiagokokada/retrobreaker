@@ -11,8 +11,9 @@ import android.util.Log;
 public class Game {
 	private static final String TAG = Game.class.getSimpleName();
 	
-	private static final int MS_PER_FRAME = 50;
-	private static final int NANOS_PER_MS = 1000000;
+	private static final int MS_PER_SECONDS = 1000 /* milliseconds */;
+	private static final int NANOS_PER_SECONDS = 1000 /* nanoseconds */ * MS_PER_SECONDS;
+	private static final double MS_PER_FRAME = (1.0/60.0) * MS_PER_SECONDS; // 60 FPS
 	private static final int WALL_RIGHT_LEFT_SIDE = 1;
 	private static final int WALL_TOP_BOTTOM_SIDE = 2;
 
@@ -87,20 +88,22 @@ public class Game {
 
 	//Update next frame state
 	public void updateState() {
-		
+
 		if (mPrevCurrentBeginFrameTime == 0) {
 			mPrevCurrentBeginFrameTime = System.nanoTime();
 		}
-		
-		long mCurrentTime = System.nanoTime();
-		double elapsedFrameTime = (mCurrentTime - mPrevCurrentBeginFrameTime)/NANOS_PER_MS;
-		if (elapsedFrameTime < MS_PER_FRAME)//it doesn't reach next frame yet
+
+		long currentTime = System.nanoTime();
+		double elapsedFrameTime = (currentTime - mPrevCurrentBeginFrameTime)/NANOS_PER_SECONDS;
+		if (elapsedFrameTime < MS_PER_FRAME) { //it doesn't reach next frame yet
+			Log.v(TAG, "Frame rendering faster than " + MS_PER_FRAME + ", skipping this frame");
 			return;
-		
+		}
+
 		//Now it's time to update next frame. 
-		
+
 		int collisionType = detectColision();	
-		
+
 		//I'm considering the ball is being updated in a different rate compared to the frame update rate.
 		if (mFramesWithoutBallMov == 0) {
 			switch (collisionType) {
@@ -110,17 +113,17 @@ public class Game {
 			case WALL_TOP_BOTTOM_SIDE:
 				mBall.turnToPerpendicularDirection(false);
 				break;
-		}			
-			
-//			Log.i(TAG, "time to move the ball");
+			}			
+
+			//Log.i(TAG, "time to move the ball");
 			mBall.move();
 			mFramesWithoutBallMov = mBall.getSpeed();
 		}
-		
+
 		mFramesWithoutBallMov--;
-		mPrevCurrentBeginFrameTime = mCurrentTime;
+		mPrevCurrentBeginFrameTime = currentTime;
 	}
-	
+
 	private int detectColision() {	
 		float ballPosX = mBall.getPosX();
 		float ballPosY = mBall.getPosY();
