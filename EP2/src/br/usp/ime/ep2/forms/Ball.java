@@ -69,12 +69,10 @@ public class Ball extends Quad {
 		float tempY = mPosY;
 		switch(hitedSide) {
 		case RIGHT_LEFT:
-			//mPrevPosX = getXinEquation(mPrevPosY);
 			mPosY = getY2InEquation(mPosX, mPosY, mPrevPosX);
 			mPosX = mPrevPosX;
 			break;
 		case TOP_BOTTOM:
-			//mPrevPosY = getYinEquation(mPrevPosX);
 			mPosX = getX2InEquation(mPosX, mPosY, mPrevPosY);
 			mPosY = mPrevPosY;
 			break;
