@@ -16,6 +16,8 @@ class TouchSurfaceView extends GLSurfaceView {
 	private static final float WALL = 0.05f;
 
 	private long mPrevFrameTime;
+	private long mCurrentTime;
+	private long mDeltaTime;
 
 	private Renderer mRenderer;
 
@@ -36,18 +38,19 @@ class TouchSurfaceView extends GLSurfaceView {
 
 		@Override
 		public void onDrawFrame(GL10 gl) {
-			long currentTime = System.nanoTime();
-			long deltaTime = (currentTime - mPrevFrameTime)/Constants.NANOS_PER_SECONDS;
-			mPrevFrameTime = currentTime;
+			mCurrentTime = System.nanoTime();
+			mDeltaTime = (mCurrentTime - mPrevFrameTime)/Constants.NANOS_PER_SECONDS;
+			//if (limitFps(30)) return;
+			mPrevFrameTime = mCurrentTime;
 		
-			Log.v(TAG, "FPS: " + Constants.MS_PER_SECONDS / deltaTime);
+			Log.v(TAG, "FPS: " + Constants.MS_PER_SECONDS / mDeltaTime);
 			
 			gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 			mGame.updateState();
 			// Sometimes deltaTime is very high (when the game starts for example)
 			// So we need to check for that
 			mGame.drawElements(gl,
-					deltaTime < Constants.MS_PER_FRAME ? deltaTime : Constants.MS_PER_FRAME);
+					mDeltaTime < Constants.MIN_MS_PER_FRAME ? mDeltaTime : Constants.MIN_MS_PER_FRAME);
 		}
 		
 //		@Override
@@ -70,7 +73,6 @@ class TouchSurfaceView extends GLSurfaceView {
 			Matrix.orthoM(mUnprojectProjMatrix, 0, -ratio, ratio, -1.0f, 1.0f, -1.0f, 1.0f);
 			Matrix.setIdentityM(mUnprojectViewMatrix, 0);
 		}
-
 
 		@Override
 		public void onSurfaceCreated(GL10 gl, EGLConfig config) {
@@ -127,5 +129,16 @@ class TouchSurfaceView extends GLSurfaceView {
 			break;
 		}
 		return true;
+	}
+	
+	private boolean limitFps(long maxFps) {
+		long framesPerSec = Constants.MS_PER_SECONDS / maxFps;
+		if (mDeltaTime < framesPerSec){
+			Log.v(TAG, "deltaTime: " + mDeltaTime + "ms, frame limit set to: "
+					+ framesPerSec + "ms, skipping frame");
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
