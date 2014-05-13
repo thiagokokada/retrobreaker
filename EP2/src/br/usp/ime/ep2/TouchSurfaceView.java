@@ -30,7 +30,6 @@ class TouchSurfaceView extends GLSurfaceView {
 	private class Renderer implements GLSurfaceView.Renderer {
 
 		private Game mGame;
-		private int result = 0;
 
 		public Renderer() {
 			mGame = new Game();
@@ -46,7 +45,7 @@ class TouchSurfaceView extends GLSurfaceView {
 			Log.v(TAG, "FPS: " + Constants.MS_PER_SECONDS/mDeltaTime);
 			
 			gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-			if (result == 0) result = mGame.updateState(mDeltaTime);
+			mGame.updateState(mDeltaTime);
 			mGame.drawElements(gl);
 		}
 
