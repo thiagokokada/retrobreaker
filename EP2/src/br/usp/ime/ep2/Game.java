@@ -136,12 +136,6 @@ public class Game {
 			angle = -1 * (90 - reflectedDegree);
 			mBall.turnByDegree(angle);
 			break;
-		case PADDLE_BOTTOM_RIGHT_COLLISION:
-			break;
-		case PADDLE_TOP_LEFT_COLLISION:
-			break;
-		case PADDLE_TOP_RIGHT_COLLISION:
-			break;
 		case NOT_AVAILABLE:
 			break;
 		default:
@@ -183,7 +177,6 @@ public class Game {
 			} else if (mBall.getDirection() == BallDirection.LEFT_DOWNWARD) {
 				return Collision.PADDLE_BALL_FROM_RIGHT;
 			}
-			return Collision.PADDLE_TOP_LEFT_COLLISION;
 		}
 		
 		return Collision.NOT_AVAILABLE;
