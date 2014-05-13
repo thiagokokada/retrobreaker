@@ -35,11 +35,11 @@ public class Ball extends Quad {
 		mTrajectoryIncrement = mBaseSpeed;
 	}
 	
-	private float getY2inEquation(float x1, float y1, float x2) {
+	private float getY2InEquation(float x1, float y1, float x2) {
 		return y1 + mSlope * (x2 - x1);
 	}
 	
-	private float getX2inEquation(float x1, float y1, float y2) {
+	private float getX2InEquation(float x1, float y1, float y2) {
 		return  (y2 - y1)/mSlope + x1;
 	}
 	
@@ -50,12 +50,12 @@ public class Ball extends Quad {
 		switch(hitedSide) {
 		case RIGHT_LEFT:
 			//mPrevPosX = getXinEquation(mPrevPosY);
-			mPosY = getY2inEquation(mPosX, mPosY, mPrevPosX);
+			mPosY = getY2InEquation(mPosX, mPosY, mPrevPosX);
 			mPosX = mPrevPosX;
 			break;
 		case TOP_BOTTOM:
 			//mPrevPosY = getYinEquation(mPrevPosX);
-			mPosX = getX2inEquation(mPosX, mPosY, mPrevPosY);
+			mPosX = getX2InEquation(mPosX, mPosY, mPrevPosY);
 			mPosY = mPrevPosY;
 			break;
 		}
@@ -73,35 +73,30 @@ public class Ball extends Quad {
 	}
 	
 	public void move() {
-		Log.v(TAG, "prevX: "+mPosX+", prevY: "+mPosY);
+		Log.v(TAG, "prevX: " + mPosX + ", prevY: " + mPosY);
 		
-		if ((mPosX > mPrevPosX) && (mPosY > mPrevPosY)) {//right upward
+		// Right upward/downward
+		if (((mPosX > mPrevPosX) && (mPosY > mPrevPosY)) || 
+				((mPosX > mPrevPosX) && (mPosY < mPrevPosY)))
+		{
 			mPrevPosX = mPosX;
 			mPrevPosY = mPosY;
 			float x2 = mPosX + mTrajectoryIncrement;
-			mPosY = getY2inEquation(mPosX, mPosY, x2);
+			mPosY = getY2InEquation(mPosX, mPosY, x2);
 			mPosX = x2;
-		} else if ((mPosX < mPrevPosX) && (mPosY > mPrevPosY)) {//left upward
+		} 
+		// Left upward/downward
+		else if (((mPosX < mPrevPosX) && (mPosY > mPrevPosY)) ||
+				((mPosX < mPrevPosX) && (mPosY < mPrevPosY)))
+		{
 			mPrevPosX = mPosX;
 			mPrevPosY = mPosY;
 			float x2 = mPosX - mTrajectoryIncrement;
-			mPosY = getY2inEquation(mPosX, mPosY, x2);
-			mPosX = x2;
-		} else if ((mPosX < mPrevPosX) && (mPosY < mPrevPosY)) {//left downward
-			mPrevPosX = mPosX;
-			mPrevPosY = mPosY;
-			float x2 = mPosX - mTrajectoryIncrement;
-			mPosY = getY2inEquation(mPosX, mPosY, x2);
-			mPosX = x2;
-		} else if ((mPosX > mPrevPosX) && (mPosY < mPrevPosY)) {//right downward
-			mPrevPosX = mPosX;
-			mPrevPosY = mPosY;
-			float x2 = mPosX + mTrajectoryIncrement;
-			mPosY = getY2inEquation(mPosX, mPosY, x2);
+			mPosY = getY2InEquation(mPosX, mPosY, x2);
 			mPosX = x2;
 		}
 
-		Log.v(TAG, "currentX: "+mPosX+", currentY: "+mPosY);
+		Log.v(TAG, "currentX: " + mPosX + ", currentY: " + mPosY);
 	}
 
 }
