@@ -44,9 +44,10 @@ public class Ball extends Quad {
 		return  (y2 - y1)/mSlope + x1;
 	}
 	
+	//close angle to the y axis
 	public float getAngle() {
 		Log.d(TAG, "inside getAngle, mSlope: "+mSlope);
-		return (float) Math.toDegrees(Math.atan(mSlope));
+		return (float) (90 - Math.abs(Math.toDegrees(Math.atan(mSlope))));
 	}
 	
 	public BallDirection getDirection() {

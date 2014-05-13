@@ -89,9 +89,9 @@ public class Game {
 	}
 	
 	private float calcReflectedDegree(float x2, float x1, boolean sameAngle) {
-		float angle;
-		if (sameAngle) angle = Math.abs(mBall.getAngle());
-		else angle = 90 - Math.abs(mBall.getAngle());
+		float angle = Math.abs(mBall.getAngle());
+//		if (sameAngle) angle = Math.abs(mBall.getAngle());
+//		else angle = 90 - Math.abs(mBall.getAngle());
 		float reflectedAngle = ((x2 - x1)/mPaddle.getWidth())*angle + angle;
 		Log.d(TAG, "angle: "+angle+", reflectedAngle: "+reflectedAngle);
 		return reflectedAngle;
@@ -111,11 +111,16 @@ public class Game {
 		switch (collisionType) {
 		case WALL_RIGHT_LEFT_SIDE:
 			Log.d(TAG, "Right/Left side collision detected");
+			Log.d(TAG, "previous slope: "+mBall.getSlope());
 			mBall.turnToPerpendicularDirection(Hit.RIGHT_LEFT);
+			Log.d(TAG, "next slope: "+mBall.getSlope());
+//			if (1==1) return -1;
 			break;
 		case WALL_TOP_BOTTOM_SIDE:
 			Log.d(TAG, "Top/Bottom side collision detected");
+			Log.d(TAG, "previous slope: "+mBall.getSlope());
 			mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
+			Log.d(TAG, "next slope: "+mBall.getSlope());
 			break;
 		case PADDLE_BALL_FROM_LEFT:
 			Log.d(TAG, "collided into the top left part of the paddle");
@@ -126,7 +131,7 @@ public class Game {
 			float reflectedDegree = calcReflectedDegree(x2, x1, sameAngle);
 			float angle = (90 - reflectedDegree);
 			mBall.turnByDegree(angle);
-			if (1==1) return -1;
+//			if (1==1) return -1;
 //			mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
 			break;
 		case PADDLE_BALL_FROM_RIGHT:
@@ -138,7 +143,7 @@ public class Game {
 			reflectedDegree = calcReflectedDegree(x2, x1, sameAngle);
 			angle = -1 * (90 - reflectedDegree);
 			mBall.turnByDegree(angle);
-			if (1==1) return -1;
+//			if (1==1) return -1;
 			break;
 		case PADDLE_TOP_RIGHT_COLLISION:
 			Log.d(TAG, "collided into the top right part of the paddle");
@@ -147,6 +152,7 @@ public class Game {
 		}
 
 		mBall.move();
+//		if (1==1) return -1;
 		return 0;
 
 	}
