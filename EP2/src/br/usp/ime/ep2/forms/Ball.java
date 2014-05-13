@@ -63,7 +63,7 @@ public class Ball extends Quad {
 	
 	public void turnToPerpendicularDirection(Hit hitedSide) {
 		
-		mSlope = -1 * (1/mSlope);
+		mSlope = -1 * (mSlope);
 		float tempX = mPosX;
 		float tempY = mPosY;
 		switch(hitedSide) {
@@ -93,6 +93,10 @@ public class Ball extends Quad {
 		
 		Log.d(TAG, "inside turnByDegre, new mSlope: "+mSlope+", based on angle: "+degree);
 		Log.d(TAG, "mPrevPosX: "+mPrevPosX+", mPrevPosY: "+mPrevPosY+", mPosX: "+mPosX+", mPosY: "+mPosY);
+	}
+	
+	public float getSlope() {
+		return mSlope;
 	}
 	
 	public void print() {
