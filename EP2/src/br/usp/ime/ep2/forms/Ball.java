@@ -111,15 +111,32 @@ public class Ball extends Quad {
 	public void move() {
 		Log.v(TAG, "prevX: " + mPosX + ", prevY: " + mPosY);
 		
+		BallDirection dir = getDirection();
 		// Right upward/downward
 		if (((mPosX > mPrevPosX) && (mPosY > mPrevPosY)) || 
 				((mPosX > mPrevPosX) && (mPosY < mPrevPosY)))
 		{
+			Log.d(TAG, "Right upward/downward");
 			mPrevPosX = mPosX;
 			mPrevPosY = mPosY;
-			float x2 = mPosX + mTrajectoryIncrement;
-			mPosY = getY2InEquation(mPosX, mPosY, x2);
-			mPosX = x2;
+			if (Math.abs(mSlope) <= 1) {
+				Log.d(TAG, "mSlope <= 1");
+				float x2 = mPosX + mTrajectoryIncrement;
+				mPosY = getY2InEquation(mPosX, mPosY, x2);
+				mPosX = x2;
+			} else {
+				Log.d(TAG, "mSlope > 1");
+				
+				float y2;
+				if (dir == BallDirection.RIGHT_UPWARD) {
+					y2 = mPosY + mTrajectoryIncrement;
+				}
+				else {
+					y2 = mPosY - mTrajectoryIncrement;
+				}
+				mPosX = getX2InEquation(mPosX, mPosY, y2);
+				mPosY = y2;
+			}
 		} 
 		// Left upward/downward
 		else if (((mPosX < mPrevPosX) && (mPosY > mPrevPosY)) ||
@@ -127,9 +144,17 @@ public class Ball extends Quad {
 		{
 			mPrevPosX = mPosX;
 			mPrevPosY = mPosY;
-			float x2 = mPosX - mTrajectoryIncrement;
-			mPosY = getY2InEquation(mPosX, mPosY, x2);
-			mPosX = x2;
+			if (Math.abs(mSlope) <= 1) {
+				float x2 = mPosX - mTrajectoryIncrement;
+				mPosY = getY2InEquation(mPosX, mPosY, x2);
+				mPosX = x2;	
+			} else {
+				float y2;
+				if (dir == BallDirection.LEFT_UPWARD) y2 = mPosY + mTrajectoryIncrement;
+				else y2 = mPosY - mTrajectoryIncrement;
+				mPosX = getX2InEquation(mPosX, mPosY, y2);
+				mPosY = y2;
+			}
 		}
 
 		Log.v(TAG, "currentX: " + mPosX + ", currentY: " + mPosY);
