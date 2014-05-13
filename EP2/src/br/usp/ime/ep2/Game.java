@@ -96,7 +96,7 @@ public class Game {
 	}
 
 	//Update next frame state
-	public int updateState(float deltaTime) {
+	public void updateState(float deltaTime) {
 		
 		// Set new ball speed to the next frame
 		mBall.setBallSpeed(deltaTime);
@@ -143,7 +143,6 @@ public class Game {
 		}
 
 		mBall.move();
-		return 0;
 
 	}
 
