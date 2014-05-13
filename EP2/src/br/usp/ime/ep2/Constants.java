@@ -12,6 +12,10 @@ public class Constants {
 	public static enum Collision {
 		NOT_AVAILABLE, WALL_RIGHT_LEFT_SIDE, WALL_TOP_BOTTOM_SIDE
 	}
+
+	public static enum Hit {
+		RIGHT_LEFT, TOP_BOTTOM
+	}
 	
 	public static final class Colors {
 		

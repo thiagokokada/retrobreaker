@@ -1,6 +1,7 @@
 package br.usp.ime.ep2.forms;
 
 import br.usp.ime.ep2.Constants;
+import br.usp.ime.ep2.Constants.Hit;
 import android.util.Log;
 
 public class Ball extends Quad {
@@ -42,12 +43,15 @@ public class Ball extends Quad {
 		return  (y2 - mPosY)/mSlope + mPosX;
 	}
 	
-	public void turnToPerpendicularDirection(boolean hitedSide) {
+	public void turnToPerpendicularDirection(Hit hitedSide) {
 		mSlope = -1 * (1/mSlope);
-		if (hitedSide) {//right or left side
+		switch(hitedSide) {
+		case RIGHT_LEFT:
 			mPrevPosX = getXinEquation(mPrevPosY);
-		} else { //top or bottom
+			break;
+		case TOP_BOTTOM:
 			mPrevPosY = getYinEquation(mPrevPosX);
+			break;
 		}
 	}
 	

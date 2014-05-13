@@ -4,6 +4,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import br.usp.ime.ep2.Constants.Collision;
 import br.usp.ime.ep2.Constants.Colors;
+import br.usp.ime.ep2.Constants.Hit;
 import br.usp.ime.ep2.forms.Ball;
 import br.usp.ime.ep2.forms.Brick;
 import br.usp.ime.ep2.forms.Paddle;
@@ -97,11 +98,11 @@ public class Game {
 		switch (collisionType) {
 		case WALL_RIGHT_LEFT_SIDE:
 			Log.d(TAG, "Right/Left side collision detected");
-			mBall.turnToPerpendicularDirection(true);
+			mBall.turnToPerpendicularDirection(Hit.RIGHT_LEFT);
 			break;
 		case WALL_TOP_BOTTOM_SIDE:
 			Log.d(TAG, "Top/Bottom side collision detected");
-			mBall.turnToPerpendicularDirection(false);
+			mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
 			break;
 		default:
 			/* Nothing to do */
