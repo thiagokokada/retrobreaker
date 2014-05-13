@@ -35,24 +35,32 @@ public class Ball extends Quad {
 		mTrajectoryIncrement = mBaseSpeed;
 	}
 	
-	private float getYinEquation(float x2) {
-		return mPosY + mSlope * (x2 - mPosX);
+	private float getY2inEquation(float x1, float y1, float x2) {
+		return y1 + mSlope * (x2 - x1);
 	}
 	
-	private float getXinEquation(float y2) {
-		return  (y2 - mPosY)/mSlope + mPosX;
+	private float getX2inEquation(float x1, float y1, float y2) {
+		return  (y2 - y1)/mSlope + x1;
 	}
 	
 	public void turnToPerpendicularDirection(Hit hitedSide) {
 		mSlope = -1 * (1/mSlope);
+		float tempX = mPosX;
+		float tempY = mPosY;
 		switch(hitedSide) {
 		case RIGHT_LEFT:
-			mPrevPosX = getXinEquation(mPrevPosY);
+			//mPrevPosX = getXinEquation(mPrevPosY);
+			mPosY = getY2inEquation(mPosX, mPosY, mPrevPosX);
+			mPosX = mPrevPosX;
 			break;
 		case TOP_BOTTOM:
-			mPrevPosY = getYinEquation(mPrevPosX);
+			//mPrevPosY = getYinEquation(mPrevPosX);
+			mPosX = getX2inEquation(mPosX, mPosY, mPrevPosY);
+			mPosY = mPrevPosY;
 			break;
 		}
+		mPrevPosX = tempX;
+		mPrevPosY = tempY;
 	}
 	
 	/* The ball speed should depend on the time that a frame is 
@@ -71,25 +79,25 @@ public class Ball extends Quad {
 			mPrevPosX = mPosX;
 			mPrevPosY = mPosY;
 			float x2 = mPosX + mTrajectoryIncrement;
-			mPosY = getYinEquation(x2);
+			mPosY = getY2inEquation(mPosX, mPosY, x2);
 			mPosX = x2;
 		} else if ((mPosX < mPrevPosX) && (mPosY > mPrevPosY)) {//left upward
 			mPrevPosX = mPosX;
 			mPrevPosY = mPosY;
 			float x2 = mPosX - mTrajectoryIncrement;
-			mPosY = getYinEquation(x2);	
+			mPosY = getY2inEquation(mPosX, mPosY, x2);
 			mPosX = x2;
 		} else if ((mPosX < mPrevPosX) && (mPosY < mPrevPosY)) {//left downward
 			mPrevPosX = mPosX;
 			mPrevPosY = mPosY;
 			float x2 = mPosX - mTrajectoryIncrement;
-			mPosY = getYinEquation(x2);
+			mPosY = getY2inEquation(mPosX, mPosY, x2);
 			mPosX = x2;
 		} else if ((mPosX > mPrevPosX) && (mPosY < mPrevPosY)) {//right downward
 			mPrevPosX = mPosX;
 			mPrevPosY = mPosY;
 			float x2 = mPosX + mTrajectoryIncrement;
-			mPosY = getYinEquation(x2);
+			mPosY = getY2inEquation(mPosX, mPosY, x2);
 			mPosX = x2;
 		}
 

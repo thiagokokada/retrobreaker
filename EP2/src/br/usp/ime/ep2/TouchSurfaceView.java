@@ -40,7 +40,7 @@ class TouchSurfaceView extends GLSurfaceView {
 		public void onDrawFrame(GL10 gl) {
 			mCurrentTime = System.nanoTime();
 			mDeltaTime = (mCurrentTime - mPrevFrameTime)/Constants.NANOS_PER_SECONDS;
-			long delta = limitFps(30);
+			long delta = limitFps(15);
 			mPrevFrameTime = mCurrentTime + delta;
 		
 			Log.v(TAG, "FPS: " + Constants.MS_PER_SECONDS/mDeltaTime);
