@@ -23,7 +23,7 @@ public class Game {
 	
 	private Paddle mPaddle;
 	private Ball mBall;
-	private Brick[][] mBlocks;
+	private Brick[][] mBricks;
 	
 	public Game() {
 		SCREEN_HIGHER_Y = 1.0f;
@@ -56,14 +56,14 @@ public class Game {
 	private void createLevel (float[] colors,int blocksX, int blocksY, float initialX, float initialY,
 			float spaceX, float spaceY) 
 	{
-		mBlocks = new Brick[blocksX][blocksY];
+		mBricks = new Brick[blocksX][blocksY];
 		
 		float newPosX = initialX;
 		float newPosY = initialY;
 		
-		for (int i=0; i<mBlocks.length; i++) {
-			for (int j=0; j<mBlocks[i].length; j++) {
-				mBlocks[i][j] = new Brick(colors, newPosX, newPosY, 0.1f);
+		for (int i=0; i<mBricks.length; i++) {
+			for (int j=0; j<mBricks[i].length; j++) {
+				mBricks[i][j] = new Brick(colors, newPosX, newPosY, 0.1f);
 				newPosX += spaceX;
 			}
 			newPosX = initialX;
@@ -77,9 +77,9 @@ public class Game {
 		mBall.draw(gl);
 		
 		// Need to draw each block on surface
-		for (int i=0; i<mBlocks.length; i++) {
-			for (int j=0; j<mBlocks[i].length; j++) {
-				mBlocks[i][j].draw(gl);
+		for (Brick[] bricks : mBricks) {
+			for (Brick brick: bricks) {
+				brick.draw(gl);
 			}
 		}
 	}
@@ -175,6 +175,13 @@ public class Game {
 				return Collision.PADDLE_BALL_FROM_LEFT;
 			} else if (mBall.getDirection() == BallDirection.LEFT_DOWNWARD) {
 				return Collision.PADDLE_BALL_FROM_RIGHT;
+			}
+		}
+		
+		//detecting collision between the ball and the bricks
+		for (Brick bricks[] : mBricks) {
+			for (Brick brick : bricks) {
+				
 			}
 		}
 		
