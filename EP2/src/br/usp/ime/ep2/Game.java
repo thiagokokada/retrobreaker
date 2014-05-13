@@ -123,11 +123,11 @@ public class Game {
 	private Collision detectColision() {	
 		
 		//detecting collision between ball and wall
-		if ((mBall.getPosX() > SCREEN_HIGHER_X) 			//collided in the right side
-				|| (mBall.getPosX() < SCREEN_LOWER_X)) {	//collided in the left side 
+		if ((mBall.getRightX() >= SCREEN_HIGHER_X) 			//collided in the right side
+				|| (mBall.getLeftX() <= SCREEN_LOWER_X)) {	//collided in the left side 
 			return Collision.WALL_RIGHT_LEFT_SIDE;
-		} else if ((mBall.getPosY() > SCREEN_HIGHER_Y)	//collided in the top part
-				|| (mBall.getPosY() < SCREEN_LOWER_Y)) {	//collided in the bottom part
+		} else if ((mBall.getTopY() >= SCREEN_HIGHER_Y)	//collided in the top part
+				|| (mBall.getBottomY() <= SCREEN_LOWER_Y)) {	//collided in the bottom part
 			return Collision.WALL_TOP_BOTTOM_SIDE;
 		}
 		
@@ -139,12 +139,11 @@ public class Game {
 		
 		
 		if ((mBall.getBottomY() <= mPaddle.getTopY()) &&
-				(
-						((mBall.getLeftX() < mPaddle.getLeftX()) && (mBall.getRightX() >= mPaddle.getLeftX())) 	//the ball is far left 
+				(((mBall.getLeftX() < mPaddle.getLeftX()) && (mBall.getRightX() >= mPaddle.getLeftX())) 	//the ball is far left 
 				|| ((mBall.getLeftX() <= mPaddle.getLeftX()) && (mBall.getRightX() < mPaddle.getRightX())) 		//the ball is far right 
 				|| ((mBall.getLeftX() >= mPaddle.getLeftX()) && (mBall.getRightX() <= mPaddle.getRightX()))		// the ball is inside the paddle
-				)
-			) {
+				))
+		{
 			float x2 = mBall.getPosX();
 			float x1 = mPaddle.getPosX();
 			float angle = 90 - Math.abs(mBall.getAngle());
