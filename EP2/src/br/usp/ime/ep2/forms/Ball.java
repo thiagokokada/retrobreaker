@@ -19,6 +19,7 @@ public class Ball extends Quad {
 	//for the trajectory equation
 	private float mSlope;
 	private float mTrajectoryIncrement;
+	private float mBaseSpeed;
 
 	public Ball(float[] colors, float pos_x, float pos_y,
 			float last_x, float last_y, float scale, float trajectory_inc) {
@@ -29,7 +30,8 @@ public class Ball extends Quad {
 		
 		mSlope = (mPosY - mPrevPosY)/(mPosX - mPrevPosX);
 		
-		mTrajectoryIncrement = getBallSpeed(trajectory_inc);
+		mBaseSpeed = trajectory_inc;
+		mTrajectoryIncrement = mBaseSpeed;
 	}
 	
 	private float getYinEquation(float x2) {
@@ -49,8 +51,13 @@ public class Ball extends Quad {
 		}
 	}
 	
-	private float getBallSpeed(float baseSpeed) {
-		return (float) (baseSpeed * Math.ceil(Constants.ANDROID_FPS_LIMIT / (Constants.MS_PER_SECONDS / Constants.FPS_LIMIT)));
+	/* The ball speed should depend on the time that a frame is 
+	 * rendered instead of a constant */
+	public void setBallSpeed(float deltaTime) {
+		mTrajectoryIncrement = mBaseSpeed * (Constants.MAX_FPS /
+				(Constants.MS_PER_SECONDS / deltaTime)
+				);
+		Log.v(TAG, "mTrajetoryIncrement: " + mTrajectoryIncrement);
 	}
 	
 	public void move() {

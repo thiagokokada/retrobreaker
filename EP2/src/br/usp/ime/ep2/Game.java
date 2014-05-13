@@ -88,7 +88,9 @@ public class Game {
 	}
 
 	//Update next frame state
-	public void updateState() {
+	public void updateState(float deltaTime) {
+		
+		mBall.setBallSpeed(deltaTime);
 
 		Collision collisionType = detectColision();	
 

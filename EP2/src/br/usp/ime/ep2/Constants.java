@@ -5,11 +5,9 @@ public class Constants {
 	public static final long MS_PER_SECONDS = 1000 /* milliseconds */;
 	public static final long NANOS_PER_SECONDS = 1000 /* nanoseconds */ * MS_PER_SECONDS;
 
-	//Thanks to VSync
-	public static final double ANDROID_FPS_LIMIT = 60.0f;
-	//~60FPS, double arithmetics is too unreliable so we round it.
-	public static final double FPS_LIMIT = Math.floor((1.0/60.0) * MS_PER_SECONDS);
-	public static final boolean FPS_LIMITER = false;
+	//The game runs at a maximum velocity of 60FPS
+	public static final int MAX_FPS = 60;
+	public static final long MS_PER_FRAME = (long) Math.ceil(1.0/MAX_FPS * MS_PER_SECONDS);
 	
 	public static enum Collision {
 		NOT_AVAILABLE, WALL_RIGHT_LEFT_SIDE, WALL_TOP_BOTTOM_SIDE
