@@ -1,6 +1,7 @@
 package br.usp.ime.ep2.forms;
 
 import br.usp.ime.ep2.Constants;
+import br.usp.ime.ep2.Constants.BallDirection;
 import br.usp.ime.ep2.Constants.Hit;
 import android.util.Log;
 
@@ -44,7 +45,20 @@ public class Ball extends Quad {
 	}
 	
 	public float getAngle() {
-		return (float) Math.atan(mSlope);
+		Log.d(TAG, "inside getAngle, mSlope: "+mSlope);
+		return (float) Math.toDegrees(Math.atan(mSlope));
+	}
+	
+	public BallDirection getDirection() {
+		if ((mPosX > mPrevPosX) && (mPosY > mPrevPosY))
+			return BallDirection.RIGHT_UPWARD;
+		else if ((mPosX > mPrevPosX) && (mPosY < mPrevPosY))
+			return BallDirection.RIGHT_DOWNWARD;
+		else if ((mPosX < mPrevPosX) && (mPosY > mPrevPosY))
+			return BallDirection.LEFT_UPWARD;
+		else if ((mPosX < mPrevPosX) && (mPosY < mPrevPosY))
+			return BallDirection.LEFT_DOWNWARD;
+		return BallDirection.UNKNOWN_DIRECTION;
 	}
 	
 	public void turnToPerpendicularDirection(Hit hitedSide) {
@@ -69,7 +83,20 @@ public class Ball extends Quad {
 	}
 	
 	public void turnByDegree(float degree) {
-		mSlope = (float) Math.tan(degree);
+		mSlope = (float) Math.tan(Math.toRadians(degree));
+		float tempX = mPosX;
+		float tempY = mPosY;
+		mPosX = getX2InEquation(mPosX, mPosY, mPrevPosY);
+		mPosY = mPrevPosY;
+		mPrevPosX = tempX;
+		mPrevPosY = tempY;
+		
+		Log.d(TAG, "inside turnByDegre, new mSlope: "+mSlope+", based on angle: "+degree);
+		Log.d(TAG, "mPrevPosX: "+mPrevPosX+", mPrevPosY: "+mPrevPosY+", mPosX: "+mPosX+", mPosY: "+mPosY);
+	}
+	
+	public void print() {
+		Log.d(TAG, "mPrevPosX: "+mPrevPosX+", mPrevPosY: "+mPrevPosY+", mPosX: "+mPosX+", mPosY: "+mPosY);
 	}
 	
 	/* The ball speed should depend on the time that a frame is 

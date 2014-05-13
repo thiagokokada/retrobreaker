@@ -41,14 +41,13 @@ class TouchSurfaceView extends GLSurfaceView {
 		public void onDrawFrame(GL10 gl) {
 			mCurrentTime = System.nanoTime();
 			mDeltaTime = (mCurrentTime - mPrevFrameTime)/Constants.NANOS_PER_SECONDS;
-			long delta = limitFps(15);
+			long delta = limitFps(30);
 			mPrevFrameTime = mCurrentTime + delta;
 		
 			Log.v(TAG, "FPS: " + Constants.MS_PER_SECONDS/mDeltaTime);
 			
 			gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-//			if (result == 0) 
-			mGame.updateState(mDeltaTime);
+			if (result == 0) result = mGame.updateState(mDeltaTime);
 			mGame.drawElements(gl);
 		}
 		

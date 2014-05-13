@@ -2,6 +2,7 @@ package br.usp.ime.ep2;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import br.usp.ime.ep2.Constants.BallDirection;
 import br.usp.ime.ep2.Constants.Collision;
 import br.usp.ime.ep2.Constants.Colors;
 import br.usp.ime.ep2.Constants.Hit;
@@ -42,7 +43,7 @@ public class Game {
 				" RightX: " + mPaddle.getRightX()
 				);
 		
-		mBall = new Ball(Colors.RAINBOW, 0.0f, 0.0f, -0.05f, -0.05f, 0.1f, 0.01f);
+		mBall = new Ball(Colors.RAINBOW, 0.0f, 0.0f, -0.02f, -0.05f, 0.1f, 0.004f);
 		Log.d(TAG, "Created ball:" + 
 				" BottomY: " + mBall.getBottomY() +
 				" TopY: " + mBall.getTopY() +
@@ -86,15 +87,27 @@ public class Game {
 	public void updatePaddleXPosition(float x) {
 		mPaddle.setPosX(x);
 	}
+	
+	private float calcReflectedDegree(float x2, float x1, boolean sameAngle) {
+		float angle;
+		if (sameAngle) angle = Math.abs(mBall.getAngle());
+		else angle = 90 - Math.abs(mBall.getAngle());
+		float reflectedAngle = ((x2 - x1)/mPaddle.getWidth())*angle + angle;
+		Log.d(TAG, "angle: "+angle+", reflectedAngle: "+reflectedAngle);
+		return reflectedAngle;
+	}
 
 	//Update next frame state
-	public void updateState(float deltaTime) {
+	public int updateState(float deltaTime) {
 		
 		// Set new ball speed to the next frame
 		mBall.setBallSpeed(deltaTime);
 
-		Collision collisionType = detectColision();	
+		float padPosX[] = new float[1];
+		float padPosY[] = new float[1];
+		Collision collisionType = detectColision(padPosX, padPosY);	
 
+		boolean sameAngle = false;
 		switch (collisionType) {
 		case WALL_RIGHT_LEFT_SIDE:
 			Log.d(TAG, "Right/Left side collision detected");
@@ -104,10 +117,28 @@ public class Game {
 			Log.d(TAG, "Top/Bottom side collision detected");
 			mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
 			break;
-		case PADDLE_TOP_LEFT_COLLISION:
+		case PADDLE_BALL_FROM_LEFT:
 			Log.d(TAG, "collided into the top left part of the paddle");
-//			if (1==1) return -1;
-			mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
+			float x2 = mBall.getPosX();
+			float x1 = padPosX[0];
+			if (x2 > x1) sameAngle = true;
+			Log.d(TAG, "paddlePosX: "+padPosX[0]);
+			float reflectedDegree = calcReflectedDegree(x2, x1, sameAngle);
+			float angle = (90 - reflectedDegree);
+			mBall.turnByDegree(angle);
+			if (1==1) return -1;
+//			mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
+			break;
+		case PADDLE_BALL_FROM_RIGHT:
+			Log.d(TAG, "collided into the top left part of the paddle");
+			x2 = padPosX[0];
+			x1 = mBall.getPosX(); 
+			if (x2 > x1) sameAngle = true;
+			Log.d(TAG, "paddlePosX: "+padPosX[0]);
+			reflectedDegree = calcReflectedDegree(x2, x1, sameAngle);
+			angle = -1 * (90 - reflectedDegree);
+			mBall.turnByDegree(angle);
+			if (1==1) return -1;
 			break;
 		case PADDLE_TOP_RIGHT_COLLISION:
 			Log.d(TAG, "collided into the top right part of the paddle");
@@ -116,11 +147,16 @@ public class Game {
 		}
 
 		mBall.move();
-//		return 0;
+		return 0;
 
 	}
 
-	private Collision detectColision() {	
+	private Collision detectColision(float padPosX[], float padPosY[]) {
+		padPosX[0] = mPaddle.getPosX();
+		padPosY[0] = mPaddle.getPosY();
+		float paddleLeftX = mPaddle.getLeftX();
+		float paddleRightX = mPaddle.getRightX();
+		float paddleTopY = mPaddle.getTopY();
 		
 		//detecting collision between ball and wall
 		if ((mBall.getPosX() > SCREEN_HIGHER_X) 			//collided in the right side
@@ -132,24 +168,25 @@ public class Game {
 		}
 		
 		//detecting collision between the ball and the paddle
-		Log.d(TAG, "ball bottom Y: "+mBall.getBottomY());
-		Log.d(TAG, "paddle top Y: "+ mPaddle.getTopY());
-		Log.d(TAG, "ball right X: "+mBall.getRightX());
-		Log.d(TAG, "paddle left X: "+mPaddle.getLeftX());
+//		Log.d(TAG, "ball bottom Y: "+mBall.getBottomY());
+//		Log.d(TAG, "paddle top Y: "+ mPaddle.getTopY());
+//		Log.d(TAG, "ball right X: "+mBall.getRightX());
+//		Log.d(TAG, "paddle left X: "+mPaddle.getLeftX());
+		mBall.print();
 		
 		
-		if ((mBall.getBottomY() <= mPaddle.getTopY()) &&
+		if ((mBall.getBottomY() <= paddleTopY) &&
 				(
-						((mBall.getLeftX() < mPaddle.getLeftX()) && (mBall.getRightX() >= mPaddle.getLeftX())) 	//the ball is far left 
-				|| ((mBall.getLeftX() <= mPaddle.getLeftX()) && (mBall.getRightX() < mPaddle.getRightX())) 		//the ball is far right 
-				|| ((mBall.getLeftX() >= mPaddle.getLeftX()) && (mBall.getRightX() <= mPaddle.getRightX()))		// the ball is inside the paddle
+						((mBall.getLeftX() < paddleLeftX) && (mBall.getRightX() >= paddleLeftX)) 	//the ball is far left 
+				|| ((mBall.getLeftX() <= paddleLeftX) && (mBall.getRightX() < paddleRightX)) 		//the ball is far right 
+				|| ((mBall.getLeftX() >= paddleLeftX) && (mBall.getRightX() <= paddleRightX))		// the ball is inside the paddle
 				)
 			) {
-			float x2 = mBall.getPosX();
-			float x1 = mPaddle.getPosX();
-			float angle = 90 - Math.abs(mBall.getAngle());
-			float reflectedDegree = ((x2 - x1)/mPaddle.getWidth())*angle + angle;
-			
+			if (mBall.getDirection() == BallDirection.RIGHT_DOWNWARD) {
+				return Collision.PADDLE_BALL_FROM_LEFT;
+			} else if (mBall.getDirection() == BallDirection.LEFT_DOWNWARD)
+				return Collision.PADDLE_BALL_FROM_RIGHT;
+			return Collision.PADDLE_TOP_LEFT_COLLISION;
 		}
 		
 //		if ((mBall.getBottomY() <= mPaddle.getTopY()) 
