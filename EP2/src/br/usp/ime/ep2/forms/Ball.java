@@ -42,6 +42,10 @@ public class Ball extends Quad {
 		return  (y2 - mPosY)/mSlope + mPosX;
 	}
 	
+	public float getAngle() {
+		return (float) Math.atan(mSlope);
+	}
+	
 	public void turnToPerpendicularDirection(boolean hitedSide) {
 		mSlope = -1 * (1/mSlope);
 		if (hitedSide) {//right or left side
@@ -49,6 +53,10 @@ public class Ball extends Quad {
 		} else { //top or bottom
 			mPrevPosY = getYinEquation(mPrevPosX);
 		}
+	}
+	
+	public void turnByDegree(float degree) {
+		mSlope = (float) Math.tan(degree);
 	}
 	
 	/* The ball speed should depend on the time that a frame is 
