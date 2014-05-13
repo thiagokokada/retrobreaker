@@ -71,7 +71,7 @@ public class Game {
 	}
 
 	
-	public void drawElements(GL10 gl) {
+	public void drawElements(GL10 gl, float deltaTime) {
 		mPaddle.draw(gl);
 		mBall.draw(gl);
 		
@@ -81,6 +81,9 @@ public class Game {
 				mBlocks[i][j].draw(gl);
 			}
 		}
+		
+		// Set new ball speed to the next frame
+		mBall.setBallSpeed(deltaTime);
 	}
 	
 	public void updatePaddleXPosition(float x) {
@@ -88,9 +91,8 @@ public class Game {
 	}
 
 	//Update next frame state
-	public void updateState(float deltaTime) {
+	public void updateState() {
 		
-		mBall.setBallSpeed(deltaTime);
 
 		Collision collisionType = detectColision();	
 

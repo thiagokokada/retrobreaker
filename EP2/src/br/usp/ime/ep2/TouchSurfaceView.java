@@ -43,8 +43,11 @@ class TouchSurfaceView extends GLSurfaceView {
 			Log.v(TAG, "FPS: " + Constants.MS_PER_SECONDS / deltaTime);
 			
 			gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-			mGame.updateState(deltaTime < Constants.MS_PER_FRAME ? deltaTime : Constants.MS_PER_FRAME);
-			mGame.drawElements(gl);
+			mGame.updateState();
+			// Sometimes deltaTime is very high (when the game starts for example)
+			// So we need to check for that
+			mGame.drawElements(gl,
+					deltaTime < Constants.MS_PER_FRAME ? deltaTime : Constants.MS_PER_FRAME);
 		}
 		
 //		@Override
