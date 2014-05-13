@@ -40,10 +40,10 @@ class TouchSurfaceView extends GLSurfaceView {
 		public void onDrawFrame(GL10 gl) {
 			mCurrentTime = System.nanoTime();
 			mDeltaTime = (mCurrentTime - mPrevFrameTime)/Constants.NANOS_PER_SECONDS;
-			//if (limitFps(60)) return;
-			mPrevFrameTime = mCurrentTime;
+			long delta = limitFps(30);
+			mPrevFrameTime = mCurrentTime + delta;
 		
-			Log.v(TAG, "FPS: " + Constants.MS_PER_SECONDS / mDeltaTime);
+			Log.v(TAG, "FPS: " + Constants.MS_PER_SECONDS/mDeltaTime);
 			
 			gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 			mGame.updateState(mDeltaTime);
@@ -129,14 +129,19 @@ class TouchSurfaceView extends GLSurfaceView {
 		return true;
 	}
 	
-	private boolean limitFps(long maxFps) {
+	private long limitFps(long maxFps) {
 		long framesPerSec = Constants.MS_PER_SECONDS / maxFps;
 		if (mDeltaTime < framesPerSec){
+			long sleepTime = framesPerSec - mDeltaTime;
 			Log.v(TAG, "deltaTime: " + mDeltaTime + "ms, frame limit set to: "
-					+ framesPerSec + "ms, skipping frame");
-			return true;
-		} else {
-			return false;
+					+ framesPerSec + "ms, waiting " + sleepTime + "ms");
+			try {
+				Thread.sleep(sleepTime);
+				return sleepTime;
+			} catch (InterruptedException e) {
+				return 0;
+			}
 		}
+		return 0;
 	}
 }
