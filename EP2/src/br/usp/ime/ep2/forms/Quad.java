@@ -39,6 +39,10 @@ abstract class Quad {
 		mColorBuffer.position(0);
 	}
 	
+	public float getScale() {
+		return mScale;
+	}
+	
 	public float getPosX() {
 		return mPosX;
 	}
@@ -48,19 +52,23 @@ abstract class Quad {
 	}
 
 	public float getLeftX() {
-		return getPosX() + mVertices[0];		
+		return getPosX() + mScale * mVertices[0];		
 	}
 	
 	public float getBottomY() {
-		return getPosY() + mVertices[1];		
+		return getPosY() + mScale * mVertices[1];		
 	}
 	
 	public float getTopY() {
-		return getPosY() + mVertices[3];		
+		return getPosY() + mScale * mVertices[3];		
 	}
 
 	public float getRightX() {
-		return getPosX() + mVertices[4];		
+		return getPosX() + mScale * mVertices[4];		
+	}
+	
+	public float getWidth() {
+		return (mVertices[4] - mVertices[0])*mScale;
 	}
 	
 	public void setPosX(float x) {

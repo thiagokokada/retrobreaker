@@ -104,36 +104,66 @@ public class Game {
 			Log.d(TAG, "Top/Bottom side collision detected");
 			mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
 			break;
-		default:
-			/* Nothing to do */
+		case PADDLE_TOP_LEFT_COLLISION:
+			Log.d(TAG, "collided into the top left part of the paddle");
+//			if (1==1) return -1;
+			mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
+			break;
+		case PADDLE_TOP_RIGHT_COLLISION:
+			Log.d(TAG, "collided into the top right part of the paddle");
+			mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
 			break;
 		}
 
 		mBall.move();
+//		return 0;
 
 	}
 
 	private Collision detectColision() {	
-		float ballPosX = mBall.getPosX();
-		float ballPosY = mBall.getPosY();
 		
 		//detecting collision between ball and wall
-		if ((ballPosX > SCREEN_HIGHER_X) 			//collided in the right side
-				|| (ballPosX < SCREEN_LOWER_X)) {	//collided in the left side 
+		if ((mBall.getPosX() > SCREEN_HIGHER_X) 			//collided in the right side
+				|| (mBall.getPosX() < SCREEN_LOWER_X)) {	//collided in the left side 
 			return Collision.WALL_RIGHT_LEFT_SIDE;
-		} else if ((ballPosY > SCREEN_HIGHER_Y)	//collided in the top part
-				|| (ballPosY < SCREEN_LOWER_Y)) {	//collided in the bottom part
+		} else if ((mBall.getPosY() > SCREEN_HIGHER_Y)	//collided in the top part
+				|| (mBall.getPosY() < SCREEN_LOWER_Y)) {	//collided in the bottom part
 			return Collision.WALL_TOP_BOTTOM_SIDE;
 		}
-
-		//detect collision between ball and paddle
-//		if ((ballBottomY <= mPaddle.getLeftX) 
-//				&& (ballRightX))
 		
-		//detect collision between ball and blocks
-//		for (int i=0; i<mBlocks.length; i++) {
-//			for (int j=0; j<mBlocks[i].length; j++) {
-//			}
+		//detecting collision between the ball and the paddle
+		Log.d(TAG, "ball bottom Y: "+mBall.getBottomY());
+		Log.d(TAG, "paddle top Y: "+ mPaddle.getTopY());
+		Log.d(TAG, "ball right X: "+mBall.getRightX());
+		Log.d(TAG, "paddle left X: "+mPaddle.getLeftX());
+		
+		
+		if ((mBall.getBottomY() <= mPaddle.getTopY()) &&
+				(
+						((mBall.getLeftX() < mPaddle.getLeftX()) && (mBall.getRightX() >= mPaddle.getLeftX())) 	//the ball is far left 
+				|| ((mBall.getLeftX() <= mPaddle.getLeftX()) && (mBall.getRightX() < mPaddle.getRightX())) 		//the ball is far right 
+				|| ((mBall.getLeftX() >= mPaddle.getLeftX()) && (mBall.getRightX() <= mPaddle.getRightX()))		// the ball is inside the paddle
+				)
+			) {
+			float x2 = mBall.getPosX();
+			float x1 = mPaddle.getPosX();
+			float angle = 90 - Math.abs(mBall.getAngle());
+			float reflectedDegree = ((x2 - x1)/mPaddle.getWidth())*angle + angle;
+			
+		}
+		
+//		if ((mBall.getBottomY() <= mPaddle.getTopY()) 
+//				/*&& (mBall.getRightX() >= mPaddle.getLeftX())*/) {
+//			return Collision.PADDLE_TOP_LEFT_COLLISION;
+//		} else if ((mBall.getBottomY() <= mPaddle.getTopY()) 
+//				&& (mBall.getLeftX() <= mPaddle.getRightX())) {
+//			return Collision.PADDLE_TOP_RIGHT_COLLISION;
+//		} else if ((mBall.getTopY() >= mPaddle.getBottomY()) 
+//				&& (mBall.getRightX() >= mPaddle.getLeftX())) {
+//			return Collision.PADDLE_BOTTOM_LEFT_COLLISION;
+//		} else if ((mBall.getTopY() >= mPaddle.getBottomY()) 
+//				&& (mBall.getLeftX() >= mPaddle.getRightX())) {
+//			return Collision.PADDLE_BOTTOM_RIGHT_COLLISION;
 //		}
 		
 		return Collision.NOT_AVAILABLE;
