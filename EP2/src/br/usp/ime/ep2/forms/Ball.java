@@ -1,6 +1,7 @@
 package br.usp.ime.ep2.forms;
 
 import br.usp.ime.ep2.Constants;
+import br.usp.ime.ep2.Constants.BallDirection;
 import br.usp.ime.ep2.Constants.Hit;
 import android.util.Log;
 
@@ -43,23 +44,35 @@ public class Ball extends Quad {
 		return  (y2 - y1)/mSlope + x1;
 	}
 	
+	//close angle to the y axis
 	public float getAngle() {
-		return (float) Math.atan(mSlope);
+		Log.d(TAG, "inside getAngle, mSlope: "+mSlope);
+		return (float) (90 - Math.abs(Math.toDegrees(Math.atan(mSlope))));
+	}
+	
+	public BallDirection getDirection() {
+		if ((mPosX > mPrevPosX) && (mPosY > mPrevPosY))
+			return BallDirection.RIGHT_UPWARD;
+		else if ((mPosX > mPrevPosX) && (mPosY < mPrevPosY))
+			return BallDirection.RIGHT_DOWNWARD;
+		else if ((mPosX < mPrevPosX) && (mPosY > mPrevPosY))
+			return BallDirection.LEFT_UPWARD;
+		else if ((mPosX < mPrevPosX) && (mPosY < mPrevPosY))
+			return BallDirection.LEFT_DOWNWARD;
+		return BallDirection.UNKNOWN_DIRECTION;
 	}
 	
 	public void turnToPerpendicularDirection(Hit hitedSide) {
 		
-		mSlope = -1 * (1/mSlope);
+		mSlope = -1 * (mSlope);
 		float tempX = mPosX;
 		float tempY = mPosY;
 		switch(hitedSide) {
 		case RIGHT_LEFT:
-			//mPrevPosX = getXinEquation(mPrevPosY);
 			mPosY = getY2InEquation(mPosX, mPosY, mPrevPosX);
 			mPosX = mPrevPosX;
 			break;
 		case TOP_BOTTOM:
-			//mPrevPosY = getYinEquation(mPrevPosX);
 			mPosX = getX2InEquation(mPosX, mPosY, mPrevPosY);
 			mPosY = mPrevPosY;
 			break;
@@ -69,7 +82,26 @@ public class Ball extends Quad {
 	}
 	
 	public void turnByDegree(float degree) {
-		mSlope = (float) Math.tan(degree);
+		mSlope = (float) Math.tan(Math.toRadians(degree));
+		float tempX = mPosX;
+		float tempY = mPosY;
+		mPosX = getX2InEquation(mPosX, mPosY, mPrevPosY);
+		mPosY = mPrevPosY;
+		mPrevPosX = tempX;
+		mPrevPosY = tempY;
+		
+		Log.d(TAG, "inside turnByDegre, new mSlope: "+mSlope+", based on angle: "+degree);
+		Log.d(TAG, "mPrevPosX: "+mPrevPosX+", mPrevPosY: "+mPrevPosY+", mPosX: "+mPosX+", mPosY: "+mPosY);
+	}
+	
+	public float getSlope() {
+		return mSlope;
+	}
+	
+	public String toString() {
+		return this.getClass().getSimpleName() +
+				" form, PosX: " + getPosX() + ", PrevPosX: " + mPrevPosX +
+				", PosY: " + getPosY() + ", PrevPosY: " + mPrevPosY;
 	}
 	
 	/* The ball speed should depend on the time that a frame is 
@@ -84,15 +116,32 @@ public class Ball extends Quad {
 	public void move() {
 		Log.v(TAG, "prevX: " + mPosX + ", prevY: " + mPosY);
 		
+		BallDirection dir = getDirection();
 		// Right upward/downward
 		if (((mPosX > mPrevPosX) && (mPosY > mPrevPosY)) || 
 				((mPosX > mPrevPosX) && (mPosY < mPrevPosY)))
 		{
+			Log.d(TAG, "Right upward/downward");
 			mPrevPosX = mPosX;
 			mPrevPosY = mPosY;
-			float x2 = mPosX + mTrajectoryIncrement;
-			mPosY = getY2InEquation(mPosX, mPosY, x2);
-			mPosX = x2;
+			if (Math.abs(mSlope) <= 1) {
+				Log.d(TAG, "mSlope <= 1");
+				float x2 = mPosX + mTrajectoryIncrement;
+				mPosY = getY2InEquation(mPosX, mPosY, x2);
+				mPosX = x2;
+			} else {
+				Log.d(TAG, "mSlope > 1");
+				
+				float y2;
+				if (dir == BallDirection.RIGHT_UPWARD) {
+					y2 = mPosY + mTrajectoryIncrement;
+				}
+				else {
+					y2 = mPosY - mTrajectoryIncrement;
+				}
+				mPosX = getX2InEquation(mPosX, mPosY, y2);
+				mPosY = y2;
+			}
 		} 
 		// Left upward/downward
 		else if (((mPosX < mPrevPosX) && (mPosY > mPrevPosY)) ||
@@ -100,9 +149,17 @@ public class Ball extends Quad {
 		{
 			mPrevPosX = mPosX;
 			mPrevPosY = mPosY;
-			float x2 = mPosX - mTrajectoryIncrement;
-			mPosY = getY2InEquation(mPosX, mPosY, x2);
-			mPosX = x2;
+			if (Math.abs(mSlope) <= 1) {
+				float x2 = mPosX - mTrajectoryIncrement;
+				mPosY = getY2InEquation(mPosX, mPosY, x2);
+				mPosX = x2;	
+			} else {
+				float y2;
+				if (dir == BallDirection.LEFT_UPWARD) y2 = mPosY + mTrajectoryIncrement;
+				else y2 = mPosY - mTrajectoryIncrement;
+				mPosX = getX2InEquation(mPosX, mPosY, y2);
+				mPosY = y2;
+			}
 		}
 
 		Log.v(TAG, "currentX: " + mPosX + ", currentY: " + mPosY);

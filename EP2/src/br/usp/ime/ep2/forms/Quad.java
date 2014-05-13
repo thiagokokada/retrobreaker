@@ -50,6 +50,11 @@ abstract class Quad {
 	public float getPosY() {
 		return mPosY;
 	}
+	
+	public String toString() {
+		return this.getClass().getSimpleName() +
+				" form, PosX: " + getPosX() + ", PosY: " + getPosY();
+	}
 
 	public float getLeftX() {
 		return getPosX() + mScale * mVertices[0];		

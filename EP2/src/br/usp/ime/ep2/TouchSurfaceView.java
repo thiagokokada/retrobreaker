@@ -46,15 +46,9 @@ class TouchSurfaceView extends GLSurfaceView {
 			Log.v(TAG, "FPS: " + Constants.MS_PER_SECONDS/mDeltaTime);
 			
 			gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-//			if (result == 0) 
-			mGame.updateState(mDeltaTime);
+			if (result == 0) result = mGame.updateState(mDeltaTime);
 			mGame.drawElements(gl);
 		}
-		
-//		@Override
-//		public void onCreate(int width, int height, boolean contextLost) {
-//			
-//		}
 
 		@Override
 		public void onSurfaceChanged(GL10 gl, int width, int height) {
@@ -130,6 +124,7 @@ class TouchSurfaceView extends GLSurfaceView {
 		return true;
 	}
 	
+	@SuppressWarnings("unused")
 	private long limitFps(long maxFps) {
 		long framesPerSec = Constants.MS_PER_SECONDS / maxFps;
 		if (mDeltaTime < framesPerSec){
