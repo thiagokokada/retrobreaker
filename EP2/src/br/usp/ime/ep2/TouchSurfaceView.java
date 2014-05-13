@@ -33,24 +33,21 @@ class TouchSurfaceView extends GLSurfaceView {
 
 		public Renderer() {
 			mGame = new Game();
-			mPrevFrameTime = System.nanoTime()/Constants.NANOS_PER_SECONDS;
+			mPrevFrameTime = System.nanoTime();
 		}
 
 		@Override
 		public void onDrawFrame(GL10 gl) {
 			mCurrentTime = System.nanoTime();
 			mDeltaTime = (mCurrentTime - mPrevFrameTime)/Constants.NANOS_PER_SECONDS;
-			//if (limitFps(30)) return;
+			//if (limitFps(60)) return;
 			mPrevFrameTime = mCurrentTime;
 		
 			Log.v(TAG, "FPS: " + Constants.MS_PER_SECONDS / mDeltaTime);
 			
 			gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-			mGame.updateState();
-			// Sometimes deltaTime is very high (when the game starts for example)
-			// So we need to check for that
-			mGame.drawElements(gl,
-					mDeltaTime < Constants.MIN_MS_PER_FRAME ? mDeltaTime : Constants.MIN_MS_PER_FRAME);
+			mGame.updateState(mDeltaTime);
+			mGame.drawElements(gl);
 		}
 		
 //		@Override
