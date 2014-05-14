@@ -44,12 +44,16 @@ public class Ball extends Quad {
 		return  (y2 - y1)/mSlope + x1;
 	}
 	
-	//close angle to the y axis
+	/*
+	 * Get the angle of incidence (relative to the Y axis) of the ball's trajectory.
+	 */
 	public float getAngle() {
 		Log.d(TAG, "inside getAngle, mSlope: "+mSlope);
+		//as the angle of the slope can be negative (see: http://www.mathopenref.com/coordslope.html), we need to get the absolute value.
 		return (float) (Constants.RIGHT_ANGLE - Math.abs(Math.toDegrees(Math.atan(mSlope))));
 	}
 	
+	//Calculate in which direction the ball is moving
 	public BallDirection getDirection() {
 		if ((mPosX > mPrevPosX) && (mPosY > mPrevPosY))
 			return BallDirection.RIGHT_UPWARD;
@@ -81,6 +85,8 @@ public class Ball extends Quad {
 		mPrevPosY = tempY;
 	}
 	
+	//Change the ball's trajectory to a new one that is based on the new slope.
+	//The new slope is based on the angle passed as parameter.
 	public void turnByAngle(float angle) {
 		//angle: the angle of the slope (http://www.mathopenref.com/coordslope.html)
 		mSlope = (float) Math.tan(Math.toRadians(angle));

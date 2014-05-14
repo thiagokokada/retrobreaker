@@ -95,7 +95,7 @@ public class Game {
 	private float calcReflectedAngle(float x2, float x1) {
 		float angleOfIncidence = mBall.getAngle();
 		/*
-		 * The angle increment can be positive, negative or zero.
+		 * The angle increment can be positive, negative or zero. It depends if x2 is greater, lesser or equal to x1.
 		 * If it's positive, the ball will move farther away from the Y axis compared to the angle of incidence.
 		 * The positive value means the ball hit the paddle in the half part opposed to the direction where the ball came from.
 		 * 
@@ -151,7 +151,7 @@ public class Game {
 			reflectedAngle = calcReflectedAngle(mPaddle.getPosX(), mBall.getPosX());
 			/*
 			 * The angle of the slope (of the ball trajectory) is the complement of the angle of reflection.
-			 * Besides been the complement, it's the negative complement, since the ball came from the right side.
+			 * Besides being the complement, it's the negative complement, since the ball came from the right side.
 			 * Take a look at http://www.mathopenref.com/coordslope.html to get an idea of the angle of the slope.
 			 */
 			angleOfBallSlope = -1 * (Constants.RIGHT_ANGLE - reflectedAngle);
