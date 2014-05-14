@@ -77,9 +77,9 @@ public class Game {
 		mBall.draw(gl);
 		
 		// Need to draw each block on surface
-		for (Brick[] bricks : mBricks) {
-			for (Brick brick: bricks) {
-				brick.draw(gl);
+		for (int i=0; i<mBricks.length; i++) {
+			for (int j=0; j<mBricks[i].length; j++) {
+				mBricks[i][j].draw(gl);
 			}
 		}
 	}
@@ -155,11 +155,8 @@ public class Game {
 		//detecting collision between the ball and the paddle
 		Log.v(TAG, mBall.toString());
 		
-		if ((mBall.getBottomY() <= mPaddle.getTopY()) &&
-				(((mBall.getLeftX() < mPaddle.getLeftX()) && (mBall.getRightX() >= mPaddle.getLeftX())) //the ball is far left 
-				|| ((mBall.getLeftX() <= mPaddle.getLeftX()) && (mBall.getRightX() > mPaddle.getRightX())) //the ball is far right 
-				|| ((mBall.getLeftX() >= mPaddle.getLeftX()) && (mBall.getRightX() <= mPaddle.getRightX())) // the ball is inside the paddle
-				))
+		if (mBall.getTopY() >= mPaddle.getBottomY() && mBall.getBottomY() <= mPaddle.getTopY() &&
+				mBall.getRightX() >= mPaddle.getLeftX() && mBall.getLeftX() <= mPaddle.getRightX())
 		{
 			if (mBall.getDirection() == BallDirection.RIGHT_DOWNWARD) {
 				return Collision.PADDLE_BALL_FROM_LEFT;
@@ -169,8 +166,14 @@ public class Game {
 		}
 		
 		//detecting collision between the ball and the bricks
-		for (Brick bricks[] : mBricks) {
-			for (Brick brick : bricks) {
+		for (int i=0; i<mBricks.length; i++) {
+			for (int j=0; j<mBricks[i].length; j++) {
+				Brick brick = mBricks[i][j];
+				if (mBall.getTopY() >= brick.getBottomY() && mBall.getBottomY() <= brick.getTopY() &&
+						mBall.getRightX() >= brick.getLeftX() && mBall.getLeftX() <= brick.getRightX())
+				{
+					Log.d(TAG, "Detected collision between ball and brick[" + i + "][" + j + "]");
+				}
 			}
 		}
 		
