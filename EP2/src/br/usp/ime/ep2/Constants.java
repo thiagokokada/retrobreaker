@@ -16,6 +16,10 @@ public class Constants {
 	public static enum BallDirection {
 		RIGHT_UPWARD, LEFT_UPWARD, RIGHT_DOWNWARD, LEFT_DOWNWARD, UNKNOWN_DIRECTION
 	}
+	
+	public static enum ScoreMultiplier {
+		RESTART_LEVEL, PADDLE_HIT, BRICK_HIT
+	}
 
 	public static enum Hit {
 		RIGHT_LEFT, TOP_BOTTOM

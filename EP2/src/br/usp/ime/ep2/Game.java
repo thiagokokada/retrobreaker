@@ -6,6 +6,7 @@ import br.usp.ime.ep2.Constants.BallDirection;
 import br.usp.ime.ep2.Constants.Collision;
 import br.usp.ime.ep2.Constants.Colors;
 import br.usp.ime.ep2.Constants.Hit;
+import br.usp.ime.ep2.Constants.ScoreMultiplier;
 import br.usp.ime.ep2.forms.Ball;
 import br.usp.ime.ep2.forms.Brick;
 import br.usp.ime.ep2.forms.Paddle;
@@ -25,6 +26,7 @@ public class Game {
 	private Ball mBall;
 	private Brick[][] mBricks;
 	private long mScore;
+	private int mScoreMultiplier;
 	
 	public Game() {
 		SCREEN_HIGHER_Y = 1.0f;
@@ -32,6 +34,7 @@ public class Game {
 		SCREEN_HIGHER_X = 1.0f;
 		SCREEN_LOWER_X = -1.0f;
 		mScore = 0;
+		setNewScoreMultiplier(ScoreMultiplier.RESTART_LEVEL);
 		
 		resetElements();
 	}
@@ -164,6 +167,7 @@ public class Game {
 		if (mBall.getTopY() >= mPaddle.getBottomY() && mBall.getBottomY() <= mPaddle.getTopY() &&
 				mBall.getRightX() >= mPaddle.getLeftX() && mBall.getLeftX() <= mPaddle.getRightX())
 		{
+			setNewScoreMultiplier(ScoreMultiplier.PADDLE_HIT);
 			if (mBall.getDirection() == BallDirection.RIGHT_DOWNWARD) {
 				return Collision.PADDLE_BALL_FROM_LEFT;
 			} else if (mBall.getDirection() == BallDirection.LEFT_DOWNWARD) {
@@ -182,8 +186,9 @@ public class Game {
 						Log.d(TAG, "Detected collision between ball and brick[" + i + "][" + j + "]");
 						//Deleting brick
 						mBricks[i][j] = null;
-						mScore += 100;
-						Log.i(TAG, "Score: " + mScore);
+						mScore += 100 * mScoreMultiplier;
+						Log.i(TAG, "Score multiplier: " + mScoreMultiplier + " Score: " + mScore);
+						setNewScoreMultiplier(ScoreMultiplier.BRICK_HIT);
 						return Collision.PADDLE_BRICK;
 					}
 				}
@@ -191,6 +196,24 @@ public class Game {
 		}
 		
 		return Collision.NOT_AVAILABLE;
+	}
+	
+	private void setNewScoreMultiplier(ScoreMultiplier event) {
+		switch(event) {
+		case RESTART_LEVEL:
+			mScoreMultiplier = 1;
+			break;
+		case BRICK_HIT:
+			if (mScoreMultiplier < 8) {
+				mScoreMultiplier *= 2;
+			}
+			break;
+		case PADDLE_HIT:
+			if (mScoreMultiplier > 1) {
+				mScoreMultiplier /= 2;
+			}
+			break;
+		}
 	}
 
 	public void updateScreenMeasures(float screenWidth, float screenHeight) {
