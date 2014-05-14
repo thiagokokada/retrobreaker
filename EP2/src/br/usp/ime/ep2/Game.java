@@ -29,17 +29,13 @@ public class Game {
 	private int mScoreMultiplier;
 	
 	public Game() {
-		SCREEN_HIGHER_Y = 1.0f;
-		SCREEN_LOWER_Y = -1.0f;
-		SCREEN_HIGHER_X = 1.0f;
-		SCREEN_LOWER_X = -1.0f;
-		mScore = 0;
-		setNewScoreMultiplier(ScoreMultiplier.RESTART_LEVEL);
-		
 		resetElements();
 	}
 	
 	public void resetElements() {
+		mScore = 0;
+		setNewScoreMultiplier(ScoreMultiplier.RESTART_LEVEL);
+		
 		mPaddle = new Paddle(Colors.RAINBOW, 0.0f, -0.7f, 0.1f);
 		Log.d(TAG, "Created paddle:" + 
 				" BottomY: " + mPaddle.getBottomY() +
@@ -92,7 +88,7 @@ public class Game {
 		}
 	}
 	
-	public void updatePaddleXPosition(float x) {
+	public void updatePaddlePosX(float x) {
 		mPaddle.setPosX(x);
 	}
 	

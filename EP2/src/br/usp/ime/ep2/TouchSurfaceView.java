@@ -83,7 +83,7 @@ class TouchSurfaceView extends GLSurfaceView {
 			queueEvent(new Runnable() {
 				@Override
 				public void run() {
-					mGame.updatePaddleXPosition(x);
+					mGame.updatePaddlePosX(x);
 				}
 			} );
 		}
