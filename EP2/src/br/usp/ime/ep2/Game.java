@@ -117,6 +117,7 @@ public class Game {
 			Log.d(TAG, "next slope: " + mBall.getSlope());
 			break;
 		case WALL_TOP_BOTTOM_SIDE:
+		case PADDLE_BRICK:
 			Log.d(TAG, "Top/Bottom side collision detected");
 			Log.d(TAG, "previous slope: " + mBall.getSlope());
 			mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
@@ -183,7 +184,7 @@ public class Game {
 						mBricks[i][j] = null;
 						mScore += 100;
 						Log.i(TAG, "Score: " + mScore);
-						return Collision.WALL_TOP_BOTTOM_SIDE;
+						return Collision.PADDLE_BRICK;
 					}
 				}
 			}
