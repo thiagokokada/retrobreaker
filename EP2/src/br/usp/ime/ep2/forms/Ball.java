@@ -81,8 +81,9 @@ public class Ball extends Quad {
 		mPrevPosY = tempY;
 	}
 	
-	public void turnByDegree(float degree) {
-		mSlope = (float) Math.tan(Math.toRadians(degree));
+	public void turnByAngle(float angle) {
+		//angle: the angle of the slope (http://www.mathopenref.com/coordslope.html)
+		mSlope = (float) Math.tan(Math.toRadians(angle));
 		float tempX = mPosX;
 		float tempY = mPosY;
 		mPosX = getX2InEquation(mPosX, mPosY, mPrevPosY);
@@ -90,7 +91,7 @@ public class Ball extends Quad {
 		mPrevPosX = tempX;
 		mPrevPosY = tempY;
 		
-		Log.d(TAG, "inside turnByDegre, new mSlope: "+mSlope+", based on angle: "+degree);
+		Log.d(TAG, "inside turnByDegre, new mSlope: "+mSlope+", based on angle: "+angle);
 		Log.d(TAG, "mPrevPosX: "+mPrevPosX+", mPrevPosY: "+mPrevPosY+", mPosX: "+mPosX+", mPosY: "+mPosY);
 	}
 	

@@ -116,7 +116,7 @@ public class Game {
 		
 		// Set new ball speed to the next frame
 		mBall.setBallSpeed(deltaTime);
-		float reflectedAngle = 0.0f, angle = 0.0f;
+		float reflectedAngle = 0.0f, angleOfBallSlope = 0.0f;
 
 		Collision collisionType = detectColision();	
 
@@ -138,15 +138,24 @@ public class Game {
 			Log.d(TAG, "collided into the top left part of the paddle");
 			Log.d(TAG, "paddlePosX: " + mPaddle.getPosX());
 			reflectedAngle = calcReflectedAngle(mBall.getPosX(), mPaddle.getPosX());
-			angle = (Constants.RIGHT_ANGLE - reflectedAngle);
-			mBall.turnByDegree(angle);
+			/* 
+			 * The angle of the slope (of the ball trajectory) is the complement of the angle of reflection.
+			 * Take a look at http://www.mathopenref.com/coordslope.html to get an idea of the angle of the slope.
+			 */
+			angleOfBallSlope = (Constants.RIGHT_ANGLE - reflectedAngle);
+			mBall.turnByAngle(angleOfBallSlope);
 			break;
 		case PADDLE_BALL_FROM_RIGHT:
 			Log.d(TAG, "collided into the top left part of the paddle");
 			Log.d(TAG, "paddlePosX: " + mPaddle.getPosX());
 			reflectedAngle = calcReflectedAngle(mPaddle.getPosX(), mBall.getPosX());
-			angle = -1 * (Constants.RIGHT_ANGLE - reflectedAngle);
-			mBall.turnByDegree(angle);
+			/*
+			 * The angle of the slope (of the ball trajectory) is the complement of the angle of reflection.
+			 * Besides been the complement, it's the negative complement, since the ball came from the right side.
+			 * Take a look at http://www.mathopenref.com/coordslope.html to get an idea of the angle of the slope.
+			 */
+			angleOfBallSlope = -1 * (Constants.RIGHT_ANGLE - reflectedAngle);
+			mBall.turnByAngle(angleOfBallSlope);
 			break;
 		case NOT_AVAILABLE:
 			break;
