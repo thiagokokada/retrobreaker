@@ -23,13 +23,15 @@ public class Game {
 	
 	private Paddle mPaddle;
 	private Ball mBall;
-	private Brick[][] mBlocks;
+	private Brick[][] mBricks;
+	private long mScore;
 	
 	public Game() {
 		SCREEN_HIGHER_Y = 1.0f;
 		SCREEN_LOWER_Y = -1.0f;
 		SCREEN_HIGHER_X = 1.0f;
-		SCREEN_LOWER_X = -1.0f;		
+		SCREEN_LOWER_X = -1.0f;
+		mScore = 0;
 		
 		resetElements();
 	}
@@ -56,14 +58,14 @@ public class Game {
 	private void createLevel (float[] colors,int blocksX, int blocksY, float initialX, float initialY,
 			float spaceX, float spaceY) 
 	{
-		mBlocks = new Brick[blocksX][blocksY];
+		mBricks = new Brick[blocksX][blocksY];
 		
 		float newPosX = initialX;
 		float newPosY = initialY;
 		
-		for (int i=0; i<mBlocks.length; i++) {
-			for (int j=0; j<mBlocks[i].length; j++) {
-				mBlocks[i][j] = new Brick(colors, newPosX, newPosY, 0.1f);
+		for (int i=0; i<mBricks.length; i++) {
+			for (int j=0; j<mBricks[i].length; j++) {
+				mBricks[i][j] = new Brick(colors, newPosX, newPosY, 0.1f);
 				newPosX += spaceX;
 			}
 			newPosX = initialX;
@@ -77,9 +79,12 @@ public class Game {
 		mBall.draw(gl);
 		
 		// Need to draw each block on surface
-		for (int i=0; i<mBlocks.length; i++) {
-			for (int j=0; j<mBlocks[i].length; j++) {
-				mBlocks[i][j].draw(gl);
+		for (int i=0; i<mBricks.length; i++) {
+			for (int j=0; j<mBricks[i].length; j++) {
+				// Checking if the brick is not destroyed
+				if (mBricks[i][j] != null) {
+					mBricks[i][j].draw(gl);
+				}
 			}
 		}
 	}
@@ -100,39 +105,35 @@ public class Game {
 		
 		// Set new ball speed to the next frame
 		mBall.setBallSpeed(deltaTime);
+		float reflectedDegree = 0.0f, angle = 0.0f;
 
-		float padPosX[] = new float[1];
-		float padPosY[] = new float[1];
-		Collision collisionType = detectColision(padPosX, padPosY);	
+		Collision collisionType = detectColision();	
 
 		switch (collisionType) {
 		case WALL_RIGHT_LEFT_SIDE:
 			Log.d(TAG, "Right/Left side collision detected");
-			Log.d(TAG, "previous slope: "+mBall.getSlope());
+			Log.d(TAG, "previous slope: " + mBall.getSlope());
 			mBall.turnToPerpendicularDirection(Hit.RIGHT_LEFT);
-			Log.d(TAG, "next slope: "+mBall.getSlope());
+			Log.d(TAG, "next slope: " + mBall.getSlope());
 			break;
 		case WALL_TOP_BOTTOM_SIDE:
+		case PADDLE_BRICK:
 			Log.d(TAG, "Top/Bottom side collision detected");
-			Log.d(TAG, "previous slope: "+mBall.getSlope());
+			Log.d(TAG, "previous slope: " + mBall.getSlope());
 			mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
-			Log.d(TAG, "next slope: "+mBall.getSlope());
+			Log.d(TAG, "next slope: " + mBall.getSlope());
 			break;
 		case PADDLE_BALL_FROM_LEFT:
 			Log.d(TAG, "collided into the top left part of the paddle");
-			float x2 = mBall.getPosX();
-			float x1 = padPosX[0];
-			Log.d(TAG, "paddlePosX: "+padPosX[0]);
-			float reflectedDegree = calcReflectedDegree(x2, x1);
-			float angle = (90 - reflectedDegree);
+			Log.d(TAG, "paddlePosX: " + mPaddle.getPosX());
+			reflectedDegree = calcReflectedDegree(mBall.getPosX(), mPaddle.getPosX());
+			angle = (90 - reflectedDegree);
 			mBall.turnByDegree(angle);
 			break;
 		case PADDLE_BALL_FROM_RIGHT:
 			Log.d(TAG, "collided into the top left part of the paddle");
-			x2 = padPosX[0];
-			x1 = mBall.getPosX(); 
-			Log.d(TAG, "paddlePosX: "+padPosX[0]);
-			reflectedDegree = calcReflectedDegree(x2, x1);
+			Log.d(TAG, "paddlePosX: " + mPaddle.getPosX());
+			reflectedDegree = calcReflectedDegree(mPaddle.getPosX(), mBall.getPosX());
 			angle = -1 * (90 - reflectedDegree);
 			mBall.turnByDegree(angle);
 			break;
@@ -146,12 +147,7 @@ public class Game {
 
 	}
 
-	private Collision detectColision(float padPosX[], float padPosY[]) {
-		padPosX[0] = mPaddle.getPosX();
-		padPosY[0] = mPaddle.getPosY();
-		float paddleLeftX = mPaddle.getLeftX();
-		float paddleRightX = mPaddle.getRightX();
-		float paddleTopY = mPaddle.getTopY();
+	private Collision detectColision() {
 		
 		//detecting collision between ball and wall
 		if ((mBall.getRightX() >= SCREEN_HIGHER_X) 			//collided in the right side
@@ -165,16 +161,32 @@ public class Game {
 		//detecting collision between the ball and the paddle
 		Log.v(TAG, mBall.toString());
 		
-		if ((mBall.getBottomY() <= paddleTopY) &&
-				(((mBall.getLeftX() < paddleLeftX) && (mBall.getRightX() >= paddleLeftX)) //the ball is far left 
-				|| ((mBall.getLeftX() <= paddleLeftX) && (mBall.getRightX() < paddleRightX)) //the ball is far right 
-				|| ((mBall.getLeftX() >= paddleLeftX) && (mBall.getRightX() <= paddleRightX)) // the ball is inside the paddle
-				))
+		if (mBall.getTopY() >= mPaddle.getBottomY() && mBall.getBottomY() <= mPaddle.getTopY() &&
+				mBall.getRightX() >= mPaddle.getLeftX() && mBall.getLeftX() <= mPaddle.getRightX())
 		{
 			if (mBall.getDirection() == BallDirection.RIGHT_DOWNWARD) {
 				return Collision.PADDLE_BALL_FROM_LEFT;
 			} else if (mBall.getDirection() == BallDirection.LEFT_DOWNWARD) {
 				return Collision.PADDLE_BALL_FROM_RIGHT;
+			}
+		}
+		
+		//detecting collision between the ball and the bricks
+		for (int i=0; i<mBricks.length; i++) {
+			for (int j=0; j<mBricks[i].length; j++) {
+				Brick brick = mBricks[i][j];
+				if(brick != null) {
+					if (mBall.getTopY() >= brick.getBottomY() && mBall.getBottomY() <= brick.getTopY() &&
+							mBall.getRightX() >= brick.getLeftX() && mBall.getLeftX() <= brick.getRightX())
+					{
+						Log.d(TAG, "Detected collision between ball and brick[" + i + "][" + j + "]");
+						//Deleting brick
+						mBricks[i][j] = null;
+						mScore += 100;
+						Log.i(TAG, "Score: " + mScore);
+						return Collision.PADDLE_BRICK;
+					}
+				}
 			}
 		}
 		
