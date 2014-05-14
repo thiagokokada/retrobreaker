@@ -100,39 +100,34 @@ public class Game {
 		
 		// Set new ball speed to the next frame
 		mBall.setBallSpeed(deltaTime);
+		float reflectedDegree = 0.0f, angle = 0.0f;
 
-		float padPosX[] = new float[1];
-		float padPosY[] = new float[1];
-		Collision collisionType = detectColision(padPosX, padPosY);	
+		Collision collisionType = detectColision();	
 
 		switch (collisionType) {
 		case WALL_RIGHT_LEFT_SIDE:
 			Log.d(TAG, "Right/Left side collision detected");
-			Log.d(TAG, "previous slope: "+mBall.getSlope());
+			Log.d(TAG, "previous slope: " + mBall.getSlope());
 			mBall.turnToPerpendicularDirection(Hit.RIGHT_LEFT);
-			Log.d(TAG, "next slope: "+mBall.getSlope());
+			Log.d(TAG, "next slope: " + mBall.getSlope());
 			break;
 		case WALL_TOP_BOTTOM_SIDE:
 			Log.d(TAG, "Top/Bottom side collision detected");
-			Log.d(TAG, "previous slope: "+mBall.getSlope());
+			Log.d(TAG, "previous slope: " + mBall.getSlope());
 			mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
-			Log.d(TAG, "next slope: "+mBall.getSlope());
+			Log.d(TAG, "next slope: " + mBall.getSlope());
 			break;
 		case PADDLE_BALL_FROM_LEFT:
 			Log.d(TAG, "collided into the top left part of the paddle");
-			float x2 = mBall.getPosX();
-			float x1 = padPosX[0];
-			Log.d(TAG, "paddlePosX: "+padPosX[0]);
-			float reflectedDegree = calcReflectedDegree(x2, x1);
-			float angle = (90 - reflectedDegree);
+			Log.d(TAG, "paddlePosX: " + mPaddle.getPosX());
+			reflectedDegree = calcReflectedDegree(mBall.getPosX(), mPaddle.getPosX());
+			angle = (90 - reflectedDegree);
 			mBall.turnByDegree(angle);
 			break;
 		case PADDLE_BALL_FROM_RIGHT:
 			Log.d(TAG, "collided into the top left part of the paddle");
-			x2 = padPosX[0];
-			x1 = mBall.getPosX(); 
-			Log.d(TAG, "paddlePosX: "+padPosX[0]);
-			reflectedDegree = calcReflectedDegree(x2, x1);
+			Log.d(TAG, "paddlePosX: " + mPaddle.getPosX());
+			reflectedDegree = calcReflectedDegree(mPaddle.getPosX(), mBall.getPosX());
 			angle = -1 * (90 - reflectedDegree);
 			mBall.turnByDegree(angle);
 			break;
@@ -146,9 +141,7 @@ public class Game {
 
 	}
 
-	private Collision detectColision(float padPosX[], float padPosY[]) {
-		padPosX[0] = mPaddle.getPosX();
-		padPosY[0] = mPaddle.getPosY();
+	private Collision detectColision() {
 		float paddleLeftX = mPaddle.getLeftX();
 		float paddleRightX = mPaddle.getRightX();
 		float paddleTopY = mPaddle.getTopY();
@@ -181,7 +174,6 @@ public class Game {
 		//detecting collision between the ball and the bricks
 		for (Brick bricks[] : mBricks) {
 			for (Brick brick : bricks) {
-				
 			}
 		}
 		
