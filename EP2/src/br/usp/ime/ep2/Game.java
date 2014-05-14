@@ -92,10 +92,22 @@ public class Game {
 		mPaddle.setPosX(x);
 	}
 	
-	private float calcReflectedDegree(float x2, float x1) {
-		float angle = mBall.getAngle();
-		float reflectedAngle = ((x2 - x1)/mPaddle.getWidth())*angle + angle;
-		Log.d(TAG, "angle: "+angle+", reflectedAngle: "+reflectedAngle);
+	private float calcReflectedAngle(float x2, float x1) {
+		float angleOfIncidence = mBall.getAngle();
+		/*
+		 * The angle increment can be positive, negative or zero.
+		 * If it's positive, the ball will move farther away from the Y axis compared to the angle of incidence.
+		 * The positive value means the ball hit the paddle in the half part opposed to the direction where the ball came from.
+		 * 
+		 * If it's negative, the ball will move closer to the Y axis compared to the angle of incidence. It simulates a ball break.
+		 * The negative value means the ball hit the paddle in the half part at the same side from where the ball came from.
+		 * 
+		 * It if's zero, the reflected angle will be the same as the angle of incidence.
+		 * This means the ball hit the paddle in the middle.
+		 */
+		float angleIncrement = ((x2 - x1)/mPaddle.getWidth())*angleOfIncidence;
+		float reflectedAngle = angleIncrement + angleOfIncidence;
+		Log.d(TAG, "angle: "+angleOfIncidence+", reflectedAngle: "+reflectedAngle);
 		return reflectedAngle;
 	}
 
@@ -104,7 +116,7 @@ public class Game {
 		
 		// Set new ball speed to the next frame
 		mBall.setBallSpeed(deltaTime);
-		float reflectedDegree = 0.0f, angle = 0.0f;
+		float reflectedAngle = 0.0f, angle = 0.0f;
 
 		Collision collisionType = detectColision();	
 
@@ -125,15 +137,15 @@ public class Game {
 		case PADDLE_BALL_FROM_LEFT:
 			Log.d(TAG, "collided into the top left part of the paddle");
 			Log.d(TAG, "paddlePosX: " + mPaddle.getPosX());
-			reflectedDegree = calcReflectedDegree(mBall.getPosX(), mPaddle.getPosX());
-			angle = (90 - reflectedDegree);
+			reflectedAngle = calcReflectedAngle(mBall.getPosX(), mPaddle.getPosX());
+			angle = (Constants.RIGHT_ANGLE - reflectedAngle);
 			mBall.turnByDegree(angle);
 			break;
 		case PADDLE_BALL_FROM_RIGHT:
 			Log.d(TAG, "collided into the top left part of the paddle");
 			Log.d(TAG, "paddlePosX: " + mPaddle.getPosX());
-			reflectedDegree = calcReflectedDegree(mPaddle.getPosX(), mBall.getPosX());
-			angle = -1 * (90 - reflectedDegree);
+			reflectedAngle = calcReflectedAngle(mPaddle.getPosX(), mBall.getPosX());
+			angle = -1 * (Constants.RIGHT_ANGLE - reflectedAngle);
 			mBall.turnByDegree(angle);
 			break;
 		case NOT_AVAILABLE:
