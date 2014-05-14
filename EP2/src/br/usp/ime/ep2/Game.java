@@ -24,12 +24,14 @@ public class Game {
 	private Paddle mPaddle;
 	private Ball mBall;
 	private Brick[][] mBricks;
+	private long mScore;
 	
 	public Game() {
 		SCREEN_HIGHER_Y = 1.0f;
 		SCREEN_LOWER_Y = -1.0f;
 		SCREEN_HIGHER_X = 1.0f;
-		SCREEN_LOWER_X = -1.0f;		
+		SCREEN_LOWER_X = -1.0f;
+		mScore = 0;
 		
 		resetElements();
 	}
@@ -79,7 +81,10 @@ public class Game {
 		// Need to draw each block on surface
 		for (int i=0; i<mBricks.length; i++) {
 			for (int j=0; j<mBricks[i].length; j++) {
-				mBricks[i][j].draw(gl);
+				// Checking if the brick is not destroyed
+				if (mBricks[i][j] != null) {
+					mBricks[i][j].draw(gl);
+				}
 			}
 		}
 	}
@@ -169,10 +174,17 @@ public class Game {
 		for (int i=0; i<mBricks.length; i++) {
 			for (int j=0; j<mBricks[i].length; j++) {
 				Brick brick = mBricks[i][j];
-				if (mBall.getTopY() >= brick.getBottomY() && mBall.getBottomY() <= brick.getTopY() &&
-						mBall.getRightX() >= brick.getLeftX() && mBall.getLeftX() <= brick.getRightX())
-				{
-					Log.d(TAG, "Detected collision between ball and brick[" + i + "][" + j + "]");
+				if(brick != null) {
+					if (mBall.getTopY() >= brick.getBottomY() && mBall.getBottomY() <= brick.getTopY() &&
+							mBall.getRightX() >= brick.getLeftX() && mBall.getLeftX() <= brick.getRightX())
+					{
+						Log.d(TAG, "Detected collision between ball and brick[" + i + "][" + j + "]");
+						//Deleting brick
+						mBricks[i][j] = null;
+						mScore += 100;
+						Log.i(TAG, "Score: " + mScore);
+						return Collision.WALL_TOP_BOTTOM_SIDE;
+					}
 				}
 			}
 		}
