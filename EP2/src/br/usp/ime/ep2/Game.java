@@ -160,7 +160,7 @@ public class Game {
 		
 		if ((mBall.getBottomY() <= paddleTopY) &&
 				(((mBall.getLeftX() < paddleLeftX) && (mBall.getRightX() >= paddleLeftX)) //the ball is far left 
-				|| ((mBall.getLeftX() <= paddleLeftX) && (mBall.getRightX() < paddleRightX)) //the ball is far right 
+				|| ((mBall.getLeftX() <= paddleLeftX) && (mBall.getRightX() > paddleRightX)) //the ball is far right 
 				|| ((mBall.getLeftX() >= paddleLeftX) && (mBall.getRightX() <= paddleRightX)) // the ball is inside the paddle
 				))
 		{
