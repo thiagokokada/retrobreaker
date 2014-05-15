@@ -134,7 +134,7 @@ public class Game {
 			mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
 			Log.d(TAG, "next slope: " + mBall.getSlope());
 			break;
-		case PADDLE_BALL:
+		case PADDLE_BALL: 
 			Log.d(TAG, "collided into the top left part of the paddle");
 			Log.d(TAG, "paddlePosX: " + mPaddle.getPosX());
 			/* 
