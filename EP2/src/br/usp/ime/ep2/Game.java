@@ -1,5 +1,7 @@
 package br.usp.ime.ep2;
 
+import java.util.Random;
+
 import javax.microedition.khronos.opengles.GL10;
 
 import br.usp.ime.ep2.Constants.Collision;
@@ -62,6 +64,10 @@ public class Game {
 		createLevel(Colors.RAINBOW, 8, 12, -0.55f, 0.7f, 0.1f, 0.04f);
 	}
 	
+	private Brick createGrayBrick(float posX, float posY, float scale) {
+		return new Brick(Colors.GRAY, posX, posY, scale, Brick.GRAY_LIVES);
+	}
+	
 	private void createLevel (float[] colors,int blocksX, int blocksY, float initialX, float initialY,
 			float spaceX, float spaceY) 
 	{
@@ -72,7 +78,12 @@ public class Game {
 		
 		for (int i=0; i<mBricks.length; i++) {
 			for (int j=0; j<mBricks[i].length; j++) {
-				mBricks[i][j] = new Brick(colors, newPosX, newPosY, 0.1f);
+				double prob = Math.random();
+				if (prob <= Brick.GRAY_BRICK_PROBABILITY) { 
+					mBricks[i][j] = createGrayBrick(newPosX, newPosY, 0.1f);
+				} else {
+					mBricks[i][j] = new Brick(colors, newPosX, newPosY, 0.1f, Brick.NORMAL_LIVES);
+				}
 				newPosX += spaceX;
 			}
 			newPosX = initialX;
@@ -207,7 +218,11 @@ public class Game {
 							mBall.getRightX() >= brick.getLeftX() && mBall.getLeftX() <= brick.getRightX())
 					{
 						Log.d(TAG, "Detected collision between ball and brick[" + i + "][" + j + "]");
-						mBricks[i][j] = null; //Deleting brick	
+						if (mBricks[i][j].getLives() == 0) {
+							mBricks[i][j] = null; //Deleting brick
+						} else {
+							mBricks[i][j].decrementLives();
+						}
 						sScore += 100 * sScoreMultiplier;
 						Log.i(TAG, "Score multiplier: " + sScoreMultiplier + " Score: " + sScore);
 						updateScoreMultiplier(ScoreMultiplier.BRICK_HIT);
