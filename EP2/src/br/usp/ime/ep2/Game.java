@@ -14,14 +14,13 @@ import android.util.Log;
 
 public class Game {
 	private static final String TAG = Game.class.getSimpleName();
-
 	private static final int SCREEN_INITIAL_X = 0;
 	private static final int SCREEN_INITIAL_Y = 0;
-	private float SCREEN_HIGHER_Y;
-	private float SCREEN_LOWER_Y;
-	private float SCREEN_HIGHER_X;
-	private float SCREEN_LOWER_X;
 	
+	private float mScreenHigherY;
+	private float mScreenLowerY;
+	private float mScreenHigherX;
+	private float mScreenLowerX;
 	private Paddle mPaddle;
 	private Ball mBall;
 	private Brick[][] mBricks;
@@ -173,11 +172,11 @@ public class Game {
 	private Collision detectColision() {
 		
 		//detecting collision between ball and wall
-		if ((mBall.getRightX() >= SCREEN_HIGHER_X) 			//collided in the right side
-				|| (mBall.getLeftX() <= SCREEN_LOWER_X)) {	//collided in the left side 
+		if ((mBall.getRightX() >= mScreenHigherX) 			//collided in the right side
+				|| (mBall.getLeftX() <= mScreenLowerX)) {	//collided in the left side 
 			return Collision.WALL_RIGHT_LEFT_SIDE;
-		} else if ((mBall.getTopY() >= SCREEN_HIGHER_Y)	//collided in the top part
-				|| (mBall.getBottomY() <= SCREEN_LOWER_Y)) {	//collided in the bottom part
+		} else if ((mBall.getTopY() >= mScreenHigherY)	//collided in the top part
+				|| (mBall.getBottomY() <= mScreenLowerY)) {	//collided in the bottom part
 			return Collision.WALL_TOP_BOTTOM_SIDE;
 		}
 		
@@ -249,15 +248,15 @@ public class Game {
 
 	public void updateScreenMeasures(float screenWidth, float screenHeight) {
 		Log.i(TAG, "screenWidth: " + screenWidth + ", screenHeight: " + screenHeight);
-		SCREEN_LOWER_X = SCREEN_INITIAL_X - screenWidth/2;
-		SCREEN_HIGHER_X = SCREEN_INITIAL_X + screenWidth/2;
-		SCREEN_LOWER_Y = SCREEN_INITIAL_Y - screenHeight/2;
-		SCREEN_HIGHER_Y = SCREEN_INITIAL_Y + screenHeight/2;
+		mScreenLowerX = SCREEN_INITIAL_X - screenWidth/2;
+		mScreenHigherX = SCREEN_INITIAL_X + screenWidth/2;
+		mScreenLowerY = SCREEN_INITIAL_Y - screenHeight/2;
+		mScreenHigherY = SCREEN_INITIAL_Y + screenHeight/2;
 		Log.i(TAG, "Screen limits =>" +
-				" -X: " + SCREEN_LOWER_X +
-				" +X: " + SCREEN_HIGHER_X +
-				" -Y: " + SCREEN_LOWER_Y +
-				" +Y: " + SCREEN_HIGHER_Y
+				" -X: " + mScreenLowerX +
+				" +X: " + mScreenHigherX +
+				" -Y: " + mScreenLowerY +
+				" +Y: " + mScreenHigherY
 				);
 	}
 }
