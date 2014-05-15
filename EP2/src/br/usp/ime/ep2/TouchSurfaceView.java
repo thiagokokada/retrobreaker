@@ -7,6 +7,7 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
 import android.opengl.Matrix;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -87,10 +88,32 @@ class TouchSurfaceView extends GLSurfaceView {
 				}
 			} );
 		}
+		
+		public void updateScoreView() {
+			MainActivity.setScore(mGame.getScore());
+			MainActivity.setScoreMultiplier(mGame.getScoreMultiplier());
+		}
+
+		@SuppressWarnings("unused")
+		private long limitFps(long maxFps) {
+			long framesPerSec = Constants.MS_PER_SECONDS / maxFps;
+			if (mDeltaTime < framesPerSec){
+				long sleepTime = framesPerSec - mDeltaTime;
+				Log.v(TAG, "deltaTime: " + mDeltaTime + "ms, frame limit set to: "
+						+ framesPerSec + "ms, waiting " + sleepTime + "ms");
+				try {
+					Thread.sleep(sleepTime);
+					return sleepTime;
+				} catch (InterruptedException e) {
+					return 0;
+				}
+			}
+			return 0;
+		}
 	}
 
-	public TouchSurfaceView(Context context) {
-		super(context);
+	public TouchSurfaceView(Context context, AttributeSet attrs) {
+		super(context, attrs);
 		super.setEGLConfigChooser(8 , 8, 8, 8, 16, 0);
 		mRenderer = new Renderer();
 		setRenderer(mRenderer);
@@ -118,25 +141,10 @@ class TouchSurfaceView extends GLSurfaceView {
 			resultWorldPos[3] = 1.0f;
 
 			mRenderer.updatePaddlePosition(resultWorldPos[0], resultWorldPos[1]);
+			// TODO: find the right place to call this
+			mRenderer.updateScoreView();
 			break;
 		}
 		return true;
-	}
-	
-	@SuppressWarnings("unused")
-	private long limitFps(long maxFps) {
-		long framesPerSec = Constants.MS_PER_SECONDS / maxFps;
-		if (mDeltaTime < framesPerSec){
-			long sleepTime = framesPerSec - mDeltaTime;
-			Log.v(TAG, "deltaTime: " + mDeltaTime + "ms, frame limit set to: "
-					+ framesPerSec + "ms, waiting " + sleepTime + "ms");
-			try {
-				Thread.sleep(sleepTime);
-				return sleepTime;
-			} catch (InterruptedException e) {
-				return 0;
-			}
-		}
-		return 0;
 	}
 }

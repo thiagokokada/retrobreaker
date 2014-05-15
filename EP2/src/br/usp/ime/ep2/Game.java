@@ -201,8 +201,7 @@ public class Game {
 							mBall.getRightX() >= brick.getLeftX() && mBall.getLeftX() <= brick.getRightX())
 					{
 						Log.d(TAG, "Detected collision between ball and brick[" + i + "][" + j + "]");
-						//Deleting brick
-						mBricks[i][j] = null;
+						mBricks[i][j] = null; //Deleting brick	
 						mScore += 100 * mScoreMultiplier;
 						Log.i(TAG, "Score multiplier: " + mScoreMultiplier + " Score: " + mScore);
 						setNewScoreMultiplier(ScoreMultiplier.BRICK_HIT);
@@ -231,6 +230,14 @@ public class Game {
 			}
 			break;
 		}
+	}
+	
+	public long getScore() {
+		return mScore;
+	}
+	
+	public int getScoreMultiplier() {
+		return mScoreMultiplier;
 	}
 
 	public void updateScreenMeasures(float screenWidth, float screenHeight) {
