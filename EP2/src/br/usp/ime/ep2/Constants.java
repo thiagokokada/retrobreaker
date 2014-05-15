@@ -6,6 +6,8 @@ public class Constants {
 
 	public static final long MS_PER_SECONDS = 1000 /* milliseconds */;
 	public static final long NANOS_PER_SECONDS = 1000 /* nanoseconds */ * MS_PER_SECONDS;
+	
+	public static final boolean INVICIBILITY = false;
 
 	//The game runs at a maximum velocity of 60FPS
 	public static final int MAX_FPS = 60;

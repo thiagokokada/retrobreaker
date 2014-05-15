@@ -172,12 +172,20 @@ public class Game {
 	private Collision detectColision() {
 		
 		//detecting collision between ball and wall
-		if ((mBall.getRightX() >= mScreenHigherX) 			//collided in the right side
-				|| (mBall.getLeftX() <= mScreenLowerX)) {	//collided in the left side 
+		if ((mBall.getRightX() >= mScreenHigherX)        //collided in the right wall
+				|| (mBall.getLeftX() <= mScreenLowerX))  //collided in the left wall 
+		{	
 			return Collision.WALL_RIGHT_LEFT_SIDE;
-		} else if ((mBall.getTopY() >= mScreenHigherY)	//collided in the top part
-				|| (mBall.getBottomY() <= mScreenLowerY)) {	//collided in the bottom part
+		} else if ((mBall.getTopY() >= mScreenHigherY)   //collided in the top wall
+				|| (mBall.getBottomY() <= mScreenLowerY) //collided in the bottom wall...
+				&& Constants.INVICIBILITY)               //and invincibility is on
+		{
 			return Collision.WALL_TOP_BOTTOM_SIDE;
+		} else if (mBall.getBottomY() <= mScreenLowerY   //if invincibility is off and the ball collided
+			&& !Constants.INVICIBILITY)                  //with bottom wall, user loses a life
+		{
+			sLifes--;
+			mBall = new Ball(Colors.RAINBOW, 0.0f, 0.0f, -0.02f, -0.05f, 0.1f, 0.01f);
 		}
 		
 		//detecting collision between the ball and the paddle
