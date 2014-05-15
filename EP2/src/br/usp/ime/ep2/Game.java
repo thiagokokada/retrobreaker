@@ -17,10 +17,6 @@ public class Game {
 	private static final int SCREEN_INITIAL_X = 0;
 	private static final int SCREEN_INITIAL_Y = 0;
 	
-	private float mScreenHigherY;
-	private float mScreenLowerY;
-	private float mScreenHigherX;
-	private float mScreenLowerX;
 	private Paddle mPaddle;
 	private Ball mBall;
 	private Brick[][] mBricks;
@@ -29,11 +25,21 @@ public class Game {
 	private static int sScoreMultiplier;
 	private static int sLifes;
 	
+	public static float sScreenHigherY;
+	public static float sScreenLowerY;
+	public static float sScreenHigherX;
+	public static float sScreenLowerX;
+	
 	public Game() {
 		resetElements();
 	}
 	
 	public void resetElements() {
+		sScreenHigherX = 1.0f;
+		sScreenLowerX = -1.0f;
+		sScreenHigherY = 1.0f;
+		sScreenLowerY = -1.0f;
+		
 		sScore = 0;
 		sLifes = Config.LIFE_COUNT;
 		updateScoreMultiplier(ScoreMultiplier.RESTART_LEVEL);
@@ -167,16 +173,16 @@ public class Game {
 	private Collision detectColision() {
 		
 		//detecting collision between ball and wall
-		if ((mBall.getRightX() >= mScreenHigherX)        //collided in the right wall
-				|| (mBall.getLeftX() <= mScreenLowerX))  //collided in the left wall 
+		if ((mBall.getRightX() >= sScreenHigherX)        //collided in the right wall
+				|| (mBall.getLeftX() <= sScreenLowerX))  //collided in the left wall 
 		{	
 			return Collision.WALL_RIGHT_LEFT_SIDE;
-		} else if ((mBall.getTopY() >= mScreenHigherY)   //collided in the top wall
-				|| (mBall.getBottomY() <= mScreenLowerY) //collided in the bottom wall...
+		} else if ((mBall.getTopY() >= sScreenHigherY)   //collided in the top wall
+				|| (mBall.getBottomY() <= sScreenLowerY) //collided in the bottom wall...
 				&& Config.INVICIBILITY)                  //and invincibility is on
 		{
 			return Collision.WALL_TOP_BOTTOM_SIDE;
-		} else if (mBall.getBottomY() <= mScreenLowerY   //if invincibility is off and the ball collided
+		} else if (mBall.getBottomY() <= sScreenLowerY   //if invincibility is off and the ball collided
 			&& !Config.INVICIBILITY)                     //with bottom wall, user loses a life
 		{
 			return Collision.LIFE_LOST;
@@ -246,15 +252,15 @@ public class Game {
 
 	public void updateScreenMeasures(float screenWidth, float screenHeight) {
 		Log.i(TAG, "screenWidth: " + screenWidth + ", screenHeight: " + screenHeight);
-		mScreenLowerX = SCREEN_INITIAL_X - screenWidth/2;
-		mScreenHigherX = SCREEN_INITIAL_X + screenWidth/2;
-		mScreenLowerY = SCREEN_INITIAL_Y - screenHeight/2;
-		mScreenHigherY = SCREEN_INITIAL_Y + screenHeight/2;
+		sScreenLowerX = SCREEN_INITIAL_X - screenWidth/2;
+		sScreenHigherX = SCREEN_INITIAL_X + screenWidth/2;
+		sScreenLowerY = SCREEN_INITIAL_Y - screenHeight/2;
+		sScreenHigherY = SCREEN_INITIAL_Y + screenHeight/2;
 		Log.i(TAG, "Screen limits =>" +
-				" -X: " + mScreenLowerX +
-				" +X: " + mScreenHigherX +
-				" -Y: " + mScreenLowerY +
-				" +Y: " + mScreenHigherY
+				" -X: " + sScreenLowerX +
+				" +X: " + sScreenHigherX +
+				" -Y: " + sScreenLowerY +
+				" +Y: " + sScreenHigherY
 				);
 	}
 }
