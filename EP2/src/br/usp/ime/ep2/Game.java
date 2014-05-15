@@ -2,9 +2,9 @@ package br.usp.ime.ep2;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import br.usp.ime.ep2.Constants.BallDirection;
 import br.usp.ime.ep2.Constants.Collision;
 import br.usp.ime.ep2.Constants.Colors;
+import br.usp.ime.ep2.Constants.Config;
 import br.usp.ime.ep2.Constants.Hit;
 import br.usp.ime.ep2.Constants.ScoreMultiplier;
 import br.usp.ime.ep2.forms.Ball;
@@ -14,27 +14,29 @@ import android.util.Log;
 
 public class Game {
 	private static final String TAG = Game.class.getSimpleName();
-
 	private static final int SCREEN_INITIAL_X = 0;
 	private static final int SCREEN_INITIAL_Y = 0;
-	private float SCREEN_HIGHER_Y;
-	private float SCREEN_LOWER_Y;
-	private float SCREEN_HIGHER_X;
-	private float SCREEN_LOWER_X;
 	
+	private float mScreenHigherY;
+	private float mScreenLowerY;
+	private float mScreenHigherX;
+	private float mScreenLowerX;
 	private Paddle mPaddle;
 	private Ball mBall;
 	private Brick[][] mBricks;
-	private long mScore;
-	private int mScoreMultiplier;
+	
+	private static long sScore;
+	private static int sScoreMultiplier;
+	private static int sLifes;
 	
 	public Game() {
 		resetElements();
 	}
 	
 	public void resetElements() {
-		mScore = 0;
-		setNewScoreMultiplier(ScoreMultiplier.RESTART_LEVEL);
+		sScore = 0;
+		sLifes = Config.LIFE_COUNT;
+		updateScoreMultiplier(ScoreMultiplier.RESTART_LEVEL);
 		
 		mPaddle = new Paddle(Colors.RAINBOW, 0.0f, -0.7f, 0.1f);
 		Log.d(TAG, "Created paddle:" + 
@@ -143,6 +145,15 @@ public class Game {
 			}
 			mBall.turnByAngle(angleOfBallSlope);
 			break;
+		case LIFE_LOST:
+			if (sLifes > 0) {
+				sLifes--;
+				mBall = new Ball(Colors.RAINBOW, 0.0f, 0.0f, -0.02f, -0.05f, 0.1f, 0.01f);
+				updateScoreMultiplier(ScoreMultiplier.RESTART_LEVEL);
+			} else {
+				// TODO: show user that he lost
+			}
+			break;
 		case NOT_AVAILABLE:
 			break;
 		default:
@@ -156,12 +167,19 @@ public class Game {
 	private Collision detectColision() {
 		
 		//detecting collision between ball and wall
-		if ((mBall.getRightX() >= SCREEN_HIGHER_X) 			//collided in the right side
-				|| (mBall.getLeftX() <= SCREEN_LOWER_X)) {	//collided in the left side 
+		if ((mBall.getRightX() >= mScreenHigherX)        //collided in the right wall
+				|| (mBall.getLeftX() <= mScreenLowerX))  //collided in the left wall 
+		{	
 			return Collision.WALL_RIGHT_LEFT_SIDE;
-		} else if ((mBall.getTopY() >= SCREEN_HIGHER_Y)	//collided in the top part
-				|| (mBall.getBottomY() <= SCREEN_LOWER_Y)) {	//collided in the bottom part
+		} else if ((mBall.getTopY() >= mScreenHigherY)   //collided in the top wall
+				|| (mBall.getBottomY() <= mScreenLowerY) //collided in the bottom wall...
+				&& Config.INVICIBILITY)                  //and invincibility is on
+		{
 			return Collision.WALL_TOP_BOTTOM_SIDE;
+		} else if (mBall.getBottomY() <= mScreenLowerY   //if invincibility is off and the ball collided
+			&& !Config.INVICIBILITY)                     //with bottom wall, user loses a life
+		{
+			return Collision.LIFE_LOST;
 		}
 		
 		//detecting collision between the ball and the paddle
@@ -170,7 +188,7 @@ public class Game {
 		if (mBall.getTopY() >= mPaddle.getBottomY() && mBall.getBottomY() <= mPaddle.getTopY() &&
 				mBall.getRightX() >= mPaddle.getLeftX() && mBall.getLeftX() <= mPaddle.getRightX())
 		{
-			setNewScoreMultiplier(ScoreMultiplier.PADDLE_HIT);
+			updateScoreMultiplier(ScoreMultiplier.PADDLE_HIT);
 			return Collision.PADDLE_BALL;
 		}
 		
@@ -183,11 +201,10 @@ public class Game {
 							mBall.getRightX() >= brick.getLeftX() && mBall.getLeftX() <= brick.getRightX())
 					{
 						Log.d(TAG, "Detected collision between ball and brick[" + i + "][" + j + "]");
-						//Deleting brick
-						mBricks[i][j] = null;
-						mScore += 100 * mScoreMultiplier;
-						Log.i(TAG, "Score multiplier: " + mScoreMultiplier + " Score: " + mScore);
-						setNewScoreMultiplier(ScoreMultiplier.BRICK_HIT);
+						mBricks[i][j] = null; //Deleting brick	
+						sScore += 100 * sScoreMultiplier;
+						Log.i(TAG, "Score multiplier: " + sScoreMultiplier + " Score: " + sScore);
+						updateScoreMultiplier(ScoreMultiplier.BRICK_HIT);
 						return Collision.PADDLE_BRICK;
 					}
 				}
@@ -197,35 +214,47 @@ public class Game {
 		return Collision.NOT_AVAILABLE;
 	}
 	
-	private void setNewScoreMultiplier(ScoreMultiplier event) {
+	private void updateScoreMultiplier(ScoreMultiplier event) {
 		switch(event) {
 		case RESTART_LEVEL:
-			mScoreMultiplier = 1;
+			sScoreMultiplier = 1;
 			break;
 		case BRICK_HIT:
-			if (mScoreMultiplier < 8) {
-				mScoreMultiplier *= 2;
+			if (sScoreMultiplier < Config.MAX_SCORE_MULTIPLIER) {
+				sScoreMultiplier *= 2;
 			}
 			break;
 		case PADDLE_HIT:
-			if (mScoreMultiplier > 1) {
-				mScoreMultiplier /= 2;
+			if (sScoreMultiplier > 1) {
+				sScoreMultiplier /= 2;
 			}
 			break;
 		}
 	}
+	
+	public static long getScore() {
+		return sScore;
+	}
+	
+	public static int getScoreMultiplier() {
+		return sScoreMultiplier;
+	}
+	
+	public static int getLifes() {
+		return sLifes;
+	}
 
 	public void updateScreenMeasures(float screenWidth, float screenHeight) {
 		Log.i(TAG, "screenWidth: " + screenWidth + ", screenHeight: " + screenHeight);
-		SCREEN_LOWER_X = SCREEN_INITIAL_X - screenWidth/2;
-		SCREEN_HIGHER_X = SCREEN_INITIAL_X + screenWidth/2;
-		SCREEN_LOWER_Y = SCREEN_INITIAL_Y - screenHeight/2;
-		SCREEN_HIGHER_Y = SCREEN_INITIAL_Y + screenHeight/2;
+		mScreenLowerX = SCREEN_INITIAL_X - screenWidth/2;
+		mScreenHigherX = SCREEN_INITIAL_X + screenWidth/2;
+		mScreenLowerY = SCREEN_INITIAL_Y - screenHeight/2;
+		mScreenHigherY = SCREEN_INITIAL_Y + screenHeight/2;
 		Log.i(TAG, "Screen limits =>" +
-				" -X: " + SCREEN_LOWER_X +
-				" +X: " + SCREEN_HIGHER_X +
-				" -Y: " + SCREEN_LOWER_Y +
-				" +Y: " + SCREEN_HIGHER_Y
+				" -X: " + mScreenLowerX +
+				" +X: " + mScreenHigherX +
+				" -Y: " + mScreenLowerY +
+				" +Y: " + mScreenHigherY
 				);
 	}
 }

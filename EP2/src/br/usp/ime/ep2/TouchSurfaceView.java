@@ -7,6 +7,7 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
 import android.opengl.Matrix;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -54,8 +55,7 @@ class TouchSurfaceView extends GLSurfaceView {
 			gl.glViewport(0, 0, width, height);
 			mScreenWidth = width;
 			mScreenHeight = height;
-			float ratio = (float) width / height;
-			mGame.updateScreenMeasures((2.0f * ratio) - WALL, 2.0f - WALL);
+			float ratio = updateScreenMeasures(width, height);
 
 			gl.glMatrixMode(GL10.GL_PROJECTION);
 			gl.glLoadIdentity();
@@ -69,6 +69,7 @@ class TouchSurfaceView extends GLSurfaceView {
 		public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 			mScreenWidth = TouchSurfaceView.this.getWidth();
 			mScreenHeight = TouchSurfaceView.this.getHeight();
+			updateScreenMeasures(mScreenWidth, mScreenHeight);
 			
 			gl.glDisable(GL10.GL_DITHER);
 			gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);
@@ -87,10 +88,33 @@ class TouchSurfaceView extends GLSurfaceView {
 				}
 			} );
 		}
+		
+		private float updateScreenMeasures(float width, float height) {
+			float ratio = (float) width / height;
+			mGame.updateScreenMeasures((2.0f * ratio) - WALL, 2.0f - WALL);
+			return ratio;
+		}
+
+		@SuppressWarnings("unused")
+		private long limitFps(long maxFps) {
+			long framesPerSec = Constants.MS_PER_SECONDS / maxFps;
+			if (mDeltaTime < framesPerSec){
+				long sleepTime = framesPerSec - mDeltaTime;
+				Log.v(TAG, "deltaTime: " + mDeltaTime + "ms, frame limit set to: "
+						+ framesPerSec + "ms, waiting " + sleepTime + "ms");
+				try {
+					Thread.sleep(sleepTime);
+					return sleepTime;
+				} catch (InterruptedException e) {
+					return 0;
+				}
+			}
+			return 0;
+		}
 	}
 
-	public TouchSurfaceView(Context context) {
-		super(context);
+	public TouchSurfaceView(Context context, AttributeSet attrs) {
+		super(context, attrs);
 		super.setEGLConfigChooser(8 , 8, 8, 8, 16, 0);
 		mRenderer = new Renderer();
 		setRenderer(mRenderer);
@@ -121,22 +145,5 @@ class TouchSurfaceView extends GLSurfaceView {
 			break;
 		}
 		return true;
-	}
-	
-	@SuppressWarnings("unused")
-	private long limitFps(long maxFps) {
-		long framesPerSec = Constants.MS_PER_SECONDS / maxFps;
-		if (mDeltaTime < framesPerSec){
-			long sleepTime = framesPerSec - mDeltaTime;
-			Log.v(TAG, "deltaTime: " + mDeltaTime + "ms, frame limit set to: "
-					+ framesPerSec + "ms, waiting " + sleepTime + "ms");
-			try {
-				Thread.sleep(sleepTime);
-				return sleepTime;
-			} catch (InterruptedException e) {
-				return 0;
-			}
-		}
-		return 0;
 	}
 }
