@@ -55,8 +55,7 @@ class TouchSurfaceView extends GLSurfaceView {
 			gl.glViewport(0, 0, width, height);
 			mScreenWidth = width;
 			mScreenHeight = height;
-			float ratio = (float) width / height;
-			mGame.updateScreenMeasures((2.0f * ratio) - WALL, 2.0f - WALL);
+			float ratio = updateScreenMeasures(width, height);
 
 			gl.glMatrixMode(GL10.GL_PROJECTION);
 			gl.glLoadIdentity();
@@ -70,6 +69,7 @@ class TouchSurfaceView extends GLSurfaceView {
 		public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 			mScreenWidth = TouchSurfaceView.this.getWidth();
 			mScreenHeight = TouchSurfaceView.this.getHeight();
+			updateScreenMeasures(mScreenWidth, mScreenHeight);
 			
 			gl.glDisable(GL10.GL_DITHER);
 			gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);
@@ -90,8 +90,14 @@ class TouchSurfaceView extends GLSurfaceView {
 		}
 		
 		public void updateScoreView() {
-			MainActivity.setScore(mGame.getScore());
-			MainActivity.setScoreMultiplier(mGame.getScoreMultiplier());
+			UI.setScore(mGame.getScore());
+			UI.setScoreMultiplier(mGame.getScoreMultiplier());
+		}
+		
+		private float updateScreenMeasures(float width, float height) {
+			float ratio = (float) width / height;
+			mGame.updateScreenMeasures((2.0f * ratio) - WALL, 2.0f - WALL);
+			return ratio;
 		}
 
 		@SuppressWarnings("unused")

@@ -5,7 +5,7 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.widget.TextView;
 
-public class MainActivity extends Activity {
+public class UI extends Activity {
 
 	private GLSurfaceView mGlSurfaceView;
 	private static TextView mScoreTextView;
@@ -15,7 +15,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		setContentView(R.layout.main_activity);
+		setContentView(R.layout.activity_ui);
 
 		mGlSurfaceView = (TouchSurfaceView) findViewById(R.id.opengl);
 		mScoreTextView = (TextView) findViewById(R.id.score);
@@ -35,7 +35,7 @@ public class MainActivity extends Activity {
 	}
 	
 	public static void setScore(long score) {
-		mScoreTextView.setText("Score: " + score);
+		mScoreTextView.setText("Score: " + String.format("%08d", score));
 	}
 
 	public static void setScoreMultiplier(int scoreMultiplier) {

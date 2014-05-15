@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:text="Score: -1"
+            android:text="Score: :("
             android:visibility="visible" />
 
         <TextView
@@ -33,10 +33,24 @@
             android:id="@+id/scoreMultiplier"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Score multiplier: -1"
+            android:text="Score multiplier: :("
             android:textStyle="bold"
             android:visibility="visible" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="\t"
+            android:visibility="visible" />
+        
+        <TextView
+            android:id="@+id/lifes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lifes: :("
+            android:textStyle="bold"
+            android:visibility="visible" />
+        
     </LinearLayout>
 
 </RelativeLayout>
