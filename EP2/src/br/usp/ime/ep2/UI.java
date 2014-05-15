@@ -28,6 +28,7 @@ public class UI extends Activity {
 	private SharedPreferences mHighScoreSharedPrefs;
 	private SharedPreferences.Editor mSharedPrefsEditor;
 	private long mHighScore;
+	private boolean mNewHighScore;
 	private boolean mGameOver;
 
 	@Override
@@ -38,6 +39,7 @@ public class UI extends Activity {
 
 		mHandler = new Handler();
 		mGameOver = false;
+		mNewHighScore = false;
 		mTouchSurfaceView = (TouchSurfaceView) findViewById(R.id.opengl);
 		mHighScoreSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		mSharedPrefsEditor = mHighScoreSharedPrefs.edit();
@@ -70,11 +72,16 @@ public class UI extends Activity {
 		mTouchSurfaceView.onPause();
 	}
 	
-	private void showGameOverDialog(long finalScore) {
+	private void showGameOverDialog(long finalScore, boolean newHighScore) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("Game Over");
+		if(newHighScore){
+		builder.setMessage("New high score: " + finalScore + "\n" +
+				"Do you want to restart the game?");
+		} else {
 		builder.setMessage("Final score: " + finalScore + "\n" +
 				"Do you want to restart the game?");
+		}
 		
 		builder.setPositiveButton("Yes", new OnClickListener() {
 			@Override
@@ -115,6 +122,7 @@ public class UI extends Activity {
 				mScoreMultiplierTextView.setText("Multiplier: " + Status.getScoreMultiplier() + "x");
 				if(Status.getScore() > mHighScore) {
 					mHighScore = Status.getScore();
+					mNewHighScore = true;
 				}
 				mHighScoreTextView.setText("High score: " + String.format("%08d", mHighScore));
 				mLifesTextView.setText("Lifes: " + Status.getLifes());
@@ -122,7 +130,7 @@ public class UI extends Activity {
 					mSharedPrefsEditor.putLong("high_score", mHighScore);
 					mSharedPrefsEditor.commit();
 					mGameOver = true;
-					showGameOverDialog(Status.getScore());
+					showGameOverDialog(Status.getScore(), mNewHighScore);
 				}
 			}
 		});
