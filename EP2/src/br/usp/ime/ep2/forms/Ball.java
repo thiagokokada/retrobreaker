@@ -20,6 +20,7 @@ public class Ball extends Quad {
 	private float mPrevPosY;
 	//for the trajectory equation
 	private float mSlope;
+	private boolean mUndefinedSlope;
 	private float mTrajectoryIncrement;
 	private float mBaseSpeed;
 
@@ -30,7 +31,12 @@ public class Ball extends Quad {
 		mPrevPosX = last_x;
 		mPrevPosY = last_y;
 		
-		mSlope = (mPosY - mPrevPosY)/(mPosX - mPrevPosX);
+		if (mPosX == mPrevPosX) {
+			mUndefinedSlope = true;
+		} else {
+			mUndefinedSlope = false;
+			mSlope = (mPosY - mPrevPosY)/(mPosX - mPrevPosX);
+		}
 		
 		mBaseSpeed = trajectory_inc;
 		mTrajectoryIncrement = mBaseSpeed;
@@ -67,6 +73,13 @@ public class Ball extends Quad {
 	}
 	
 	public void turnToPerpendicularDirection(Hit hitedSide) {
+		//the ball is moving along the Y axis.
+		if (mUndefinedSlope) {
+			float tempY = mPrevPosY;
+			mPrevPosY = mPosY;
+			mPosY = tempY;
+			return;
+		}
 		
 		mSlope = -1 * (mSlope);
 		float tempX = mPosX;
@@ -87,8 +100,16 @@ public class Ball extends Quad {
 	
 	//Change the ball's trajectory to a new one that is based on the new slope.
 	//The new slope is based on the angle passed as parameter.
+	//angle: the angle of the slope (http://www.mathopenref.com/coordslope.html)
 	public void turnByAngle(float angle) {
-		//angle: the angle of the slope (http://www.mathopenref.com/coordslope.html)
+		if (angle == Constants.RIGHT_ANGLE) {
+			mUndefinedSlope = true;
+			mPrevPosX = mPosX;
+			turnToPerpendicularDirection(Hit.TOP_BOTTOM);
+			return;
+		} else {
+			mUndefinedSlope = false;
+		}
 		mSlope = (float) Math.tan(Math.toRadians(angle));
 		float tempX = mPosX;
 		float tempY = mPosY;
@@ -166,6 +187,17 @@ public class Ball extends Quad {
 				else y2 = mPosY - mTrajectoryIncrement;
 				mPosX = getX2InEquation(mPosX, mPosY, y2);
 				mPosY = y2;
+			}
+		}
+		//moving along the Y axis
+		else if (mPosX == mPrevPosX) {
+			if (mPosY > mPrevPosY) {	//upward
+				mPrevPosY = mPosY;
+				mPosY = mPosY + mTrajectoryIncrement;
+			}
+			else {						//downward
+				mPrevPosY = mPosY;
+				mPosY = mPosY - mTrajectoryIncrement;
 			}
 		}
 
