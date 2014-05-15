@@ -6,6 +6,8 @@ import br.usp.ime.ep2.Constants.Collision;
 import br.usp.ime.ep2.Constants.Colors;
 import br.usp.ime.ep2.Constants.Config;
 import br.usp.ime.ep2.Constants.Hit;
+import br.usp.ime.ep2.Constants.Lifes;
+import br.usp.ime.ep2.Constants.Score;
 import br.usp.ime.ep2.Constants.ScoreMultiplier;
 import br.usp.ime.ep2.forms.Ball;
 import br.usp.ime.ep2.forms.Brick;
@@ -20,10 +22,6 @@ public class Game {
 	private Paddle mPaddle;
 	private Ball mBall;
 	private Brick[][] mBricks;
-	
-	private static long sScore;
-	private static int sScoreMultiplier;
-	private static int sLifes;
 	
 	public static float sScreenHigherY;
 	public static float sScreenLowerY;
@@ -40,9 +38,9 @@ public class Game {
 		sScreenHigherY = 1.0f;
 		sScreenLowerY = -1.0f;
 		
-		sScore = 0;
-		sLifes = Config.LIFE_COUNT;
-		updateScoreMultiplier(ScoreMultiplier.RESTART_LEVEL);
+		Status.setLifes(Lifes.RESTART_LEVEL);
+		Status.setScore(Score.RESTART_LEVEL);
+		Status.setScoreMultiplier(ScoreMultiplier.RESTART_LEVEL);
 		
 		mPaddle = new Paddle(Colors.RAINBOW, 0.0f, -0.7f, 0.1f);
 		Log.d(TAG, "Created paddle:" + 
@@ -152,10 +150,9 @@ public class Game {
 			mBall.turnByAngle(angleOfBallSlope);
 			break;
 		case LIFE_LOST:
-			if (sLifes > 0) {
-				sLifes--;
+			Status.setLifes(Lifes.LOST_LIFE);
+			if (Status.getLifes() > 0) {
 				mBall = new Ball(Colors.RAINBOW, 0.0f, 0.0f, -0.02f, -0.05f, 0.1f, 0.01f);
-				updateScoreMultiplier(ScoreMultiplier.RESTART_LEVEL);
 			} else {
 				// TODO: show user that he lost
 			}
@@ -194,7 +191,7 @@ public class Game {
 		if (mBall.getTopY() >= mPaddle.getBottomY() && mBall.getBottomY() <= mPaddle.getTopY() &&
 				mBall.getRightX() >= mPaddle.getLeftX() && mBall.getLeftX() <= mPaddle.getRightX())
 		{
-			updateScoreMultiplier(ScoreMultiplier.PADDLE_HIT);
+			Status.setScoreMultiplier(ScoreMultiplier.PADDLE_HIT);
 			return Collision.PADDLE_BALL;
 		}
 		
@@ -208,9 +205,9 @@ public class Game {
 					{
 						Log.d(TAG, "Detected collision between ball and brick[" + i + "][" + j + "]");
 						mBricks[i][j] = null; //Deleting brick	
-						sScore += Config.HIT_SCORE * sScoreMultiplier;
-						Log.i(TAG, "Score multiplier: " + sScoreMultiplier + " Score: " + sScore);
-						updateScoreMultiplier(ScoreMultiplier.BRICK_HIT);
+						Status.setScore(Score.BRICK_HIT);
+						Log.i(TAG, "Score multiplier: " + Status.getScoreMultiplier() + " Score: " + Status.getScore());
+						Status.setScoreMultiplier(ScoreMultiplier.BRICK_HIT); // Update score multiplier only to next brick hit
 						return Collision.PADDLE_BRICK;
 					}
 				}
@@ -218,37 +215,7 @@ public class Game {
 		}
 		
 		return Collision.NOT_AVAILABLE;
-	}
-	
-	private void updateScoreMultiplier(ScoreMultiplier event) {
-		switch(event) {
-		case RESTART_LEVEL:
-			sScoreMultiplier = 1;
-			break;
-		case BRICK_HIT:
-			if (sScoreMultiplier < Config.MAX_SCORE_MULTIPLIER) {
-				sScoreMultiplier *= 2;
-			}
-			break;
-		case PADDLE_HIT:
-			if (sScoreMultiplier > 1) {
-				sScoreMultiplier /= 2;
-			}
-			break;
-		}
-	}
-	
-	public static long getScore() {
-		return sScore;
-	}
-	
-	public static int getScoreMultiplier() {
-		return sScoreMultiplier;
-	}
-	
-	public static int getLifes() {
-		return sLifes;
-	}
+	}	
 
 	public void updateScreenMeasures(float screenWidth, float screenHeight) {
 		Log.i(TAG, "screenWidth: " + screenWidth + ", screenHeight: " + screenHeight);
@@ -262,5 +229,63 @@ public class Game {
 				" -Y: " + sScreenLowerY +
 				" +Y: " + sScreenHigherY
 				);
+	}
+	
+	public static class Status {
+		private static long sScore;
+		private static int sScoreMultiplier;
+		private static int sLifes;
+
+		public static void setScore (Score event) {
+			switch(event) {
+			case BRICK_HIT:
+				sScore += Config.HIT_SCORE * getScoreMultiplier();
+				break;
+			case RESTART_LEVEL:
+				sScore = 0;
+				break;
+			}
+		}
+
+		public static void setScoreMultiplier(ScoreMultiplier event) {
+			switch(event) {
+			case RESTART_LEVEL:
+				sScoreMultiplier = 1;
+				break;
+			case BRICK_HIT:
+				if (sScoreMultiplier < Config.MAX_SCORE_MULTIPLIER) {
+					sScoreMultiplier *= 2;
+				}
+				break;
+			case PADDLE_HIT:
+				if (sScoreMultiplier > 1) {
+					sScoreMultiplier /= 2;
+				}
+				break;
+			}
+		}
+		
+		public static void setLifes(Lifes event) {
+			switch(event) {
+			case RESTART_LEVEL:
+				sLifes = Config.LIFE_COUNT;
+			case LOST_LIFE:
+				if (sLifes > 0) {
+					sLifes--;
+				}
+			}
+		}
+
+		public static long getScore() {
+			return sScore;
+		}
+
+		public static int getScoreMultiplier() {
+			return sScoreMultiplier;
+		}
+
+		public static int getLifes() {
+			return sLifes;
+		}
 	}
 }

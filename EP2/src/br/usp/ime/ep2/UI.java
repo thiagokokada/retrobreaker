@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.TextView;
+import br.usp.ime.ep2.Game.Status;
 
 public class UI extends Activity {
 
@@ -53,9 +54,9 @@ public class UI extends Activity {
 		mHandler.post(new Runnable() {
 			@Override
 			public void run() {
-				mScoreTextView.setText("Score: " + String.format("%08d", Game.getScore()));
-				mScoreMultiplierTextView.setText("Score multiplier: " + Game.getScoreMultiplier() + "x");
-				mLifesTextView.setText("Lifes: " + Game.getLifes());
+				mScoreTextView.setText("Score: " + String.format("%08d", Status.getScore()));
+				mScoreMultiplierTextView.setText("Score multiplier: " + Status.getScoreMultiplier() + "x");
+				mLifesTextView.setText("Lifes: " + Status.getLifes());
 			}
 		});
 	}
