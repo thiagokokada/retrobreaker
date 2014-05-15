@@ -5,6 +5,7 @@ import javax.microedition.khronos.opengles.GL10;
 import br.usp.ime.ep2.Constants.BallDirection;
 import br.usp.ime.ep2.Constants.Collision;
 import br.usp.ime.ep2.Constants.Colors;
+import br.usp.ime.ep2.Constants.Config;
 import br.usp.ime.ep2.Constants.Hit;
 import br.usp.ime.ep2.Constants.ScoreMultiplier;
 import br.usp.ime.ep2.forms.Ball;
@@ -35,8 +36,8 @@ public class Game {
 	
 	public void resetElements() {
 		sScore = 0;
-		sLifes = 3;
-		setNewScoreMultiplier(ScoreMultiplier.RESTART_LEVEL);
+		sLifes = Config.LIFE_COUNT;
+		updateScoreMultiplier(ScoreMultiplier.RESTART_LEVEL);
 		
 		mPaddle = new Paddle(Colors.RAINBOW, 0.0f, -0.7f, 0.1f);
 		Log.d(TAG, "Created paddle:" + 
@@ -159,6 +160,15 @@ public class Game {
 			angleOfBallSlope = -1 * (Constants.RIGHT_ANGLE - reflectedAngle);
 			mBall.turnByAngle(angleOfBallSlope);
 			break;
+		case LIFE_LOST:
+			if (sLifes > 0) {
+				sLifes--;
+				mBall = new Ball(Colors.RAINBOW, 0.0f, 0.0f, -0.02f, -0.05f, 0.1f, 0.01f);
+				updateScoreMultiplier(ScoreMultiplier.RESTART_LEVEL);
+			} else {
+				// TODO: show user that he lost
+			}
+			break;
 		case NOT_AVAILABLE:
 			break;
 		default:
@@ -178,14 +188,13 @@ public class Game {
 			return Collision.WALL_RIGHT_LEFT_SIDE;
 		} else if ((mBall.getTopY() >= mScreenHigherY)   //collided in the top wall
 				|| (mBall.getBottomY() <= mScreenLowerY) //collided in the bottom wall...
-				&& Constants.INVICIBILITY)               //and invincibility is on
+				&& Config.INVICIBILITY)                  //and invincibility is on
 		{
 			return Collision.WALL_TOP_BOTTOM_SIDE;
 		} else if (mBall.getBottomY() <= mScreenLowerY   //if invincibility is off and the ball collided
-			&& !Constants.INVICIBILITY)                  //with bottom wall, user loses a life
+			&& !Config.INVICIBILITY)                     //with bottom wall, user loses a life
 		{
-			sLifes--;
-			mBall = new Ball(Colors.RAINBOW, 0.0f, 0.0f, -0.02f, -0.05f, 0.1f, 0.01f);
+			return Collision.LIFE_LOST;
 		}
 		
 		//detecting collision between the ball and the paddle
@@ -194,7 +203,7 @@ public class Game {
 		if (mBall.getTopY() >= mPaddle.getBottomY() && mBall.getBottomY() <= mPaddle.getTopY() &&
 				mBall.getRightX() >= mPaddle.getLeftX() && mBall.getLeftX() <= mPaddle.getRightX())
 		{
-			setNewScoreMultiplier(ScoreMultiplier.PADDLE_HIT);
+			updateScoreMultiplier(ScoreMultiplier.PADDLE_HIT);
 			if (mBall.getDirection() == BallDirection.RIGHT_DOWNWARD) {
 				return Collision.PADDLE_BALL_FROM_LEFT;
 			} else if (mBall.getDirection() == BallDirection.LEFT_DOWNWARD) {
@@ -214,7 +223,7 @@ public class Game {
 						mBricks[i][j] = null; //Deleting brick	
 						sScore += 100 * sScoreMultiplier;
 						Log.i(TAG, "Score multiplier: " + sScoreMultiplier + " Score: " + sScore);
-						setNewScoreMultiplier(ScoreMultiplier.BRICK_HIT);
+						updateScoreMultiplier(ScoreMultiplier.BRICK_HIT);
 						return Collision.PADDLE_BRICK;
 					}
 				}
@@ -224,13 +233,13 @@ public class Game {
 		return Collision.NOT_AVAILABLE;
 	}
 	
-	private void setNewScoreMultiplier(ScoreMultiplier event) {
+	private void updateScoreMultiplier(ScoreMultiplier event) {
 		switch(event) {
 		case RESTART_LEVEL:
 			sScoreMultiplier = 1;
 			break;
 		case BRICK_HIT:
-			if (sScoreMultiplier < 8) {
+			if (sScoreMultiplier < Config.MAX_SCORE_MULTIPLIER) {
 				sScoreMultiplier *= 2;
 			}
 			break;
