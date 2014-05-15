@@ -24,7 +24,7 @@ public class Constants {
 	}
 
 	public static enum ScoreMultiplier {
-		RESTART_LEVEL, PADDLE_HIT, BRICK_HIT
+		RESTART_LEVEL, LOST_LIFE, PADDLE_HIT, BRICK_HIT
 	}
 
 	public static enum Lifes {

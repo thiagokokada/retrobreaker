@@ -153,6 +153,7 @@ public class Game {
 			Status.setLifes(Lifes.LOST_LIFE);
 			if (Status.getLifes() > 0) {
 				mBall = new Ball(Colors.RAINBOW, 0.0f, 0.0f, -0.02f, -0.05f, 0.1f, 0.01f);
+				Status.setScoreMultiplier(ScoreMultiplier.LOST_LIFE);
 			} else {
 				// TODO: show user that he lost
 			}
@@ -250,6 +251,7 @@ public class Game {
 		public static void setScoreMultiplier(ScoreMultiplier event) {
 			switch(event) {
 			case RESTART_LEVEL:
+			case LOST_LIFE:
 				sScoreMultiplier = 1;
 				break;
 			case BRICK_HIT:
