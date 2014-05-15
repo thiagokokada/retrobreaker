@@ -4,8 +4,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.widget.TextView;
 import br.usp.ime.ep2.Game.Status;
 
@@ -16,6 +18,10 @@ public class UI extends Activity {
 	private TextView mScoreTextView;
 	private TextView mScoreMultiplierTextView;
 	private TextView mLifesTextView;
+	private TextView mHighScoreTextView;
+	private SharedPreferences mHighScoreSharedPrefs;
+	private SharedPreferences.Editor mSharedPrefsEditor;
+	private long mHighScore;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,9 +31,13 @@ public class UI extends Activity {
 
 		mHandler = new Handler();
 		mTouchSurfaceView = (TouchSurfaceView) findViewById(R.id.opengl);
+		mHighScoreSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		mSharedPrefsEditor = mHighScoreSharedPrefs.edit();
 		mScoreTextView = (TextView) findViewById(R.id.score);
 		mScoreMultiplierTextView = (TextView) findViewById(R.id.scoreMultiplier);
 		mLifesTextView = (TextView) findViewById(R.id.lifes);
+		mHighScoreTextView = (TextView) findViewById(R.id.highScore);
+		mHighScore = mHighScoreSharedPrefs.getLong("high_score", 0);
 		
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
@@ -57,6 +67,12 @@ public class UI extends Activity {
 				mScoreTextView.setText("Score: " + String.format("%08d", Status.getScore()));
 				mScoreMultiplierTextView.setText("Score multiplier: " + Status.getScoreMultiplier() + "x");
 				mLifesTextView.setText("Lifes: " + Status.getLifes());
+				if(Status.getScore() > mHighScore) {
+					mHighScore = Status.getScore();
+					mSharedPrefsEditor.putLong("high_score", mHighScore);
+					mSharedPrefsEditor.commit();
+				}
+				mHighScoreTextView.setText("High score: " + String.format("%08d", mHighScore));
 			}
 		});
 	}
