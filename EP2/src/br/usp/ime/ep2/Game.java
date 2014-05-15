@@ -44,7 +44,7 @@ public class Game {
 				" RightX: " + mPaddle.getRightX()
 				);
 		
-		mBall = new Ball(Colors.RAINBOW, 0.0f, 0.0f, -0.02f, -0.05f, 0.1f, 0.01f);
+		mBall = new Ball(Colors.RAINBOW, 0.0f, 0.0f, -0.02f, -0.05f, 0.1f, 0.005f);
 		Log.d(TAG, "Created ball:" + 
 				" BottomY: " + mBall.getBottomY() +
 				" TopY: " + mBall.getTopY() +
@@ -92,23 +92,15 @@ public class Game {
 		mPaddle.setPosX(x);
 	}
 	
+	/*
+	 * We see the paddle as a circumference. The paddle's width is proportional to half of a circumference. In other words,
+	 * the half of the width of the paddle is proportional to 90 degrees.
+	 * x2 - x1		reflected angle
+	 * --------  = 	----------------
+	 * width/2  		  90
+	 */
 	private float calcReflectedAngle(float x2, float x1) {
-		float angleOfIncidence = mBall.getAngle();
-		/*
-		 * The angle increment can be positive, negative or zero. It depends if x2 is greater, lesser or equal to x1.
-		 * If it's positive, the ball will move farther away from the Y axis compared to the angle of incidence.
-		 * The positive value means the ball hit the paddle in the half part opposed to the direction where the ball came from.
-		 * 
-		 * If it's negative, the ball will move closer to the Y axis compared to the angle of incidence. It simulates a ball break.
-		 * The negative value means the ball hit the paddle in the half part at the same side from where the ball came from.
-		 * 
-		 * It if's zero, the reflected angle will be the same as the angle of incidence.
-		 * This means the ball hit the paddle in the middle.
-		 */
-		float angleIncrement = ((x2 - x1)/mPaddle.getWidth())*angleOfIncidence;
-		float reflectedAngle = angleIncrement + angleOfIncidence;
-		Log.d(TAG, "angle: "+angleOfIncidence+", reflectedAngle: "+reflectedAngle);
-		return reflectedAngle;
+		return Constants.RIGHT_ANGLE * (x2 - x1)/(mPaddle.getWidth()/2);
 	}
 
 	//Update next frame state
@@ -134,27 +126,21 @@ public class Game {
 			mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
 			Log.d(TAG, "next slope: " + mBall.getSlope());
 			break;
-		case PADDLE_BALL_FROM_LEFT:
+		case PADDLE_BALL:
 			Log.d(TAG, "collided into the top left part of the paddle");
 			Log.d(TAG, "paddlePosX: " + mPaddle.getPosX());
-			reflectedAngle = calcReflectedAngle(mBall.getPosX(), mPaddle.getPosX());
 			/* 
 			 * The angle of the slope (of the ball trajectory) is the complement of the angle of reflection.
 			 * Take a look at http://www.mathopenref.com/coordslope.html to get an idea of the angle of the slope.
 			 */
-			angleOfBallSlope = (Constants.RIGHT_ANGLE - reflectedAngle);
-			mBall.turnByAngle(angleOfBallSlope);
-			break;
-		case PADDLE_BALL_FROM_RIGHT:
-			Log.d(TAG, "collided into the top left part of the paddle");
-			Log.d(TAG, "paddlePosX: " + mPaddle.getPosX());
-			reflectedAngle = calcReflectedAngle(mPaddle.getPosX(), mBall.getPosX());
-			/*
-			 * The angle of the slope (of the ball trajectory) is the complement of the angle of reflection.
-			 * Besides being the complement, it's the negative complement, since the ball came from the right side.
-			 * Take a look at http://www.mathopenref.com/coordslope.html to get an idea of the angle of the slope.
-			 */
-			angleOfBallSlope = -1 * (Constants.RIGHT_ANGLE - reflectedAngle);
+			if (mPaddle.getPosX() >= mBall.getPosX()) {	//the ball hit the paddle in the right half-part.
+				reflectedAngle = calcReflectedAngle(mBall.getPosX(), mPaddle.getPosX());
+				angleOfBallSlope = (Constants.RIGHT_ANGLE - reflectedAngle);
+			} else {									//the ball hit the paddle in the left half-part.
+				reflectedAngle = calcReflectedAngle(mPaddle.getPosX(), mBall.getPosX());
+				//Besides being the complement, the angle of the slope is the negative complement, since the ball is going to the left.
+				angleOfBallSlope = -1 * (Constants.RIGHT_ANGLE - reflectedAngle);
+			}
 			mBall.turnByAngle(angleOfBallSlope);
 			break;
 		case NOT_AVAILABLE:
@@ -185,11 +171,7 @@ public class Game {
 				mBall.getRightX() >= mPaddle.getLeftX() && mBall.getLeftX() <= mPaddle.getRightX())
 		{
 			setNewScoreMultiplier(ScoreMultiplier.PADDLE_HIT);
-			if (mBall.getDirection() == BallDirection.RIGHT_DOWNWARD) {
-				return Collision.PADDLE_BALL_FROM_LEFT;
-			} else if (mBall.getDirection() == BallDirection.LEFT_DOWNWARD) {
-				return Collision.PADDLE_BALL_FROM_RIGHT;
-			}
+			return Collision.PADDLE_BALL;
 		}
 		
 		//detecting collision between the ball and the bricks
