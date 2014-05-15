@@ -44,7 +44,7 @@ public class Game {
 				" RightX: " + mPaddle.getRightX()
 				);
 		
-		mBall = new Ball(Colors.RAINBOW, 0.0f, 0.0f, -0.02f, -0.05f, 0.1f, 0.005f);
+		mBall = new Ball(Colors.RAINBOW, 0.0f, 0.0f, -0.02f, -0.05f, 0.1f, 0.01f);
 		Log.d(TAG, "Created ball:" + 
 				" BottomY: " + mBall.getBottomY() +
 				" TopY: " + mBall.getTopY() +
