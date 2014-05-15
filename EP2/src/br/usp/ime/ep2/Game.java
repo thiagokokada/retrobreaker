@@ -208,7 +208,7 @@ public class Game {
 					{
 						Log.d(TAG, "Detected collision between ball and brick[" + i + "][" + j + "]");
 						mBricks[i][j] = null; //Deleting brick	
-						sScore += 100 * sScoreMultiplier;
+						sScore += Config.HIT_SCORE * sScoreMultiplier;
 						Log.i(TAG, "Score multiplier: " + sScoreMultiplier + " Score: " + sScore);
 						updateScoreMultiplier(ScoreMultiplier.BRICK_HIT);
 						return Collision.PADDLE_BRICK;
