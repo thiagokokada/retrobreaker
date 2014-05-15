@@ -112,7 +112,7 @@ public class UI extends Activity {
 			@Override
 			public void run() {
 				mScoreTextView.setText("Score: " + String.format("%08d", Status.getScore()));
-				mScoreMultiplierTextView.setText("Score multiplier: " + Status.getScoreMultiplier() + "x");
+				mScoreMultiplierTextView.setText("Multiplier: " + Status.getScoreMultiplier() + "x");
 				if(Status.getScore() > mHighScore) {
 					mHighScore = Status.getScore();
 				}

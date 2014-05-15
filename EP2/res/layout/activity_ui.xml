@@ -10,53 +10,11 @@
         android:layout_height="match_parent" />
 
     <LinearLayout
-        android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp" >
+        android:layout_marginTop="8dp"
+        android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/score"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:text="Score: :((((((("
-            android:visibility="visible" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="\t"
-            android:visibility="visible" />
-        
-        <TextView
-            android:id="@+id/scoreMultiplier"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Score multiplier: :("
-            android:textStyle="bold"
-            android:visibility="visible" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="\t"
-            android:visibility="visible" />
-        
-        <TextView
-            android:id="@+id/lifes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Lifes: :("
-            android:textStyle="bold"
-            android:visibility="visible" />
-        
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="\t"
-            android:visibility="visible" />
-        
         <TextView
             android:id="@+id/highScore"
             android:layout_width="wrap_content"
@@ -64,7 +22,48 @@
             android:text="High score: :((((((("
             android:textStyle="bold"
             android:visibility="visible" />
-        
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Score: :((((((("
+                android:textStyle="bold"
+                android:visibility="visible" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="\t"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/scoreMultiplier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Multiplier: :("
+                android:textStyle="bold"
+                android:visibility="visible" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="\t"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/lifes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lifes: :("
+                android:textStyle="bold"
+                android:visibility="visible" />
+        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>
