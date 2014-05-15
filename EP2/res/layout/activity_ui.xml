@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:text="Score: :("
+            android:text="Score: :((((((("
             android:visibility="visible" />
 
         <TextView

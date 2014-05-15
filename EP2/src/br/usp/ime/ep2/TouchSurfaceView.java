@@ -89,11 +89,6 @@ class TouchSurfaceView extends GLSurfaceView {
 			} );
 		}
 		
-		public void updateScoreView() {
-			UI.setScore(mGame.getScore());
-			UI.setScoreMultiplier(mGame.getScoreMultiplier());
-		}
-		
 		private float updateScreenMeasures(float width, float height) {
 			float ratio = (float) width / height;
 			mGame.updateScreenMeasures((2.0f * ratio) - WALL, 2.0f - WALL);
@@ -147,8 +142,6 @@ class TouchSurfaceView extends GLSurfaceView {
 			resultWorldPos[3] = 1.0f;
 
 			mRenderer.updatePaddlePosition(resultWorldPos[0], resultWorldPos[1]);
-			// TODO: find the right place to call this
-			mRenderer.updateScoreView();
 			break;
 		}
 		return true;

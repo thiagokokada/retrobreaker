@@ -25,15 +25,18 @@ public class Game {
 	private Paddle mPaddle;
 	private Ball mBall;
 	private Brick[][] mBricks;
-	private long mScore;
-	private int mScoreMultiplier;
+	
+	private static long sScore;
+	private static int sScoreMultiplier;
+	private static int sLifes;
 	
 	public Game() {
 		resetElements();
 	}
 	
 	public void resetElements() {
-		mScore = 0;
+		sScore = 0;
+		sLifes = 3;
 		setNewScoreMultiplier(ScoreMultiplier.RESTART_LEVEL);
 		
 		mPaddle = new Paddle(Colors.RAINBOW, 0.0f, -0.7f, 0.1f);
@@ -202,8 +205,8 @@ public class Game {
 					{
 						Log.d(TAG, "Detected collision between ball and brick[" + i + "][" + j + "]");
 						mBricks[i][j] = null; //Deleting brick	
-						mScore += 100 * mScoreMultiplier;
-						Log.i(TAG, "Score multiplier: " + mScoreMultiplier + " Score: " + mScore);
+						sScore += 100 * sScoreMultiplier;
+						Log.i(TAG, "Score multiplier: " + sScoreMultiplier + " Score: " + sScore);
 						setNewScoreMultiplier(ScoreMultiplier.BRICK_HIT);
 						return Collision.PADDLE_BRICK;
 					}
@@ -217,27 +220,31 @@ public class Game {
 	private void setNewScoreMultiplier(ScoreMultiplier event) {
 		switch(event) {
 		case RESTART_LEVEL:
-			mScoreMultiplier = 1;
+			sScoreMultiplier = 1;
 			break;
 		case BRICK_HIT:
-			if (mScoreMultiplier < 8) {
-				mScoreMultiplier *= 2;
+			if (sScoreMultiplier < 8) {
+				sScoreMultiplier *= 2;
 			}
 			break;
 		case PADDLE_HIT:
-			if (mScoreMultiplier > 1) {
-				mScoreMultiplier /= 2;
+			if (sScoreMultiplier > 1) {
+				sScoreMultiplier /= 2;
 			}
 			break;
 		}
 	}
 	
-	public long getScore() {
-		return mScore;
+	public static long getScore() {
+		return sScore;
 	}
 	
-	public int getScoreMultiplier() {
-		return mScoreMultiplier;
+	public static int getScoreMultiplier() {
+		return sScoreMultiplier;
+	}
+	
+	public static int getLifes() {
+		return sLifes;
 	}
 
 	public void updateScreenMeasures(float screenWidth, float screenHeight) {
