@@ -61,6 +61,7 @@ public class Game {
 		sScreenHigherY = 1.0f;
 		sScreenLowerY = -1.0f;
 		
+		State.setWinner(false);
 		State.setLifes(Lifes.RESTART_LEVEL);
 		State.setScore(Score.RESTART_LEVEL);
 		State.setScoreMultiplier(ScoreMultiplier.RESTART_LEVEL);
@@ -159,78 +160,81 @@ public class Game {
 	//Update next frame state
 	public void updateState(float deltaTime) {
 		
-		// Set new ball speed to the next frame
-		mBall.setBallSpeed(deltaTime);
-		
-		if(!State.getGameOver()) {
-			float reflectedAngle = 0.0f, angleOfBallSlope = 0.0f;
+		if(!State.getWinner()) {
+			
+			// Set new ball speed to the next frame
+			mBall.setBallSpeed(deltaTime);
 
-			Collision collisionType = detectColision();	
+			if(!State.getGameOver()) {
+				float reflectedAngle = 0.0f, angleOfBallSlope = 0.0f;
 
-			switch (collisionType) {
-			case WALL_RIGHT_LEFT_SIDE:
-				Log.d(TAG, "Right/Left side collision detected");
-				Log.d(TAG, "previous slope: " + mBall.getSlope());
-				mSoundPool.play(mSoundIds.get("wall_hit"), 100, 100, 1, 0, 1.0f);
-				mBall.turnToPerpendicularDirection(Hit.RIGHT_LEFT);
-				Log.d(TAG, "next slope: " + mBall.getSlope());
-				break;
-			case WALL_TOP_BOTTOM_SIDE:
-				mSoundPool.play(mSoundIds.get("wall_hit"), 100, 100, 1, 0, 1.0f);
-				Log.d(TAG, "Top/Bottom side collision detected");
-				Log.d(TAG, "previous slope: " + mBall.getSlope());
-				mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
-				Log.d(TAG, "next slope: " + mBall.getSlope());
-			case BRICK_BALL:
-				State.setScore(Score.BRICK_HIT);
-				Log.i(TAG, "Score multiplier: " + State.getScoreMultiplier() + " Score: " + State.getScore());
-				State.setScoreMultiplier(ScoreMultiplier.BRICK_HIT); //Update multiplier for the next brick hit
-				mSoundPool.play(mSoundIds.get("brick_hit"), 100, 100, 1, 0, 1.0f);
-				mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
-				break;
-			case EX_BRICK_BALL:
-				State.setScore(Score.EX_BRICK_HIT);
-				Log.i(TAG, "Score multiplier: " + State.getScoreMultiplier() + " Score: " + State.getScore());
-				State.setScoreMultiplier(ScoreMultiplier.BRICK_HIT); //Update multiplier for the next brick hit
-				mSoundPool.play(mSoundIds.get("explosive_brick"), 100, 100, 1, 0, 1.0f);
-				mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
-				break;
-			case PADDLE_BALL:
-				Log.d(TAG, "collided into the top left part of the paddle");
-				Log.d(TAG, "paddlePosX: " + mPaddle.getPosX());
-				mSoundPool.play(mSoundIds.get("paddle_hit"), 100, 100, 1, 0, 1.0f);
-				/* 
-				 * The angle of the slope (of the ball trajectory) is the complement of the angle of reflection.
-				 * Take a look at http://www.mathopenref.com/coordslope.html to get an idea of the angle of the slope.
-				 */
-				if (mPaddle.getPosX() >= mBall.getPosX()) {	//the ball hit the paddle in the right half-part.
-					reflectedAngle = calcReflectedAngle(mBall.getPosX(), mPaddle.getPosX());
-					angleOfBallSlope = (Constants.RIGHT_ANGLE - reflectedAngle);
-				} else {									//the ball hit the paddle in the left half-part.
-					reflectedAngle = calcReflectedAngle(mPaddle.getPosX(), mBall.getPosX());
-					//Besides being the complement, the angle of the slope is the negative complement, since the ball is going to the left.
-					angleOfBallSlope = -1 * (Constants.RIGHT_ANGLE - reflectedAngle);
+				Collision collisionType = detectColision();	
+
+				switch (collisionType) {
+				case WALL_RIGHT_LEFT_SIDE:
+					Log.d(TAG, "Right/Left side collision detected");
+					Log.d(TAG, "previous slope: " + mBall.getSlope());
+					mSoundPool.play(mSoundIds.get("wall_hit"), 100, 100, 1, 0, 1.0f);
+					mBall.turnToPerpendicularDirection(Hit.RIGHT_LEFT);
+					Log.d(TAG, "next slope: " + mBall.getSlope());
+					break;
+				case WALL_TOP_BOTTOM_SIDE:
+					mSoundPool.play(mSoundIds.get("wall_hit"), 100, 100, 1, 0, 1.0f);
+					Log.d(TAG, "Top/Bottom side collision detected");
+					Log.d(TAG, "previous slope: " + mBall.getSlope());
+					mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
+					Log.d(TAG, "next slope: " + mBall.getSlope());
+				case BRICK_BALL:
+					State.setScore(Score.BRICK_HIT);
+					Log.i(TAG, "Score multiplier: " + State.getScoreMultiplier() + " Score: " + State.getScore());
+					State.setScoreMultiplier(ScoreMultiplier.BRICK_HIT); //Update multiplier for the next brick hit
+					mSoundPool.play(mSoundIds.get("brick_hit"), 100, 100, 1, 0, 1.0f);
+					mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
+					break;
+				case EX_BRICK_BALL:
+					State.setScore(Score.EX_BRICK_HIT);
+					Log.i(TAG, "Score multiplier: " + State.getScoreMultiplier() + " Score: " + State.getScore());
+					State.setScoreMultiplier(ScoreMultiplier.BRICK_HIT); //Update multiplier for the next brick hit
+					mSoundPool.play(mSoundIds.get("explosive_brick"), 100, 100, 1, 0, 1.0f);
+					mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
+					break;
+				case PADDLE_BALL:
+					Log.d(TAG, "collided into the top left part of the paddle");
+					Log.d(TAG, "paddlePosX: " + mPaddle.getPosX());
+					mSoundPool.play(mSoundIds.get("paddle_hit"), 100, 100, 1, 0, 1.0f);
+					/* 
+					 * The angle of the slope (of the ball trajectory) is the complement of the angle of reflection.
+					 * Take a look at http://www.mathopenref.com/coordslope.html to get an idea of the angle of the slope.
+					 */
+					if (mPaddle.getPosX() >= mBall.getPosX()) {	//the ball hit the paddle in the right half-part.
+						reflectedAngle = calcReflectedAngle(mBall.getPosX(), mPaddle.getPosX());
+						angleOfBallSlope = (Constants.RIGHT_ANGLE - reflectedAngle);
+					} else {									//the ball hit the paddle in the left half-part.
+						reflectedAngle = calcReflectedAngle(mPaddle.getPosX(), mBall.getPosX());
+						//Besides being the complement, the angle of the slope is the negative complement, since the ball is going to the left.
+						angleOfBallSlope = -1 * (Constants.RIGHT_ANGLE - reflectedAngle);
+					}
+					mBall.turnByAngle(angleOfBallSlope);
+					break;
+				case LIFE_LOST:
+					State.setLifes(Lifes.LOST_LIFE);
+					mSoundPool.play(mSoundIds.get("lost_life"), 100, 100, 1, 0, 1.0f);
+					if (!State.getGameOver()) {
+						mBall = new Ball(Colors.RAINBOW, 0.0f, 0.0f, -0.02f, -0.05f, 0.1f, 0.01f);
+						State.setScoreMultiplier(ScoreMultiplier.LOST_LIFE);
+					}
+					break;
+				case NOT_AVAILABLE:
+					break;
+				default:
+					break;
 				}
-				mBall.turnByAngle(angleOfBallSlope);
-				break;
-			case LIFE_LOST:
-				State.setLifes(Lifes.LOST_LIFE);
-				mSoundPool.play(mSoundIds.get("lost_life"), 100, 100, 1, 0, 1.0f);
-				if (!State.getGameOver()) {
-					mBall = new Ball(Colors.RAINBOW, 0.0f, 0.0f, -0.02f, -0.05f, 0.1f, 0.01f);
-					State.setScoreMultiplier(ScoreMultiplier.LOST_LIFE);
-				}
-				break;
-			case NOT_AVAILABLE:
-				break;
-			default:
-				break;
 			}
-		}
-		
-		updateBrickExplosion();
 
-		mBall.move();
+			updateBrickExplosion();
+
+			mBall.move();
+		}
 
 	}
 

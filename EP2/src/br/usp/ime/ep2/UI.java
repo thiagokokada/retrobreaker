@@ -1,5 +1,6 @@
 package br.usp.ime.ep2;
 
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -10,6 +11,8 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,6 +33,8 @@ public class UI extends Activity {
 	private long mHighScore;
 	private boolean mNewHighScore;
 	private boolean mFinish = false;
+	private SoundPool mSoundPool;
+	private HashMap<String, Integer> mSoundIds;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +52,10 @@ public class UI extends Activity {
 		mLifesTextView = (TextView) findViewById(R.id.lifes);
 		mHighScoreTextView = (TextView) findViewById(R.id.highScore);
 		mHighScore = mHighScoreSharedPrefs.getLong("high_score", 0);
+
+		mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+		mSoundIds = new HashMap<String, Integer>(1);
+		mSoundIds.put("victory_fanfare", mSoundPool.load(this, R.raw.victory_fanfare, 1));
 		
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
@@ -128,8 +137,11 @@ public class UI extends Activity {
 				mHighScoreTextView.setText("High score: " + String.format("%08d", mHighScore));
 				mLifesTextView.setText("Lifes: " + State.getLifes());
 				if(State.getGameOver() || State.getWinner()) {
-					mSharedPrefsEditor.putLong("high_score", mHighScore);
-					mSharedPrefsEditor.commit();
+					if(mNewHighScore) {
+						mSharedPrefsEditor.putLong("high_score", mHighScore);
+						mSharedPrefsEditor.commit();
+						mSoundPool.play(mSoundIds.get("victory_fanfare"), 100, 100, 1, 0, 1.0f);
+					}
 					showGameOverDialog(State.getScore(), mNewHighScore);
 					mFinish = true;
 				}
