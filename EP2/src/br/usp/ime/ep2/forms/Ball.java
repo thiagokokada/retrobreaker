@@ -54,7 +54,6 @@ public class Ball extends Quad {
 	 * Get the angle of incidence (relative to the Y axis) of the ball's trajectory.
 	 */
 	public float getAngle() {
-		Log.d(TAG, "inside getAngle, mSlope: "+mSlope);
 		//as the angle of the slope can be negative (see: http://www.mathopenref.com/coordslope.html), we need to get the absolute value.
 		return (float) (Constants.RIGHT_ANGLE - Math.abs(Math.toDegrees(Math.atan(mSlope))));
 	}
@@ -118,8 +117,6 @@ public class Ball extends Quad {
 		mPrevPosX = tempX;
 		mPrevPosY = tempY;
 		
-		Log.d(TAG, "inside turnByDegre, new mSlope: "+mSlope+", based on angle: "+angle);
-		Log.d(TAG, "mPrevPosX: "+mPrevPosX+", mPrevPosY: "+mPrevPosY+", mPosX: "+mPosX+", mPosY: "+mPosY);
 	}
 	
 	public float getSlope() {
@@ -149,16 +146,13 @@ public class Ball extends Quad {
 		if (((mPosX > mPrevPosX) && (mPosY > mPrevPosY)) || 
 				((mPosX > mPrevPosX) && (mPosY < mPrevPosY)))
 		{
-			Log.d(TAG, "Right upward/downward");
 			mPrevPosX = mPosX;
 			mPrevPosY = mPosY;
 			if (Math.abs(mSlope) <= 1) {
-				Log.d(TAG, "mSlope <= 1");
 				float x2 = mPosX + mTrajectoryIncrement;
 				mPosY = getY2InEquation(mPosX, mPosY, x2);
 				mPosX = x2;
 			} else {
-				Log.d(TAG, "mSlope > 1");
 				
 				float y2;
 				if (dir == BallDirection.RIGHT_UPWARD) {

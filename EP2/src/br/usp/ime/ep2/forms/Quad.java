@@ -8,7 +8,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import br.usp.ime.ep2.Game;
 
-abstract class Quad {
+public abstract class Quad {
 	
 	protected float mPosX;
 	protected float mPosY;
@@ -34,6 +34,15 @@ abstract class Quad {
 		mVertexBuffer.put(mVertices);
 		mVertexBuffer.position(0);
 
+		ByteBuffer cbb = ByteBuffer.allocateDirect(mColors.length * FLOAT_SIZE_BYTES);
+		cbb.order(ByteOrder.nativeOrder());
+		mColorBuffer = cbb.asFloatBuffer();
+		mColorBuffer.put(mColors);
+		mColorBuffer.position(0);
+	}
+	
+	public void setColor(float[] colors) {
+		mColors = colors;
 		ByteBuffer cbb = ByteBuffer.allocateDirect(mColors.length * FLOAT_SIZE_BYTES);
 		cbb.order(ByteOrder.nativeOrder());
 		mColorBuffer = cbb.asFloatBuffer();
@@ -76,6 +85,10 @@ abstract class Quad {
 	
 	public float getWidth() {
 		return (mVertices[4] - mVertices[0])*mScale;
+	}
+	
+	public float getHeight() {
+		return (mVertices[3] - mVertices[1])*mScale;
 	}
 	
 	public void setPosX(float x) {

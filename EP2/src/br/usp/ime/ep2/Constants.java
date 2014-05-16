@@ -43,12 +43,33 @@ public class Constants {
 	}
 	
 	public static final class Colors {
+		static final float RGB_UPPER_BOUND = 255;
+		static final float[] GRAY_RGB = {128/RGB_UPPER_BOUND, 128/RGB_UPPER_BOUND, 128/RGB_UPPER_BOUND};
+		static final float[] WHITE_RGB = {255/RGB_UPPER_BOUND, 255/RGB_UPPER_BOUND, 255/RGB_UPPER_BOUND};
+		static final float[] BLACK_RGB = {0/RGB_UPPER_BOUND, 0/RGB_UPPER_BOUND, 0/RGB_UPPER_BOUND};
+		static final float[] RED_RGB = {255/RGB_UPPER_BOUND, 0/RGB_UPPER_BOUND, 0/RGB_UPPER_BOUND};
+		static final float[] BLUE_RGB = {0/RGB_UPPER_BOUND, 0/RGB_UPPER_BOUND, 255/RGB_UPPER_BOUND};
+		static final float[] GREEN_RGB = {0/RGB_UPPER_BOUND, 255/RGB_UPPER_BOUND, 0/RGB_UPPER_BOUND};
 
 		public static final float[] RAINBOW = {
-			0.0f,  0.0f,  0.0f,  1.0f,
-			1.0f,  0.0f,  0.0f,  1.0f,
-			0.0f,  0.0f,  1.0f,  1.0f,
-			0.0f,  1.0f,  0.0f,  1.0f,
+			BLACK_RGB[0],  BLACK_RGB[1],  BLACK_RGB[2],  1.0f,	// bottom left
+			RED_RGB[0],  RED_RGB[1],  RED_RGB[2],  1.0f,		// top left
+			BLUE_RGB[0],  BLUE_RGB[1],  BLUE_RGB[2],  1.0f,		// bottom right
+			GREEN_RGB[0],  GREEN_RGB[1],  GREEN_RGB[2],  1.0f,	// top right
+		};
+		
+		public static final float[] GRAY_GRADIENT = {
+			GRAY_RGB[0],  GRAY_RGB[1],  GRAY_RGB[2],  1.0f,		// bottom left
+			WHITE_RGB[0],  WHITE_RGB[1],  WHITE_RGB[2],  1.0f,	// top left
+			BLACK_RGB[0],  BLACK_RGB[1],  BLACK_RGB[2],  1.0f,	// bottom right
+			GRAY_RGB[0],  GRAY_RGB[1],  GRAY_RGB[2],  1.0f,		// top right
+		};
+		
+		public static final float[] RED_GRADIENT = {
+			RED_RGB[0],  RED_RGB[1],  RED_RGB[2],  1.0f,		// bottom left
+			WHITE_RGB[0],  WHITE_RGB[1],  WHITE_RGB[2],  1.0f,	// top left
+			BLACK_RGB[0],  BLACK_RGB[1],  BLACK_RGB[2],  1.0f,	// bottom right
+			RED_RGB[0],  RED_RGB[1],  RED_RGB[2],  1.0f,		// top right
 		};
 
 	}

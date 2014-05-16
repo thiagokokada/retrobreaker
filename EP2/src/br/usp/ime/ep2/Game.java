@@ -1,9 +1,15 @@
 package br.usp.ime.ep2;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.content.Context;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.util.Log;
 import br.usp.ime.ep2.Constants.Collision;
 import br.usp.ime.ep2.Constants.Colors;
 import br.usp.ime.ep2.Constants.Config;
@@ -13,11 +19,9 @@ import br.usp.ime.ep2.Constants.Score;
 import br.usp.ime.ep2.Constants.ScoreMultiplier;
 import br.usp.ime.ep2.forms.Ball;
 import br.usp.ime.ep2.forms.Brick;
+import br.usp.ime.ep2.forms.Brick.Type;
 import br.usp.ime.ep2.forms.Paddle;
-import android.content.Context;
-import android.media.AudioManager;
-import android.media.SoundPool;
-import android.util.Log;
+import brickExplosion.Explosion;
 
 public class Game {
 	private static final String TAG = Game.class.getSimpleName();
@@ -30,6 +34,11 @@ public class Game {
 	private SoundPool mSoundPool;
 	private HashMap<String, Integer> mSoundIds;
 	private Context mContext;
+	private List<Explosion> mExplosions;
+	
+	private static long sScore;
+	private static int sScoreMultiplier;
+	private static int sLifes;
 	
 	public static float sScreenHigherY;
 	public static float sScreenLowerY;
@@ -74,6 +83,12 @@ public class Game {
 				" RightX: " + mBall.getRightX()
 				);
 		createLevel(Colors.RAINBOW, 8, 12, -0.55f, 0.7f, 0.1f, 0.04f);
+		
+		mExplosions = new ArrayList<Explosion>();
+	}
+	
+	private Brick createGrayBrick(float posX, float posY, float scale) {
+		return new Brick(Colors.GRAY_GRADIENT, posX, posY, scale, Type.EXPLOSIVE);
 	}
 	
 	private void createLevel (float[] colors,int blocksX, int blocksY, float initialX, float initialY,
@@ -86,7 +101,12 @@ public class Game {
 		
 		for (int i=0; i<mBricks.length; i++) {
 			for (int j=0; j<mBricks[i].length; j++) {
-				mBricks[i][j] = new Brick(colors, newPosX, newPosY, 0.1f);
+				double prob = Math.random();
+				if (prob <= Brick.GRAY_BRICK_PROBABILITY) { 
+					mBricks[i][j] = createGrayBrick(newPosX, newPosY, 0.1f);
+				} else {
+					mBricks[i][j] = new Brick(colors, newPosX, newPosY, 0.1f, Type.NORMAL);
+				}
 				newPosX += spaceX;
 			}
 			newPosX = initialX;
@@ -106,6 +126,19 @@ public class Game {
 				if (mBricks[i][j] != null) {
 					mBricks[i][j].draw(gl);
 				}
+			}
+		}
+		
+		for (int i = 0; i < mExplosions.size(); i++) {
+			mExplosions.get(i).draw(gl);
+		}
+	}
+	
+	private void updateBrickExplosion() {
+		for (int i = 0; i < mExplosions.size(); i++) {
+			Explosion explosion = mExplosions.get(i);
+			if (explosion.isAlive()) {
+				explosion.update2();
 			}
 		}
 	}
@@ -186,6 +219,8 @@ public class Game {
 				break;
 			}
 		}
+		
+		updateBrickExplosion();
 
 		mBall.move();
 
@@ -210,7 +245,6 @@ public class Game {
 		}
 		
 		//detecting collision between the ball and the paddle
-		Log.v(TAG, mBall.toString());
 		
 		if (mBall.getTopY() >= mPaddle.getBottomY() && mBall.getBottomY() <= mPaddle.getTopY() &&
 				mBall.getRightX() >= mPaddle.getLeftX() && mBall.getLeftX() <= mPaddle.getRightX())
@@ -228,10 +262,21 @@ public class Game {
 							mBall.getRightX() >= brick.getLeftX() && mBall.getLeftX() <= brick.getRightX())
 					{
 						Log.d(TAG, "Detected collision between ball and brick[" + i + "][" + j + "]");
-						mBricks[i][j] = null; //Deleting brick	
+						if (mBricks[i][j].getLives() == 0) {
+							if (mBricks[i][j].getType() == Type.EXPLOSIVE) {
+								Log.d(TAG, "inserted explosion");
+								mExplosions.add(new Explosion(Brick.GRAY_EXPLOSION_SIZE, mBricks[i][j].getPosX(), mBricks[i][j].getPosY()));
+							}
+							mBricks[i][j] = null; //Deleting brick
+						} else {
+							mBricks[i][j].decrementLives();
+							if (mBricks[i][j].getType() == Type.EXPLOSIVE) {
+								mBricks[i][j].setColor(Colors.RED_GRADIENT);
+							}
+						}
 						State.setScore(Score.BRICK_HIT);
-						Log.i(TAG, "Score multiplier: " + State.getScoreMultiplier() + " Score: " + State.getScore());
-						State.setScoreMultiplier(ScoreMultiplier.BRICK_HIT); // Update score multiplier only to next brick hit
+						Log.i(TAG, "Score multiplier: " + sScoreMultiplier + " Score: " + sScore);
+						State.setScoreMultiplier(ScoreMultiplier.BRICK_HIT); //Update multiplier for the next brick hit
 						return Collision.BRICK_BALL;
 					}
 				}
