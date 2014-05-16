@@ -97,8 +97,12 @@ public class Game {
 		for (int i=0; i<mBricks.length; i++) {
 			for (int j=0; j<mBricks[i].length; j++) {
 				double prob = Math.random();
-				if (prob <= Brick.GRAY_BRICK_PROBABILITY) { 
-					mBricks[i][j] = new Brick(Colors.GRAY_GRADIENT, newPosX, newPosY, 0.1f, Type.EXPLOSIVE);
+				if (prob <= (Brick.GRAY_BRICK_PROBABILITY + Brick.EXPLOSIVE_BRICK_PROBABILITY)) {
+					if (prob <= Brick.EXPLOSIVE_BRICK_PROBABILITY) {
+						mBricks[i][j] = new Brick(Colors.RED_GRADIENT, newPosX, newPosY, 0.1f, Type.EXPLOSIVE);
+					} else {
+						mBricks[i][j] = new Brick(Colors.GRAY_GRADIENT, newPosX, newPosY, 0.1f, Type.HARD);
+					}
 				} else {
 					mBricks[i][j] = new Brick(Colors.RAINBOW, newPosX, newPosY, 0.1f, Type.NORMAL);
 				}
@@ -235,6 +239,13 @@ public class Game {
 		}
 
 	}
+	
+	private void decrementBrickLife(Brick brick, int i, int j) {
+		mBricks[i][j].decrementLives();
+		if (mBricks[i][j].getType() == Type.HARD) {
+			mBricks[i][j].setColor(Colors.RAINBOW);
+		}
+	}
 
 	private Collision detectColision() {
 		
@@ -266,7 +277,9 @@ public class Game {
 		//if the game is finished, there should be no bricks left
 		boolean gameFinish = true;
 		//detecting collision between the ball and the bricks
+		Log.d(TAG, "mBricks.length: "+mBricks.length);
 		for (int i=0; i<mBricks.length; i++) {
+			Log.d(TAG, "mBricks[i].length: "+mBricks[i].length);
 			for (int j=0; j<mBricks[i].length; j++) {
 				if(mBricks[i][j] != null) {
 					gameFinish = false;
@@ -278,15 +291,26 @@ public class Game {
 							if (mBricks[i][j].getType() == Type.EXPLOSIVE) {
 								Log.d(TAG, "inserted explosion");
 								mExplosions.add(new Explosion(Brick.GRAY_EXPLOSION_SIZE, mBricks[i][j].getPosX(), mBricks[i][j].getPosY()));
-								mBricks[i][j] = null;
+								
+								//deleting the surrounding bricks
+								for (int a=Math.max(i-1, 0); a< Math.min(i+2, mBricks.length); a++) {
+									Log.d(TAG, "a: "+a);
+									for (int b=Math.max(j-1, 0); b<Math.min(j+2, mBricks[i].length); b++) {
+										Log.d(TAG, "b: "+b);
+										if (mBricks[a][b] != null) {
+											if (mBricks[a][b].getLives() == 0) mBricks[a][b] = null; //Deleting brick
+											else {
+												decrementBrickLife(mBricks[a][b], a, b);
+											}
+										}
+									}
+								}
+								
 								return Collision.EX_BRICK_BALL;
 							}
 							mBricks[i][j] = null; //Deleting brick
 						} else {
-							mBricks[i][j].decrementLives();
-							if (mBricks[i][j].getType() == Type.EXPLOSIVE) {
-								mBricks[i][j].setColor(Colors.RED_GRADIENT);
-							}
+							decrementBrickLife(mBricks[i][j], i, j);
 						}
 						return Collision.BRICK_BALL;
 					}
