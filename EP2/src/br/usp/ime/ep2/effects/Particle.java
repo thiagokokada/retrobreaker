@@ -1,13 +1,5 @@
-package brickExplosion;
+package br.usp.ime.ep2.effects;
 
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.util.Log;
-
-import br.usp.ime.ep2.Constants.Collision;
-import br.usp.ime.ep2.Constants.Config;
 import br.usp.ime.ep2.Game;
 import br.usp.ime.ep2.forms.Quad;
 

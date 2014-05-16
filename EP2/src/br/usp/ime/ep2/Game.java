@@ -17,11 +17,11 @@ import br.usp.ime.ep2.Constants.Hit;
 import br.usp.ime.ep2.Constants.Lifes;
 import br.usp.ime.ep2.Constants.Score;
 import br.usp.ime.ep2.Constants.ScoreMultiplier;
+import br.usp.ime.ep2.effects.Explosion;
 import br.usp.ime.ep2.forms.Ball;
 import br.usp.ime.ep2.forms.Brick;
 import br.usp.ime.ep2.forms.Brick.Type;
 import br.usp.ime.ep2.forms.Paddle;
-import brickExplosion.Explosion;
 
 public class Game {
 	private static final String TAG = Game.class.getSimpleName();
@@ -35,10 +35,6 @@ public class Game {
 	private HashMap<String, Integer> mSoundIds;
 	private Context mContext;
 	private List<Explosion> mExplosions;
-	
-	private static long sScore;
-	private static int sScoreMultiplier;
-	private static int sLifes;
 	
 	public static float sScreenHigherY;
 	public static float sScreenLowerY;
@@ -275,7 +271,7 @@ public class Game {
 							}
 						}
 						State.setScore(Score.BRICK_HIT);
-						Log.i(TAG, "Score multiplier: " + sScoreMultiplier + " Score: " + sScore);
+						Log.i(TAG, "Score multiplier: " + State.getScoreMultiplier() + " Score: " + State.getScore());
 						State.setScoreMultiplier(ScoreMultiplier.BRICK_HIT); //Update multiplier for the next brick hit
 						return Collision.BRICK_BALL;
 					}

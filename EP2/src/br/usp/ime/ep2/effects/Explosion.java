@@ -1,11 +1,9 @@
-package brickExplosion;
+package br.usp.ime.ep2.effects;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import br.usp.ime.ep2.Constants.Colors;
-import android.graphics.Canvas;
-import android.graphics.Rect;
 import android.util.Log;
+import br.usp.ime.ep2.Constants.Colors;
 
 /**
  * @author impaler
