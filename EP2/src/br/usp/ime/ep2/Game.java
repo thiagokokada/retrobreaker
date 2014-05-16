@@ -12,6 +12,9 @@ import br.usp.ime.ep2.Constants.ScoreMultiplier;
 import br.usp.ime.ep2.forms.Ball;
 import br.usp.ime.ep2.forms.Brick;
 import br.usp.ime.ep2.forms.Paddle;
+import android.content.Context;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.util.Log;
 
 public class Game {
@@ -22,13 +25,17 @@ public class Game {
 	private Paddle mPaddle;
 	private Ball mBall;
 	private Brick[][] mBricks;
+	private SoundPool mSoundPool;
+	private int[] mSoundIds;
+	private Context mContext;
 	
 	public static float sScreenHigherY;
 	public static float sScreenLowerY;
 	public static float sScreenHigherX;
 	public static float sScreenLowerX;
 	
-	public Game() {
+	public Game(Context context) {
+		mContext = context;
 		resetElements();
 	}
 	
@@ -38,9 +45,13 @@ public class Game {
 		sScreenHigherY = 1.0f;
 		sScreenLowerY = -1.0f;
 		
-		Status.setLifes(Lifes.RESTART_LEVEL);
-		Status.setScore(Score.RESTART_LEVEL);
-		Status.setScoreMultiplier(ScoreMultiplier.RESTART_LEVEL);
+		mSoundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
+		mSoundIds = new int[10];
+		mSoundIds[0] = mSoundPool.load(mContext, R.raw.lost_life, 1);
+		
+		State.setLifes(Lifes.RESTART_LEVEL);
+		State.setScore(Score.RESTART_LEVEL);
+		State.setScoreMultiplier(ScoreMultiplier.RESTART_LEVEL);
 		
 		mPaddle = new Paddle(Colors.RAINBOW, 0.0f, -0.7f, 0.1f);
 		Log.d(TAG, "Created paddle:" + 
@@ -150,12 +161,11 @@ public class Game {
 			mBall.turnByAngle(angleOfBallSlope);
 			break;
 		case LIFE_LOST:
-			Status.setLifes(Lifes.LOST_LIFE);
-			if (Status.getLifes() > 0) {
+			State.setLifes(Lifes.LOST_LIFE);
+			if (!State.getGameOver()) {
+				mSoundPool.play(mSoundIds[0], 100, 100, 1, 0, 1.0f);
 				mBall = new Ball(Colors.RAINBOW, 0.0f, 0.0f, -0.02f, -0.05f, 0.1f, 0.01f);
-				Status.setScoreMultiplier(ScoreMultiplier.LOST_LIFE);
-			} else {
-				// TODO: show user that he lost
+				State.setScoreMultiplier(ScoreMultiplier.LOST_LIFE);
 			}
 			break;
 		case NOT_AVAILABLE:
@@ -192,7 +202,7 @@ public class Game {
 		if (mBall.getTopY() >= mPaddle.getBottomY() && mBall.getBottomY() <= mPaddle.getTopY() &&
 				mBall.getRightX() >= mPaddle.getLeftX() && mBall.getLeftX() <= mPaddle.getRightX())
 		{
-			Status.setScoreMultiplier(ScoreMultiplier.PADDLE_HIT);
+			State.setScoreMultiplier(ScoreMultiplier.PADDLE_HIT);
 			return Collision.PADDLE_BALL;
 		}
 		
@@ -206,9 +216,9 @@ public class Game {
 					{
 						Log.d(TAG, "Detected collision between ball and brick[" + i + "][" + j + "]");
 						mBricks[i][j] = null; //Deleting brick	
-						Status.setScore(Score.BRICK_HIT);
-						Log.i(TAG, "Score multiplier: " + Status.getScoreMultiplier() + " Score: " + Status.getScore());
-						Status.setScoreMultiplier(ScoreMultiplier.BRICK_HIT); // Update score multiplier only to next brick hit
+						State.setScore(Score.BRICK_HIT);
+						Log.i(TAG, "Score multiplier: " + State.getScoreMultiplier() + " Score: " + State.getScore());
+						State.setScoreMultiplier(ScoreMultiplier.BRICK_HIT); // Update score multiplier only to next brick hit
 						return Collision.PADDLE_BRICK;
 					}
 				}
@@ -232,10 +242,11 @@ public class Game {
 				);
 	}
 	
-	public static class Status {
+	public static class State {
 		private static long sScore;
 		private static int sScoreMultiplier;
 		private static int sLifes;
+		private static boolean sGameOver;
 
 		public static void setScore (Score event) {
 			switch(event) {
@@ -270,12 +281,19 @@ public class Game {
 		public static void setLifes(Lifes event) {
 			switch(event) {
 			case RESTART_LEVEL:
+				sGameOver = false;
 				sLifes = Config.LIFE_COUNT;
 			case LOST_LIFE:
 				if (sLifes > 0) {
 					sLifes--;
+				} else {
+					sGameOver = true;
 				}
 			}
+		}
+		
+		public static boolean getGameOver() {
+			return sGameOver;
 		}
 
 		public static long getScore() {

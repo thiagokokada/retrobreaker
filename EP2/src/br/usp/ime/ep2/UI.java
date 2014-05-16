@@ -15,7 +15,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.widget.TextView;
-import br.usp.ime.ep2.Game.Status;
+import br.usp.ime.ep2.Game.State;
 
 public class UI extends Activity {
 
@@ -29,7 +29,7 @@ public class UI extends Activity {
 	private SharedPreferences.Editor mSharedPrefsEditor;
 	private long mHighScore;
 	private boolean mNewHighScore;
-	private boolean mGameOver;
+	private boolean mFinish = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,6 @@ public class UI extends Activity {
 		setContentView(R.layout.activity_ui);
 
 		mHandler = new Handler();
-		mGameOver = false;
 		mNewHighScore = false;
 		mTouchSurfaceView = (TouchSurfaceView) findViewById(R.id.opengl);
 		mHighScoreSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
@@ -53,8 +52,10 @@ public class UI extends Activity {
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				if(!mGameOver){
+				if(!mFinish){
 					updateUI();				
+				} else {
+					return;
 				}
 			}
 		}, 0, Constants.MAX_MS_PER_FRAME * 15); //Update score 4 times per second with 60FPS, or each 15 frame
@@ -118,19 +119,19 @@ public class UI extends Activity {
 		mHandler.post(new Runnable() {
 			@Override
 			public void run() {
-				mScoreTextView.setText("Score: " + String.format("%08d", Status.getScore()));
-				mScoreMultiplierTextView.setText("Multiplier: " + Status.getScoreMultiplier() + "x");
-				if(Status.getScore() > mHighScore) {
-					mHighScore = Status.getScore();
+				mScoreTextView.setText("Score: " + String.format("%08d", State.getScore()));
+				mScoreMultiplierTextView.setText("Multiplier: " + State.getScoreMultiplier() + "x");
+				if(State.getScore() > mHighScore) {
+					mHighScore = State.getScore();
 					mNewHighScore = true;
 				}
 				mHighScoreTextView.setText("High score: " + String.format("%08d", mHighScore));
-				mLifesTextView.setText("Lifes: " + Status.getLifes());
-				if(Status.getLifes() == 0) {
+				mLifesTextView.setText("Lifes: " + State.getLifes());
+				if(State.getGameOver()) {
 					mSharedPrefsEditor.putLong("high_score", mHighScore);
 					mSharedPrefsEditor.commit();
-					mGameOver = true;
-					showGameOverDialog(Status.getScore(), mNewHighScore);
+					showGameOverDialog(State.getScore(), mNewHighScore);
+					mFinish = true;
 				}
 			}
 		});

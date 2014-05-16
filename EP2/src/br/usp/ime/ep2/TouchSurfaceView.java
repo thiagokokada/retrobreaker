@@ -32,8 +32,8 @@ class TouchSurfaceView extends GLSurfaceView {
 
 		private Game mGame;
 
-		public Renderer() {
-			mGame = new Game();
+		public Renderer(Context context) {
+			mGame = new Game(context);
 			mPrevFrameTime = System.nanoTime();
 		}
 
@@ -116,7 +116,7 @@ class TouchSurfaceView extends GLSurfaceView {
 	public TouchSurfaceView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		super.setEGLConfigChooser(8 , 8, 8, 8, 16, 0);
-		mRenderer = new Renderer();
+		mRenderer = new Renderer(context);
 		setRenderer(mRenderer);
 	}
 
