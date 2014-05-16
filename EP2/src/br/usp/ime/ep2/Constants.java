@@ -3,6 +3,7 @@ package br.usp.ime.ep2;
 public class Constants {
 
 	public static final int RIGHT_ANGLE = 90;
+	public static final float ANGLE_OF_REFLECTION_BOUND = 60;
 
 	public static final long MS_PER_SECONDS = 1000 /* milliseconds */;
 	public static final long NANOS_PER_SECONDS = 1000 /* nanoseconds */ * MS_PER_SECONDS;

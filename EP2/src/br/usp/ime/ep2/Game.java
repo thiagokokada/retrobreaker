@@ -147,14 +147,14 @@ public class Game {
 	}
 	
 	/*
-	 * We see the paddle as a circumference. The paddle's width is proportional to half of a circumference. In other words,
-	 * the half of the width of the paddle is proportional to 90 degrees.
-	 * x2 - x1		reflected angle
-	 * --------  = 	----------------
-	 * width/2  		  90
+	 * We see the paddle as a circumference. The paddle's width is proportional to (2 * ANGLE_OF_REFLECTION_BOUND). 
+	 * In other words, the half of the width of the paddle is proportional to Constants.ANGLE_OF_REFLECTION_BOUND degrees.
+	 * x2 - x1			reflected angle
+	 * --------  = 	------------------------
+	 * width/2  	ANGLE_OF_REFLECTION_BOUND
 	 */
 	private float calcReflectedAngle(float x2, float x1) {
-		return Constants.RIGHT_ANGLE * (x2 - x1)/(mPaddle.getWidth()/2);
+		return Constants.ANGLE_OF_REFLECTION_BOUND * (x2 - x1)/(mPaddle.getWidth()/2);
 	}
 
 	//Update next frame state
@@ -184,6 +184,7 @@ public class Game {
 					Log.d(TAG, "previous slope: " + mBall.getSlope());
 					mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
 					Log.d(TAG, "next slope: " + mBall.getSlope());
+					break;
 				case BRICK_BALL:
 					State.setScore(Score.BRICK_HIT);
 					Log.i(TAG, "Score multiplier: " + State.getScoreMultiplier() + " Score: " + State.getScore());
