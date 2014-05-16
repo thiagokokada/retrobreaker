@@ -13,6 +13,7 @@ import br.usp.ime.ep2.forms.Quad;
 
 /**
  * @author impaler
+ * http://obviam.net/index.php/particle-explosion-with-android/
  *
  */
 public class Particle extends Quad {

@@ -9,6 +9,7 @@ import android.util.Log;
 
 /**
  * @author impaler
+ * http://obviam.net/index.php/particle-explosion-with-android/
  *
  */
 public class Explosion {
