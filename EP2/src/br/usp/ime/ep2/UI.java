@@ -127,7 +127,7 @@ public class UI extends Activity {
 				}
 				mHighScoreTextView.setText("High score: " + String.format("%08d", mHighScore));
 				mLifesTextView.setText("Lifes: " + State.getLifes());
-				if(State.getGameOver()) {
+				if(State.getGameOver() || State.getWinner()) {
 					mSharedPrefsEditor.putLong("high_score", mHighScore);
 					mSharedPrefsEditor.commit();
 					showGameOverDialog(State.getScore(), mNewHighScore);

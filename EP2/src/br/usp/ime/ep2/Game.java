@@ -43,6 +43,15 @@ public class Game {
 	
 	public Game(Context context) {
 		mContext = context;
+
+		mSoundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
+		mSoundIds = new HashMap<String, Integer>(4);
+		mSoundIds.put("lost_life", mSoundPool.load(mContext, R.raw.lost_life, 1));
+		mSoundIds.put("wall_hit", mSoundPool.load(mContext, R.raw.wall_hit, 1));
+		mSoundIds.put("paddle_hit", mSoundPool.load(mContext, R.raw.paddle_hit, 1));
+		mSoundIds.put("brick_hit", mSoundPool.load(mContext, R.raw.brick_hit, 1));
+		mSoundIds.put("explosive_brick", mSoundPool.load(mContext, R.raw.explosive_brick, 1));
+		
 		resetElements();
 	}
 	
@@ -51,14 +60,6 @@ public class Game {
 		sScreenLowerX = -1.0f;
 		sScreenHigherY = 1.0f;
 		sScreenLowerY = -1.0f;
-		
-		mSoundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
-		mSoundIds = new HashMap<String, Integer>(4);
-		mSoundIds.put("lost_life", mSoundPool.load(mContext, R.raw.lost_life, 1));
-		mSoundIds.put("wall_hit", mSoundPool.load(mContext, R.raw.wall_hit, 1));
-		mSoundIds.put("paddle_hit", mSoundPool.load(mContext, R.raw.paddle_hit, 1));
-		mSoundIds.put("brick_hit", mSoundPool.load(mContext, R.raw.brick_hit, 1));
-		mSoundIds.put("explosive_brick", mSoundPool.load(mContext, R.raw.explosive_brick, 1));
 		
 		State.setLifes(Lifes.RESTART_LEVEL);
 		State.setScore(Score.RESTART_LEVEL);
@@ -260,10 +261,13 @@ public class Game {
 			return Collision.PADDLE_BALL;
 		}
 		
+		//if the game is finished, there should be no bricks left
+		boolean gameFinish = true;
 		//detecting collision between the ball and the bricks
 		for (int i=0; i<mBricks.length; i++) {
 			for (int j=0; j<mBricks[i].length; j++) {
 				if(mBricks[i][j] != null) {
+					gameFinish = false;
 					if (mBall.getTopY() >= mBricks[i][j].getBottomY() && mBall.getBottomY() <= mBricks[i][j].getTopY() &&
 							mBall.getRightX() >= mBricks[i][j].getLeftX() && mBall.getLeftX() <= mBricks[i][j].getRightX())
 					{
@@ -286,6 +290,7 @@ public class Game {
 					}
 				}
 			}
+			State.setWinner(gameFinish);
 		}
 		
 		return Collision.NOT_AVAILABLE;
@@ -310,6 +315,7 @@ public class Game {
 		private static int sScoreMultiplier;
 		private static int sLifes;
 		private static boolean sGameOver;
+		private static boolean sWinner;
 
 		public static void setScore (Score event) {
 			switch(event) {
@@ -358,6 +364,10 @@ public class Game {
 			}
 		}
 		
+		public static void setWinner(boolean event) {
+			sWinner = event;
+		}
+		
 		public static boolean getGameOver() {
 			return sGameOver;
 		}
@@ -372,6 +382,10 @@ public class Game {
 
 		public static int getLifes() {
 			return sLifes;
+		}
+
+		public static boolean getWinner() {
+			return sWinner;
 		}
 	}
 }
