@@ -45,9 +45,12 @@ public class Game {
 		sScreenHigherY = 1.0f;
 		sScreenLowerY = -1.0f;
 		
-		mSoundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
-		mSoundIds = new int[10];
+		mSoundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
+		mSoundIds = new int[5];
 		mSoundIds[0] = mSoundPool.load(mContext, R.raw.lost_life, 1);
+		mSoundIds[1] = mSoundPool.load(mContext, R.raw.wall_hit, 1);
+		mSoundIds[2] = mSoundPool.load(mContext, R.raw.paddle_hit, 1);
+		mSoundIds[3] = mSoundPool.load(mContext, R.raw.brick_hit, 1);
 		
 		State.setLifes(Lifes.RESTART_LEVEL);
 		State.setScore(Score.RESTART_LEVEL);
@@ -125,53 +128,61 @@ public class Game {
 		
 		// Set new ball speed to the next frame
 		mBall.setBallSpeed(deltaTime);
-		float reflectedAngle = 0.0f, angleOfBallSlope = 0.0f;
+		
+		if(!State.getGameOver()) {
+			float reflectedAngle = 0.0f, angleOfBallSlope = 0.0f;
 
-		Collision collisionType = detectColision();	
+			Collision collisionType = detectColision();	
 
-		switch (collisionType) {
-		case WALL_RIGHT_LEFT_SIDE:
-			Log.d(TAG, "Right/Left side collision detected");
-			Log.d(TAG, "previous slope: " + mBall.getSlope());
-			mBall.turnToPerpendicularDirection(Hit.RIGHT_LEFT);
-			Log.d(TAG, "next slope: " + mBall.getSlope());
-			break;
-		case WALL_TOP_BOTTOM_SIDE:
-		case PADDLE_BRICK:
-			Log.d(TAG, "Top/Bottom side collision detected");
-			Log.d(TAG, "previous slope: " + mBall.getSlope());
-			mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
-			Log.d(TAG, "next slope: " + mBall.getSlope());
-			break;
-		case PADDLE_BALL:
-			Log.d(TAG, "collided into the top left part of the paddle");
-			Log.d(TAG, "paddlePosX: " + mPaddle.getPosX());
-			/* 
-			 * The angle of the slope (of the ball trajectory) is the complement of the angle of reflection.
-			 * Take a look at http://www.mathopenref.com/coordslope.html to get an idea of the angle of the slope.
-			 */
-			if (mPaddle.getPosX() >= mBall.getPosX()) {	//the ball hit the paddle in the right half-part.
-				reflectedAngle = calcReflectedAngle(mBall.getPosX(), mPaddle.getPosX());
-				angleOfBallSlope = (Constants.RIGHT_ANGLE - reflectedAngle);
-			} else {									//the ball hit the paddle in the left half-part.
-				reflectedAngle = calcReflectedAngle(mPaddle.getPosX(), mBall.getPosX());
-				//Besides being the complement, the angle of the slope is the negative complement, since the ball is going to the left.
-				angleOfBallSlope = -1 * (Constants.RIGHT_ANGLE - reflectedAngle);
-			}
-			mBall.turnByAngle(angleOfBallSlope);
-			break;
-		case LIFE_LOST:
-			State.setLifes(Lifes.LOST_LIFE);
-			if (!State.getGameOver()) {
+			switch (collisionType) {
+			case WALL_RIGHT_LEFT_SIDE:
+				Log.d(TAG, "Right/Left side collision detected");
+				Log.d(TAG, "previous slope: " + mBall.getSlope());
+				mSoundPool.play(mSoundIds[3], 100, 100, 1, 0, 1.0f);
+				mBall.turnToPerpendicularDirection(Hit.RIGHT_LEFT);
+				Log.d(TAG, "next slope: " + mBall.getSlope());
+				break;
+			case WALL_TOP_BOTTOM_SIDE:
+				mSoundPool.play(mSoundIds[2], 100, 100, 1, 0, 1.0f);
+				Log.d(TAG, "Top/Bottom side collision detected");
+				Log.d(TAG, "previous slope: " + mBall.getSlope());
+				mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
+				Log.d(TAG, "next slope: " + mBall.getSlope());
+			case PADDLE_BRICK:
+				mSoundPool.play(mSoundIds[2], 100, 100, 1, 0, 1.0f);
+				mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
+				break;
+			case PADDLE_BALL:
+				Log.d(TAG, "collided into the top left part of the paddle");
+				Log.d(TAG, "paddlePosX: " + mPaddle.getPosX());
+				mSoundPool.play(mSoundIds[1], 100, 100, 1, 0, 1.0f);
+				/* 
+				 * The angle of the slope (of the ball trajectory) is the complement of the angle of reflection.
+				 * Take a look at http://www.mathopenref.com/coordslope.html to get an idea of the angle of the slope.
+				 */
+				if (mPaddle.getPosX() >= mBall.getPosX()) {	//the ball hit the paddle in the right half-part.
+					reflectedAngle = calcReflectedAngle(mBall.getPosX(), mPaddle.getPosX());
+					angleOfBallSlope = (Constants.RIGHT_ANGLE - reflectedAngle);
+				} else {									//the ball hit the paddle in the left half-part.
+					reflectedAngle = calcReflectedAngle(mPaddle.getPosX(), mBall.getPosX());
+					//Besides being the complement, the angle of the slope is the negative complement, since the ball is going to the left.
+					angleOfBallSlope = -1 * (Constants.RIGHT_ANGLE - reflectedAngle);
+				}
+				mBall.turnByAngle(angleOfBallSlope);
+				break;
+			case LIFE_LOST:
+				State.setLifes(Lifes.LOST_LIFE);
 				mSoundPool.play(mSoundIds[0], 100, 100, 1, 0, 1.0f);
-				mBall = new Ball(Colors.RAINBOW, 0.0f, 0.0f, -0.02f, -0.05f, 0.1f, 0.01f);
-				State.setScoreMultiplier(ScoreMultiplier.LOST_LIFE);
+				if (!State.getGameOver()) {
+					mBall = new Ball(Colors.RAINBOW, 0.0f, 0.0f, -0.02f, -0.05f, 0.1f, 0.01f);
+					State.setScoreMultiplier(ScoreMultiplier.LOST_LIFE);
+				}
+				break;
+			case NOT_AVAILABLE:
+				break;
+			default:
+				break;
 			}
-			break;
-		case NOT_AVAILABLE:
-			break;
-		default:
-			break;
 		}
 
 		mBall.move();
