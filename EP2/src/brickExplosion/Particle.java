@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 
 import br.usp.ime.ep2.Constants.Collision;
 import br.usp.ime.ep2.Constants.Config;
@@ -15,6 +16,7 @@ import br.usp.ime.ep2.forms.Quad;
  *
  */
 public class Particle extends Quad {
+	private static final String TAG = Particle.class.getSimpleName();
 	
 	public static final float scale = 0.03f;
 	
