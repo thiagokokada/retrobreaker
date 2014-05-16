@@ -184,6 +184,7 @@ public class Game {
 					Log.d(TAG, "previous slope: " + mBall.getSlope());
 					mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
 					Log.d(TAG, "next slope: " + mBall.getSlope());
+					break;
 				case BRICK_BALL:
 					State.setScore(Score.BRICK_HIT);
 					Log.i(TAG, "Score multiplier: " + State.getScoreMultiplier() + " Score: " + State.getScore());
