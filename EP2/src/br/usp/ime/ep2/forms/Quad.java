@@ -8,7 +8,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import br.usp.ime.ep2.Game;
 
-abstract class Quad {
+public abstract class Quad {
 	
 	protected float mPosX;
 	protected float mPosY;
@@ -76,6 +76,10 @@ abstract class Quad {
 	
 	public float getWidth() {
 		return (mVertices[4] - mVertices[0])*mScale;
+	}
+	
+	public float getHeight() {
+		return (mVertices[3] - mVertices[1])*mScale;
 	}
 	
 	public void setPosX(float x) {

@@ -1,5 +1,7 @@
 package br.usp.ime.ep2;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -11,7 +13,9 @@ import br.usp.ime.ep2.Constants.Hit;
 import br.usp.ime.ep2.Constants.ScoreMultiplier;
 import br.usp.ime.ep2.forms.Ball;
 import br.usp.ime.ep2.forms.Brick;
+import br.usp.ime.ep2.forms.Brick.Type;
 import br.usp.ime.ep2.forms.Paddle;
+import brickExplosion.Explosion;
 import android.util.Log;
 
 public class Game {
@@ -22,6 +26,7 @@ public class Game {
 	private Paddle mPaddle;
 	private Ball mBall;
 	private Brick[][] mBricks;
+	private List<Explosion> mExplosions;
 	
 	private static long sScore;
 	private static int sScoreMultiplier;
@@ -62,10 +67,12 @@ public class Game {
 				" RightX: " + mBall.getRightX()
 				);
 		createLevel(Colors.RAINBOW, 8, 12, -0.55f, 0.7f, 0.1f, 0.04f);
+		
+		mExplosions = new ArrayList<Explosion>();
 	}
 	
 	private Brick createGrayBrick(float posX, float posY, float scale) {
-		return new Brick(Colors.GRAY, posX, posY, scale, Brick.GRAY_LIVES);
+		return new Brick(Colors.GRAY, posX, posY, scale, Type.GRAY);
 	}
 	
 	private void createLevel (float[] colors,int blocksX, int blocksY, float initialX, float initialY,
@@ -82,7 +89,7 @@ public class Game {
 				if (prob <= Brick.GRAY_BRICK_PROBABILITY) { 
 					mBricks[i][j] = createGrayBrick(newPosX, newPosY, 0.1f);
 				} else {
-					mBricks[i][j] = new Brick(colors, newPosX, newPosY, 0.1f, Brick.NORMAL_LIVES);
+					mBricks[i][j] = new Brick(colors, newPosX, newPosY, 0.1f, Type.NORMAL);
 				}
 				newPosX += spaceX;
 			}
@@ -103,6 +110,19 @@ public class Game {
 				if (mBricks[i][j] != null) {
 					mBricks[i][j].draw(gl);
 				}
+			}
+		}
+		
+		for (int i = 0; i < mExplosions.size(); i++) {
+			mExplosions.get(i).draw(gl);
+		}
+	}
+	
+	private void updateBrickExplosion() {
+		for (int i = 0; i < mExplosions.size(); i++) {
+			Explosion explosion = mExplosions.get(i);
+			if (explosion.isAlive()) {
+				explosion.update2();
 			}
 		}
 	}
@@ -133,21 +153,13 @@ public class Game {
 
 		switch (collisionType) {
 		case WALL_RIGHT_LEFT_SIDE:
-			Log.d(TAG, "Right/Left side collision detected");
-			Log.d(TAG, "previous slope: " + mBall.getSlope());
 			mBall.turnToPerpendicularDirection(Hit.RIGHT_LEFT);
-			Log.d(TAG, "next slope: " + mBall.getSlope());
 			break;
 		case WALL_TOP_BOTTOM_SIDE:
 		case PADDLE_BRICK:
-			Log.d(TAG, "Top/Bottom side collision detected");
-			Log.d(TAG, "previous slope: " + mBall.getSlope());
 			mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
-			Log.d(TAG, "next slope: " + mBall.getSlope());
 			break;
 		case PADDLE_BALL:
-			Log.d(TAG, "collided into the top left part of the paddle");
-			Log.d(TAG, "paddlePosX: " + mPaddle.getPosX());
 			/* 
 			 * The angle of the slope (of the ball trajectory) is the complement of the angle of reflection.
 			 * Take a look at http://www.mathopenref.com/coordslope.html to get an idea of the angle of the slope.
@@ -176,6 +188,8 @@ public class Game {
 		default:
 			break;
 		}
+		
+		updateBrickExplosion();
 
 		mBall.move();
 
@@ -200,7 +214,6 @@ public class Game {
 		}
 		
 		//detecting collision between the ball and the paddle
-		Log.v(TAG, mBall.toString());
 		
 		if (mBall.getTopY() >= mPaddle.getBottomY() && mBall.getBottomY() <= mPaddle.getTopY() &&
 				mBall.getRightX() >= mPaddle.getLeftX() && mBall.getLeftX() <= mPaddle.getRightX())
@@ -219,6 +232,10 @@ public class Game {
 					{
 						Log.d(TAG, "Detected collision between ball and brick[" + i + "][" + j + "]");
 						if (mBricks[i][j].getLives() == 0) {
+							if (mBricks[i][j].getType() == Type.GRAY) {
+								Log.d(TAG, "inserted explosion");
+								mExplosions.add(new Explosion(Brick.GRAY_EXPLOSION_SIZE, mBricks[i][j].getPosX(), mBricks[i][j].getPosY()));
+							}
 							mBricks[i][j] = null; //Deleting brick
 						} else {
 							mBricks[i][j].decrementLives();
