@@ -2,14 +2,14 @@ package br.usp.ime.ep2.forms;
 
 public class Brick extends Quad {
 	
-	public static final float GRAY_BRICK_PROBABILITY = 0.2f;
+	public static final float GRAY_BRICK_PROBABILITY = 0.6f;
 	public static final int GRAY_LIVES = 1;
 	public static final int NORMAL_LIVES = 0;
 	
 	public static final int GRAY_EXPLOSION_SIZE = 8;
 	
 	public static enum Type {
-		NORMAL, GRAY
+		NORMAL, EXPLOSIVE
 	}
 
 	public static final float[] VERTICES = {
@@ -30,7 +30,7 @@ public class Brick extends Quad {
 		case NORMAL:
 			mLives = 0;
 			break;
-		case GRAY:
+		case EXPLOSIVE:
 			mLives = 1;
 		}
 	}

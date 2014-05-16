@@ -50,11 +50,18 @@ public class Constants {
 			GREEN_RGB[0],  GREEN_RGB[1],  GREEN_RGB[2],  1.0f,	// top right
 		};
 		
-		public static final float[] GRAY = {
+		public static final float[] GRAY_GRADIENT = {
 			GRAY_RGB[0],  GRAY_RGB[1],  GRAY_RGB[2],  1.0f,		// bottom left
 			WHITE_RGB[0],  WHITE_RGB[1],  WHITE_RGB[2],  1.0f,	// top left
 			BLACK_RGB[0],  BLACK_RGB[1],  BLACK_RGB[2],  1.0f,	// bottom right
 			GRAY_RGB[0],  GRAY_RGB[1],  GRAY_RGB[2],  1.0f,		// top right
+		};
+		
+		public static final float[] RED_GRADIENT = {
+			RED_RGB[0],  RED_RGB[1],  RED_RGB[2],  1.0f,		// bottom left
+			WHITE_RGB[0],  WHITE_RGB[1],  WHITE_RGB[2],  1.0f,	// top left
+			BLACK_RGB[0],  BLACK_RGB[1],  BLACK_RGB[2],  1.0f,	// bottom right
+			RED_RGB[0],  RED_RGB[1],  RED_RGB[2],  1.0f,		// top right
 		};
 
 	}

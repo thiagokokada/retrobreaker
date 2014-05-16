@@ -72,7 +72,7 @@ public class Game {
 	}
 	
 	private Brick createGrayBrick(float posX, float posY, float scale) {
-		return new Brick(Colors.GRAY, posX, posY, scale, Type.GRAY);
+		return new Brick(Colors.GRAY_GRADIENT, posX, posY, scale, Type.EXPLOSIVE);
 	}
 	
 	private void createLevel (float[] colors,int blocksX, int blocksY, float initialX, float initialY,
@@ -232,13 +232,16 @@ public class Game {
 					{
 						Log.d(TAG, "Detected collision between ball and brick[" + i + "][" + j + "]");
 						if (mBricks[i][j].getLives() == 0) {
-							if (mBricks[i][j].getType() == Type.GRAY) {
+							if (mBricks[i][j].getType() == Type.EXPLOSIVE) {
 								Log.d(TAG, "inserted explosion");
 								mExplosions.add(new Explosion(Brick.GRAY_EXPLOSION_SIZE, mBricks[i][j].getPosX(), mBricks[i][j].getPosY()));
 							}
 							mBricks[i][j] = null; //Deleting brick
 						} else {
 							mBricks[i][j].decrementLives();
+							if (mBricks[i][j].getType() == Type.EXPLOSIVE) {
+								mBricks[i][j].setColor(Colors.RED_GRADIENT);
+							}
 						}
 						sScore += 100 * sScoreMultiplier;
 						Log.i(TAG, "Score multiplier: " + sScoreMultiplier + " Score: " + sScore);

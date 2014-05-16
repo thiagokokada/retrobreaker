@@ -41,6 +41,15 @@ public abstract class Quad {
 		mColorBuffer.position(0);
 	}
 	
+	public void setColor(float[] colors) {
+		mColors = colors;
+		ByteBuffer cbb = ByteBuffer.allocateDirect(mColors.length * FLOAT_SIZE_BYTES);
+		cbb.order(ByteOrder.nativeOrder());
+		mColorBuffer = cbb.asFloatBuffer();
+		mColorBuffer.put(mColors);
+		mColorBuffer.position(0);
+	}
+	
 	public float getScale() {
 		return mScale;
 	}
