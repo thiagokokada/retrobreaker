@@ -81,16 +81,12 @@ public class Game {
 				" LeftX: " + mBall.getLeftX() +
 				" RightX: " + mBall.getRightX()
 				);
-		createLevel(Colors.RAINBOW, 8, 12, -0.55f, 0.7f, 0.1f, 0.04f);
+		createLevel(8, 12, -0.55f, 0.7f, 0.1f, 0.04f);
 		
 		mExplosions = new ArrayList<Explosion>();
 	}
 	
-	private Brick createGrayBrick(float posX, float posY, float scale) {
-		return new Brick(Colors.GRAY_GRADIENT, posX, posY, scale, Type.EXPLOSIVE);
-	}
-	
-	private void createLevel (float[] colors,int blocksX, int blocksY, float initialX, float initialY,
+	private void createLevel (int blocksX, int blocksY, float initialX, float initialY,
 			float spaceX, float spaceY) 
 	{
 		mBricks = new Brick[blocksX][blocksY];
@@ -102,9 +98,9 @@ public class Game {
 			for (int j=0; j<mBricks[i].length; j++) {
 				double prob = Math.random();
 				if (prob <= Brick.GRAY_BRICK_PROBABILITY) { 
-					mBricks[i][j] = createGrayBrick(newPosX, newPosY, 0.1f);
+					mBricks[i][j] = new Brick(Colors.GRAY_GRADIENT, newPosX, newPosY, 0.1f, Type.EXPLOSIVE);
 				} else {
-					mBricks[i][j] = new Brick(colors, newPosX, newPosY, 0.1f, Type.NORMAL);
+					mBricks[i][j] = new Brick(Colors.RAINBOW, newPosX, newPosY, 0.1f, Type.NORMAL);
 				}
 				newPosX += spaceX;
 			}
