@@ -89,18 +89,18 @@ public class Game {
 				" LeftX: " + mBall.getLeftX() +
 				" RightX: " + mBall.getRightX()
 				);
-		createLevel(NUMBER_OF_LINES_OF_BRICKS, NUMBER_OF_COLUMNS_OF_BRICKS, -0.55f, 0.7f, 0.1f, 0.04f);
+		
+		createLevel(NUMBER_OF_LINES_OF_BRICKS, NUMBER_OF_COLUMNS_OF_BRICKS, -0.55f, 0.7f);
+
+		mExplosions = new ArrayList<Explosion>();
 	}
 	
-	private void createLevel (int blocksX, int blocksY, float initialX, float initialY,
-			float spaceX, float spaceY) 
+	private void createLevel (int blocksX, int blocksY, float initialX, float initialY) 
 	{
 		mBricks = new Brick[blocksX][blocksY];
 		
 		float newPosX = initialX;
 		float newPosY = initialY;
-		
-		float width = (Brick.VERTICES[4] - Brick.VERTICES[0])*Brick.scale;
 		
 		for (int i=0; i<mBricks.length; i++) {
 			float sign = 1;
@@ -122,10 +122,10 @@ public class Game {
 				} else {
 					mBricks[i][j] = new Brick(Colors.RAINBOW, newPosX, newPosY, Brick.scale, Type.NORMAL);
 				}
-				newPosX += spaceX;
+				newPosX += mBricks[i][j].getSizeX();
 			}
 			newPosX = initialX;
-			newPosY -= spaceY;
+			newPosY -= mBricks[i][0].getSizeY();
 		}
 
 	}

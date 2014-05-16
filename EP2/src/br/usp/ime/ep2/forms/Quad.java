@@ -91,6 +91,14 @@ public abstract class Quad {
 		return (mVertices[3] - mVertices[1])*mScale;
 	}
 	
+	public float getSizeX() {
+		return (Math.abs(mVertices[0]) + Math.abs(mVertices[4])) * mScale;
+	}
+
+	public float getSizeY() {
+		return (Math.abs(mVertices[1]) + Math.abs(mVertices[3])) * mScale;
+	}
+	
 	public void setPosX(float x) {
 		if (x >= Game.sScreenLowerX && x <= Game.sScreenHigherX) {
 			mPosX = x;
@@ -110,7 +118,7 @@ public abstract class Quad {
 			mPosY = Game.sScreenHigherY;
 		}
 	}
-
+	
 	public void draw(GL10 gl) {
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glPushMatrix();
