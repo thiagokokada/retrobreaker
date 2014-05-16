@@ -228,6 +228,7 @@ public class Game {
 				case NOT_AVAILABLE:
 					break;
 				default:
+					Log.e(TAG, "Invalid collision");
 					break;
 				}
 			}
@@ -360,12 +361,14 @@ public class Game {
 			case RESTART_LEVEL:
 				sGameOver = false;
 				sLifes = Config.LIFE_COUNT;
+				break;
 			case LOST_LIFE:
 				if (sLifes > 0) {
 					sLifes--;
 				} else {
 					sGameOver = true;
 				}
+				break;
 			}
 		}
 		
