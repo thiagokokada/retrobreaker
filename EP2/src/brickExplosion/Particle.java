@@ -28,9 +28,9 @@ public class Particle extends Quad {
 	public static final int STATE_ALIVE = 0;	// particle is alive
 	public static final int STATE_DEAD = 1;		// particle is dead
 	
-	public static final int DEFAULT_LIFETIME 	= 20;	// play with this
+	public static final int DEFAULT_LIFETIME 	= 30;	// play with this
 	public static final int MAX_DIMENSION		= 5;	// the maximum width or height
-	public static final float MAX_SPEED			= ((VERTICES[3] - VERTICES[1])*scale)*5;	// maximum speed (per update)
+	public static final float MAX_SPEED			= ((VERTICES[3] - VERTICES[1])*scale)*3;	// maximum speed (per update)
 //	public static final float MAX_SPEED			= 10;
 	
 	private int state;			// particle is alive or dead
