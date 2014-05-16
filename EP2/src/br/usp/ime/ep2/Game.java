@@ -58,6 +58,7 @@ public class Game {
 		mSoundIds.put("wall_hit", mSoundPool.load(mContext, R.raw.wall_hit, 1));
 		mSoundIds.put("paddle_hit", mSoundPool.load(mContext, R.raw.paddle_hit, 1));
 		mSoundIds.put("brick_hit", mSoundPool.load(mContext, R.raw.brick_hit, 1));
+		mSoundIds.put("explosive_brick", mSoundPool.load(mContext, R.raw.explosive_brick, 1));
 		
 		State.setLifes(Lifes.RESTART_LEVEL);
 		State.setScore(Score.RESTART_LEVEL);
@@ -180,7 +181,17 @@ public class Game {
 				mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
 				Log.d(TAG, "next slope: " + mBall.getSlope());
 			case BRICK_BALL:
+				State.setScore(Score.BRICK_HIT);
+				Log.i(TAG, "Score multiplier: " + State.getScoreMultiplier() + " Score: " + State.getScore());
+				State.setScoreMultiplier(ScoreMultiplier.BRICK_HIT); //Update multiplier for the next brick hit
 				mSoundPool.play(mSoundIds.get("brick_hit"), 100, 100, 1, 0, 1.0f);
+				mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
+				break;
+			case EX_BRICK_BALL:
+				State.setScore(Score.EX_BRICK_HIT);
+				Log.i(TAG, "Score multiplier: " + State.getScoreMultiplier() + " Score: " + State.getScore());
+				State.setScoreMultiplier(ScoreMultiplier.BRICK_HIT); //Update multiplier for the next brick hit
+				mSoundPool.play(mSoundIds.get("explosive_brick"), 100, 100, 1, 0, 1.0f);
 				mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
 				break;
 			case PADDLE_BALL:
@@ -252,16 +263,17 @@ public class Game {
 		//detecting collision between the ball and the bricks
 		for (int i=0; i<mBricks.length; i++) {
 			for (int j=0; j<mBricks[i].length; j++) {
-				Brick brick = mBricks[i][j];
-				if(brick != null) {
-					if (mBall.getTopY() >= brick.getBottomY() && mBall.getBottomY() <= brick.getTopY() &&
-							mBall.getRightX() >= brick.getLeftX() && mBall.getLeftX() <= brick.getRightX())
+				if(mBricks[i][j] != null) {
+					if (mBall.getTopY() >= mBricks[i][j].getBottomY() && mBall.getBottomY() <= mBricks[i][j].getTopY() &&
+							mBall.getRightX() >= mBricks[i][j].getLeftX() && mBall.getLeftX() <= mBricks[i][j].getRightX())
 					{
 						Log.d(TAG, "Detected collision between ball and brick[" + i + "][" + j + "]");
 						if (mBricks[i][j].getLives() == 0) {
 							if (mBricks[i][j].getType() == Type.EXPLOSIVE) {
 								Log.d(TAG, "inserted explosion");
 								mExplosions.add(new Explosion(Brick.GRAY_EXPLOSION_SIZE, mBricks[i][j].getPosX(), mBricks[i][j].getPosY()));
+								mBricks[i][j] = null;
+								return Collision.EX_BRICK_BALL;
 							}
 							mBricks[i][j] = null; //Deleting brick
 						} else {
@@ -270,9 +282,6 @@ public class Game {
 								mBricks[i][j].setColor(Colors.RED_GRADIENT);
 							}
 						}
-						State.setScore(Score.BRICK_HIT);
-						Log.i(TAG, "Score multiplier: " + State.getScoreMultiplier() + " Score: " + State.getScore());
-						State.setScoreMultiplier(ScoreMultiplier.BRICK_HIT); //Update multiplier for the next brick hit
 						return Collision.BRICK_BALL;
 					}
 				}
@@ -309,6 +318,9 @@ public class Game {
 				break;
 			case RESTART_LEVEL:
 				sScore = 0;
+				break;
+			case EX_BRICK_HIT:
+				sScore += Config.HIT_SCORE * 2 * getScoreMultiplier();
 				break;
 			}
 		}

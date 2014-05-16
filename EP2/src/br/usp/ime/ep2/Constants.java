@@ -12,7 +12,7 @@ public class Constants {
 	public static final long MAX_MS_PER_FRAME = (long) Math.ceil(1.0/MAX_FPS * MS_PER_SECONDS);
 
 	public static enum Collision {
-		NOT_AVAILABLE, WALL_RIGHT_LEFT_SIDE, WALL_TOP_BOTTOM_SIDE, PADDLE_BALL, BRICK_BALL, LIFE_LOST
+		NOT_AVAILABLE, WALL_RIGHT_LEFT_SIDE, WALL_TOP_BOTTOM_SIDE, PADDLE_BALL, BRICK_BALL, EX_BRICK_BALL, LIFE_LOST
 	}
 
 	public static enum BallDirection {
@@ -20,7 +20,7 @@ public class Constants {
 	}
 	
 	public static enum Score {
-		RESTART_LEVEL, BRICK_HIT
+		RESTART_LEVEL, BRICK_HIT, EX_BRICK_HIT
 	}
 
 	public static enum ScoreMultiplier {
