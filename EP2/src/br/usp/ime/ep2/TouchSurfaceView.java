@@ -3,6 +3,8 @@ package br.usp.ime.ep2;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import br.usp.ime.ep2.Constants.Config;
+
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
@@ -14,7 +16,6 @@ import android.view.MotionEvent;
 class TouchSurfaceView extends GLSurfaceView {
 	
 	private static final String TAG = TouchSurfaceView.class.getSimpleName();
-	private static final float WALL = 0.05f;
 
 	private long mPrevFrameTime;
 	private long mCurrentTime;
@@ -52,11 +53,13 @@ class TouchSurfaceView extends GLSurfaceView {
 
 		@Override
 		public void onSurfaceChanged(GL10 gl, int width, int height) {
-			gl.glViewport(0, 0, width, height);
 			mScreenWidth = width;
 			mScreenHeight = height;
-			float ratio = updateScreenMeasures(width, height);
+			
+			float ratio = (float) width / height;
+			mGame.updateScreenMeasures((2.0f * ratio) - Config.WALL, 2.0f - Config.WALL);
 
+			gl.glViewport(0, 0, width, height);
 			gl.glMatrixMode(GL10.GL_PROJECTION);
 			gl.glLoadIdentity();
 			gl.glOrthof(-ratio, ratio, -1.0f, 1.0f, -1.0f, 1.0f);
@@ -67,10 +70,6 @@ class TouchSurfaceView extends GLSurfaceView {
 
 		@Override
 		public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-			mScreenWidth = TouchSurfaceView.this.getWidth();
-			mScreenHeight = TouchSurfaceView.this.getHeight();
-			updateScreenMeasures(mScreenWidth, mScreenHeight);
-			
 			gl.glDisable(GL10.GL_DITHER);
 			gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);
 
@@ -87,12 +86,6 @@ class TouchSurfaceView extends GLSurfaceView {
 					mGame.updatePaddlePosX(x);
 				}
 			} );
-		}
-		
-		private float updateScreenMeasures(float width, float height) {
-			float ratio = (float) width / height;
-			mGame.updateScreenMeasures((2.0f * ratio) - WALL, 2.0f - WALL);
-			return ratio;
 		}
 
 		@SuppressWarnings("unused")

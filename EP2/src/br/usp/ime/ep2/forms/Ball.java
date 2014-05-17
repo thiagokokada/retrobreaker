@@ -25,7 +25,8 @@ public class Ball extends Quad {
 	private float mBaseSpeed;
 
 	public Ball(float[] colors, float pos_x, float pos_y,
-			float last_x, float last_y, float scale, float trajectory_inc) {
+			float last_x, float last_y, float scale, float trajectory_inc)
+	{
 		super(VERTICES, colors, pos_x, pos_y, scale);
 		
 		mPrevPosX = last_x;
@@ -54,11 +55,12 @@ public class Ball extends Quad {
 	 * Get the angle of incidence (relative to the Y axis) of the ball's trajectory.
 	 */
 	public float getAngle() {
-		//as the angle of the slope can be negative (see: http://www.mathopenref.com/coordslope.html), we need to get the absolute value.
+		/* As the angle of the slope can be negative (see: http://www.mathopenref.com/coordslope.html),
+		 * we need to get the absolute value. */
 		return (float) (Constants.RIGHT_ANGLE - Math.abs(Math.toDegrees(Math.atan(mSlope))));
 	}
 	
-	//Calculate in which direction the ball is moving
+	// Calculate in which direction the ball is moving
 	public BallDirection getDirection() {
 		if ((mPosX > mPrevPosX) && (mPosY > mPrevPosY))
 			return BallDirection.RIGHT_UPWARD;
@@ -72,7 +74,7 @@ public class Ball extends Quad {
 	}
 	
 	public void turnToPerpendicularDirection(Hit hitedSide) {
-		//the ball is moving along the Y axis.
+		// The ball is moving along the Y axis.
 		if (mUndefinedSlope) {
 			float tempY = mPrevPosY;
 			mPrevPosY = mPosY;
@@ -93,13 +95,14 @@ public class Ball extends Quad {
 			mPosY = mPrevPosY;
 			break;
 		}
+		
 		mPrevPosX = tempX;
 		mPrevPosY = tempY;
 	}
 	
-	//Change the ball's trajectory to a new one that is based on the new slope.
-	//The new slope is based on the angle passed as parameter.
-	//angle: the angle of the slope (http://www.mathopenref.com/coordslope.html)
+	/* Change the ball's trajectory to a new one that is based on the new slope.
+	 * The new slope is based on the angle passed as parameter.
+	 * angle: the angle of the slope (http://www.mathopenref.com/coordslope.html) */
 	public void turnByAngle(float angle) {
 		if (angle == Constants.RIGHT_ANGLE) {
 			mUndefinedSlope = true;
@@ -124,17 +127,15 @@ public class Ball extends Quad {
 	}
 	
 	public String toString() {
-		return this.getClass().getSimpleName() +
-				" form, PosX: " + getPosX() + ", PrevPosX: " + mPrevPosX +
-				", PosY: " + getPosY() + ", PrevPosY: " + mPrevPosY;
+		return this.getClass().getSimpleName() + " form, PosX: " + getPosX() +
+				", PrevPosX: " + mPrevPosX + ", PosY: " + getPosY() + ", PrevPosY: " + mPrevPosY;
 	}
 	
 	/* The ball speed should depend on the time that a frame is 
 	 * rendered instead of a constant */
 	public void setBallSpeed(float deltaTime) {
-		mTrajectoryIncrement = mBaseSpeed * (Constants.MAX_FPS /
-				(Constants.MS_PER_SECONDS / deltaTime)
-				);
+		mTrajectoryIncrement =
+				mBaseSpeed * (Constants.MAX_FPS/(Constants.MS_PER_SECONDS / deltaTime));
 		Log.v(TAG, "mTrajetoryIncrement: " + mTrajectoryIncrement);
 	}
 	
@@ -183,13 +184,13 @@ public class Ball extends Quad {
 				mPosY = y2;
 			}
 		}
-		//moving along the Y axis
+		
+		// Moving along the Y axis
 		else if (mPosX == mPrevPosX) {
 			if (mPosY > mPrevPosY) {	//upward
 				mPrevPosY = mPosY;
 				mPosY = mPosY + mTrajectoryIncrement;
-			}
-			else {						//downward
+			} else {					//downward
 				mPrevPosY = mPosY;
 				mPosY = mPosY - mTrajectoryIncrement;
 			}

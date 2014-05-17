@@ -8,8 +8,7 @@ public class Paddle extends Quad {
 		1.0f,  0.2f, // top right
 	};
 
-	public Paddle(float[] colors, float pos_x, float pos_y,
-			float scale) {
+	public Paddle(float[] colors, float pos_x, float pos_y, float scale) {
 		super(VERTICES, colors, pos_x, pos_y, scale);
 	}
 	

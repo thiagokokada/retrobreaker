@@ -28,7 +28,7 @@ public class Constants {
 		RESTART_LEVEL, LOST_LIFE, PADDLE_HIT, BRICK_HIT
 	}
 
-	public static enum Lifes {
+	public static enum Lives {
 		RESTART_LEVEL, LOST_LIFE;
 	}
 
@@ -41,6 +41,7 @@ public class Constants {
 		public static final int HIT_SCORE = 100;
 		public static final int MAX_SCORE_MULTIPLIER = 8;
 		public static final boolean INVICIBILITY = false;
+		public static final float WALL = 0.05f;
 	}
 	
 	public static final class Colors {

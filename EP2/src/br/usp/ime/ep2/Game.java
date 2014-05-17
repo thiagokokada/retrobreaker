@@ -14,7 +14,7 @@ import br.usp.ime.ep2.Constants.Collision;
 import br.usp.ime.ep2.Constants.Colors;
 import br.usp.ime.ep2.Constants.Config;
 import br.usp.ime.ep2.Constants.Hit;
-import br.usp.ime.ep2.Constants.Lifes;
+import br.usp.ime.ep2.Constants.Lives;
 import br.usp.ime.ep2.Constants.Score;
 import br.usp.ime.ep2.Constants.ScoreMultiplier;
 import br.usp.ime.ep2.effects.Explosion;
@@ -49,6 +49,7 @@ public class Game {
 	public Game(Context context) {
 		mContext = context;
 
+		// Load sound pool, audio shouldn't change between levels
 		mSoundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
 		mSoundIds = new HashMap<String, Integer>(4);
 		mSoundIds.put("lost_life", mSoundPool.load(mContext, R.raw.lost_life, 1));
@@ -57,6 +58,7 @@ public class Game {
 		mSoundIds.put("brick_hit", mSoundPool.load(mContext, R.raw.brick_hit, 1));
 		mSoundIds.put("explosive_brick", mSoundPool.load(mContext, R.raw.explosive_brick, 1));
 		
+		// Create level elements
 		resetElements();
 	}
 	
@@ -64,16 +66,20 @@ public class Game {
 		mExplosions = new ArrayList<Explosion>();
 		mMobileBricks = new ArrayList<MobileBrick>();
 		
+		/* We don't have the screen measures on the first call of this function,
+		 * so set to a sane default. */
 		sScreenHigherX = 1.0f;
 		sScreenLowerX = -1.0f;
 		sScreenHigherY = 1.0f;
 		sScreenLowerY = -1.0f;
 		
-		State.setWinner(false);
-		State.setLifes(Lifes.RESTART_LEVEL);
+		// Initialize game state
+		State.setGameOver(false);
+		State.setLives(Lives.RESTART_LEVEL);
 		State.setScore(Score.RESTART_LEVEL);
 		State.setScoreMultiplier(ScoreMultiplier.RESTART_LEVEL);
 		
+		// Initialize graphics
 		mPaddle = new Paddle(Colors.RAINBOW, 0.0f, -0.7f, 0.1f);
 		Log.d(TAG, "Created paddle:" + 
 				" BottomY: " + mPaddle.getBottomY() +
@@ -90,22 +96,23 @@ public class Game {
 				" RightX: " + mBall.getRightX()
 				);
 		
-		createLevel(NUMBER_OF_LINES_OF_BRICKS, NUMBER_OF_COLUMNS_OF_BRICKS, -0.55f, 0.7f);
+		createLevel(NUMBER_OF_LINES_OF_BRICKS, NUMBER_OF_COLUMNS_OF_BRICKS, -0.55f, 0.5f);
 
 		mExplosions = new ArrayList<Explosion>();
 	}
 	
-	private void createLevel (int blocksX, int blocksY, float initialX, float initialY) 
-	{
+	private void createLevel (int blocksX, int blocksY, float initialX, float initialY) {
 		mBricks = new Brick[blocksX][blocksY];
 		
+		// The initial position of the brick should be the one passed from the call of this function
 		float newPosX = initialX;
 		float newPosY = initialY;
 		
-		for (int i=0; i<mBricks.length; i++) {
+		for (int i = 0; i < blocksX; i++) {
 			float sign = 1;
-			for (int j=0; j<mBricks[i].length; j++) {
+			for (int j = 0; j < blocksY; j++) {
 				sign *= -1; //consecutive bricks start moving to different directions
+				// Create special bricks (explosive and hard types) on a random probability
 				double prob = Math.random();
 				if (prob <= (Brick.MOBILE_BRICK_PROBABILITY + Brick.EXPLOSIVE_BRICK_PROBABILITY + Brick.GRAY_BRICK_PROBABILITY)) {
 					if (prob <= Brick.MOBILE_BRICK_PROBABILITY) {
@@ -122,15 +129,19 @@ public class Game {
 				} else {
 					mBricks[i][j] = new Brick(Colors.RAINBOW, newPosX, newPosY, Brick.scale, Type.NORMAL);
 				}
+				// The position of the next brick on the same line should be on the right side of the last brick
 				newPosX += mBricks[i][j].getSizeX();
 			}
+			// Finished filling a line of bricks, resetting to initial X position so we can do the same on the next line
 			newPosX = initialX;
-			newPosY -= mBricks[i][0].getSizeY();
+			// Same as the X position, put the next line of bricks on bottom of the last one
+			newPosY += mBricks[i][0].getSizeY();
 		}
 
 	}
 	
 	public void drawElements(GL10 gl) {
+		// Draw ball and paddle elements on surface
 		mPaddle.draw(gl);
 		mBall.draw(gl);
 		
@@ -144,6 +155,7 @@ public class Game {
 			}
 		}
 		
+		// Initialize explosives
 		for (int i = 0; i < mExplosions.size(); i++) {
 			mExplosions.get(i).draw(gl);
 		}
@@ -159,12 +171,15 @@ public class Game {
 	}
 	
 	public void updatePaddlePosX(float x) {
+		/* We need to update Paddle position from touch, but we can't access touch updates
+		 * directly from TouchSurfaceView, so create a wrapper and call it a day. */
 		mPaddle.setPosX(x);
 	}
 	
 	/*
 	 * We see the paddle as a circumference. The paddle's width is proportional to (2 * ANGLE_OF_REFLECTION_BOUND). 
 	 * In other words, the half of the width of the paddle is proportional to Constants.ANGLE_OF_REFLECTION_BOUND degrees.
+	 * 
 	 * x2 - x1			reflected angle
 	 * --------  = 	------------------------
 	 * width/2  	ANGLE_OF_REFLECTION_BOUND
@@ -173,80 +188,90 @@ public class Game {
 		return Constants.ANGLE_OF_REFLECTION_BOUND * (x2 - x1)/(mPaddle.getWidth()/2);
 	}
 
-	//Update next frame state
 	public void updateState(float deltaTime) {
 		
-		if(!State.getWinner()) {
+		/* If the game is over, stop updating state (so we don't have unwanted
+		 * events after the game is over) and freeze the last frame so user can see
+		 * what happened. */
+		if(!State.getGameOver()) {
 			
-			// Set new ball speed to the next frame
+			/* The frame rate can be variable, so instead of using a fixed ball speed we
+			 * actually compensate the ball speed: if the FPS is less than 60FPS, we
+			 * increase the speed of the ball. */
 			mBall.setBallSpeed(deltaTime);
 
-			if(!State.getGameOver()) {
-				float reflectedAngle = 0.0f, angleOfBallSlope = 0.0f;
+			float reflectedAngle = 0.0f, angleOfBallSlope = 0.0f;
 
-				Collision collisionType = detectCollision();	
+			Collision collisionType = detectCollision();	
 
-				switch (collisionType) {
-				case WALL_RIGHT_LEFT_SIDE:
-					Log.d(TAG, "Right/Left side collision detected");
-					Log.d(TAG, "previous slope: " + mBall.getSlope());
-					mSoundPool.play(mSoundIds.get("wall_hit"), 100, 100, 1, 0, 1.0f);
-					mBall.turnToPerpendicularDirection(Hit.RIGHT_LEFT);
-					Log.d(TAG, "next slope: " + mBall.getSlope());
-					break;
-				case WALL_TOP_BOTTOM_SIDE:
-					mSoundPool.play(mSoundIds.get("wall_hit"), 100, 100, 1, 0, 1.0f);
-					Log.d(TAG, "Top/Bottom side collision detected");
-					Log.d(TAG, "previous slope: " + mBall.getSlope());
-					mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
-					Log.d(TAG, "next slope: " + mBall.getSlope());
-					break;
-				case BRICK_BALL:
-					State.setScore(Score.BRICK_HIT);
-					Log.i(TAG, "Score multiplier: " + State.getScoreMultiplier() + " Score: " + State.getScore());
-					State.setScoreMultiplier(ScoreMultiplier.BRICK_HIT); //Update multiplier for the next brick hit
-					mSoundPool.play(mSoundIds.get("brick_hit"), 100, 100, 1, 0, 1.0f);
-					mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
-					break;
-				case EX_BRICK_BALL:
-					State.setScore(Score.EX_BRICK_HIT);
-					Log.i(TAG, "Score multiplier: " + State.getScoreMultiplier() + " Score: " + State.getScore());
-					State.setScoreMultiplier(ScoreMultiplier.BRICK_HIT); //Update multiplier for the next brick hit
-					mSoundPool.play(mSoundIds.get("explosive_brick"), 100, 100, 1, 0, 1.0f);
-					mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
-					break;
-				case PADDLE_BALL:
-					Log.d(TAG, "collided into the top left part of the paddle");
-					Log.d(TAG, "paddlePosX: " + mPaddle.getPosX());
-					mSoundPool.play(mSoundIds.get("paddle_hit"), 100, 100, 1, 0, 1.0f);
-					/* 
-					 * The angle of the slope (of the ball trajectory) is the complement of the angle of reflection.
-					 * Take a look at http://www.mathopenref.com/coordslope.html to get an idea of the angle of the slope.
-					 */
-					if (mPaddle.getPosX() >= mBall.getPosX()) {	//the ball hit the paddle in the right half-part.
-						reflectedAngle = calcReflectedAngle(mBall.getPosX(), mPaddle.getPosX());
-						angleOfBallSlope = (Constants.RIGHT_ANGLE - reflectedAngle);
-					} else {									//the ball hit the paddle in the left half-part.
-						reflectedAngle = calcReflectedAngle(mPaddle.getPosX(), mBall.getPosX());
-						//Besides being the complement, the angle of the slope is the negative complement, since the ball is going to the left.
-						angleOfBallSlope = -1 * (Constants.RIGHT_ANGLE - reflectedAngle);
-					}
-					mBall.turnByAngle(angleOfBallSlope);
-					break;
-				case LIFE_LOST:
-					State.setLifes(Lifes.LOST_LIFE);
-					mSoundPool.play(mSoundIds.get("lost_life"), 100, 100, 1, 0, 1.0f);
-					if (!State.getGameOver()) {
-						mBall = new Ball(Colors.RAINBOW, 0.0f, 0.0f, -0.02f, -0.05f, 0.1f, 0.01f);
-						State.setScoreMultiplier(ScoreMultiplier.LOST_LIFE);
-					}
-					break;
-				case NOT_AVAILABLE:
-					break;
-				default:
-					Log.e(TAG, "Invalid collision");
-					break;
+			switch (collisionType) {
+			case WALL_RIGHT_LEFT_SIDE:
+				/* Wall hit collision is almost the same, but the equation is different so we
+				 * need to differentiate here */
+				Log.d(TAG, "Right/Left side collision detected");
+				Log.d(TAG, "previous slope: " + mBall.getSlope());
+				mSoundPool.play(mSoundIds.get("wall_hit"), 100, 100, 1, 0, 1.0f);
+				mBall.turnToPerpendicularDirection(Hit.RIGHT_LEFT);
+				Log.d(TAG, "next slope: " + mBall.getSlope());
+				break;
+			case WALL_TOP_BOTTOM_SIDE:
+				Log.d(TAG, "Top/Bottom side collision detected");
+				Log.d(TAG, "previous slope: " + mBall.getSlope());
+				mSoundPool.play(mSoundIds.get("wall_hit"), 100, 100, 1, 0, 1.0f);
+				mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
+				Log.d(TAG, "next slope: " + mBall.getSlope());
+				break;
+			case BRICK_BALL:
+				// When the user hits a brick, increase the score and multiplier and play the sound effect
+				State.setScore(Score.BRICK_HIT);
+				Log.i(TAG, "Score multiplier: " + State.getScoreMultiplier() + " Score: " + State.getScore());
+				State.setScoreMultiplier(ScoreMultiplier.BRICK_HIT); // Update multiplier for the next brick hit
+				mSoundPool.play(mSoundIds.get("brick_hit"), 100, 100, 1, 0, 1.0f);
+				mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
+				break;
+			case EX_BRICK_BALL:
+				// Explosive brick has a different sound effect and score, but the rest is the same
+				State.setScore(Score.EX_BRICK_HIT);
+				Log.i(TAG, "Score multiplier: " + State.getScoreMultiplier() + " Score: " + State.getScore());
+				State.setScoreMultiplier(ScoreMultiplier.BRICK_HIT);
+				mSoundPool.play(mSoundIds.get("explosive_brick"), 100, 100, 1, 0, 1.0f);
+				mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
+				break;
+			case PADDLE_BALL:
+				Log.d(TAG, "collided into the top left part of the paddle");
+				Log.d(TAG, "paddlePosX: " + mPaddle.getPosX());
+				State.setScoreMultiplier(ScoreMultiplier.PADDLE_HIT);
+				mSoundPool.play(mSoundIds.get("paddle_hit"), 100, 100, 1, 0, 1.0f);
+				/* 
+				 * The angle of the slope (of the ball trajectory) is the complement of the angle of reflection.
+				 * Take a look at http://www.mathopenref.com/coordslope.html to get an idea of the angle of the slope.
+				 */
+				if (mPaddle.getPosX() >= mBall.getPosX()) {	//the ball hit the paddle in the right half-part.
+					reflectedAngle = calcReflectedAngle(mBall.getPosX(), mPaddle.getPosX());
+					angleOfBallSlope = (Constants.RIGHT_ANGLE - reflectedAngle);
+				} else {									//the ball hit the paddle in the left half-part.
+					reflectedAngle = calcReflectedAngle(mPaddle.getPosX(), mBall.getPosX());
+					/* Besides being the complement, the angle of the slope is the negative complement,
+					 * since the ball is going to the left. */
+					angleOfBallSlope = -1 * (Constants.RIGHT_ANGLE - reflectedAngle);
 				}
+				mBall.turnByAngle(angleOfBallSlope);
+				break;
+			case LIFE_LOST:
+				State.setLives(Lives.LOST_LIFE);
+				mSoundPool.play(mSoundIds.get("lost_life"), 100, 100, 1, 0, 1.0f);
+				// If the user still has lives left, create a new ball and reset score multiplier
+				if (!State.getGameOver()) {
+					mBall = new Ball(Colors.RAINBOW, 0.0f, 0.0f, -0.02f, -0.05f, 0.1f, 0.01f);
+					State.setScoreMultiplier(ScoreMultiplier.LOST_LIFE);
+				}
+				break;
+			case NOT_AVAILABLE:
+				// Nothing to do here
+				break;
+			default:
+				Log.e(TAG, "Invalid collision");
+				break;
 			}
 
 			updateBrickExplosion();
@@ -265,7 +290,24 @@ public class Game {
 		}
 	}
 	
-	private void decrementBrickLife(Brick brick, int i, int j) {
+	private void explosiveBrick(int i, int j) {
+		// Deleting surrounding bricks
+		for (int a=Math.max(i-1, 0); a< Math.min(i+2, mBricks.length); a++) {
+			for (int b=Math.max(j-1, 0); b<Math.min(j+2, mBricks[i].length); b++) {
+				if (mBricks[a][b] != null) {
+					if (mBricks[a][b].getLives() == 0) {
+						mBricks[a][b] = null; // Deleting brick
+						State.setScore(Score.BRICK_HIT); // And add brick to score
+					}
+					else {
+						decrementBrickLife(a, b);
+					}
+				}
+			}
+		}
+	}
+	
+	private void decrementBrickLife(int i, int j) {
 		mBricks[i][j].decrementLives();
 		if (mBricks[i][j].getType() == Type.HARD) {
 			mBricks[i][j].setColor(Colors.RAINBOW);
@@ -302,72 +344,69 @@ public class Game {
 		
 		detectCollisionOfMobileBricks();
 		
-		//detecting collision between ball and wall
-		if ((mBall.getRightX() >= sScreenHigherX)        //collided in the right wall
-				|| (mBall.getLeftX() <= sScreenLowerX))  //collided in the left wall 
+		// Detecting collision between ball and wall
+		if ((mBall.getRightX() >= sScreenHigherX)			//collided in the right wall
+				|| (mBall.getLeftX() <= sScreenLowerX))		//collided in the left wall 
 		{	
 			return Collision.WALL_RIGHT_LEFT_SIDE;
-		} else if ((mBall.getTopY() >= sScreenHigherY)   //collided in the top wall
-				|| (mBall.getBottomY() <= sScreenLowerY) //collided in the bottom wall...
-				&& Config.INVICIBILITY)                  //and invincibility is on
+		} else if ((mBall.getTopY() >= sScreenHigherY)		//collided in the top wall
+				|| (mBall.getBottomY() <= sScreenLowerY)	//collided in the bottom wall...
+				&& Config.INVICIBILITY)						//and invincibility is on
 		{
 			return Collision.WALL_TOP_BOTTOM_SIDE;
-		} else if (mBall.getBottomY() <= sScreenLowerY   //if invincibility is off and the ball collided
-			&& !Config.INVICIBILITY)                     //with bottom wall, user loses a life
+		} else if (mBall.getBottomY() <= sScreenLowerY		//if invincibility is off and the ball
+			&& !Config.INVICIBILITY)						//collided with bottom wall, user loses a life
 		{
 			return Collision.LIFE_LOST;
 		}
 		
 		//detecting collision between the ball and the paddle
-		
 		if (mBall.getTopY() >= mPaddle.getBottomY() && mBall.getBottomY() <= mPaddle.getTopY() &&
 				mBall.getRightX() >= mPaddle.getLeftX() && mBall.getLeftX() <= mPaddle.getRightX())
 		{
-			State.setScoreMultiplier(ScoreMultiplier.PADDLE_HIT);
 			return Collision.PADDLE_BALL;
 		}
 		
-		//if the game is finished, there should be no bricks left
+		// If the game is finished, there should be no bricks left
 		boolean gameFinish = true;
-		//detecting collision between the ball and the bricks
+		
 		for (int i=0; i<mBricks.length; i++) {
 			for (int j=0; j<mBricks[i].length; j++) {
+				// Check if the brick is not destroyed yet
 				if(mBricks[i][j] != null) {
+					// If there are still bricks, the game is not over yet
 					gameFinish = false;
-					if (mBall.getTopY() >= mBricks[i][j].getBottomY() && mBall.getBottomY() <= mBricks[i][j].getTopY() &&
-							mBall.getRightX() >= mBricks[i][j].getLeftX() && mBall.getLeftX() <= mBricks[i][j].getRightX())
+
+					// Detecting collision between the ball and the bricks
+					if (mBall.getTopY() >= mBricks[i][j].getBottomY()
+							&& mBall.getBottomY() <= mBricks[i][j].getTopY()
+							&& mBall.getRightX() >= mBricks[i][j].getLeftX()
+							&& mBall.getLeftX() <= mBricks[i][j].getRightX()
+							)
 					{
 						Log.d(TAG, "Detected collision between ball and brick[" + i + "][" + j + "]");
+						/* Since the update happens so fast (on each draw frame) we can update the brick
+						 * state on the next frame. */
 						if (mBricks[i][j].getLives() == 0) {
 							if (mBricks[i][j].getType() == Type.EXPLOSIVE) {
 								Log.d(TAG, "inserted explosion");
-								mExplosions.add(new Explosion(Brick.GRAY_EXPLOSION_SIZE, mBricks[i][j].getPosX(), mBricks[i][j].getPosY()));
-								
-								//deleting the surrounding bricks
-								for (int a=Math.max(i-1, 0); a< Math.min(i+2, mBricks.length); a++) {
-									Log.d(TAG, "a: "+a);
-									for (int b=Math.max(j-1, 0); b<Math.min(j+2, mBricks[i].length); b++) {
-										Log.d(TAG, "b: "+b);
-										if (mBricks[a][b] != null) {
-											if (mBricks[a][b].getLives() == 0) mBricks[a][b] = null; //Deleting brick
-											else {
-												decrementBrickLife(mBricks[a][b], a, b);
-											}
-										}
-									}
-								}
-								
+								mExplosions.add(new Explosion
+										(Brick.GRAY_EXPLOSION_SIZE, mBricks[i][j].getPosX(), mBricks[i][j].getPosY()));
+								// Explosive brick is a special type of collision, treat this case
+								explosiveBrick(i, j);
 								return Collision.EX_BRICK_BALL;
-							} else if (mBricks[i][j].getType() == Type.MOBILE) deleteMobileBrick(i, j);
-							mBricks[i][j] = null; //Deleting brick
+							} else if (mBricks[i][j].getType() == Type.MOBILE){
+								deleteMobileBrick(i, j);
+							}
+							mBricks[i][j] = null; // Deleting brick
 						} else {
-							decrementBrickLife(mBricks[i][j], i, j);
+							decrementBrickLife(i, j);
 						}
 						return Collision.BRICK_BALL;
 					}
 				}
 			}
-			State.setWinner(gameFinish);
+			State.setGameOver(gameFinish);
 		}
 		
 		return Collision.NOT_AVAILABLE;
@@ -383,25 +422,31 @@ public class Game {
 	}
 
 	public void updateScreenMeasures(float screenWidth, float screenHeight) {
-		Log.i(TAG, "screenWidth: " + screenWidth + ", screenHeight: " + screenHeight);
+		/* Calculate the new screen measure. This is important since we need to delimit a wall
+		 * to the ball. */
 		sScreenLowerX = SCREEN_INITIAL_X - screenWidth/2;
 		sScreenHigherX = SCREEN_INITIAL_X + screenWidth/2;
 		sScreenLowerY = SCREEN_INITIAL_Y - screenHeight/2;
 		sScreenHigherY = SCREEN_INITIAL_Y + screenHeight/2;
-		Log.i(TAG, "Screen limits =>" +
-				" -X: " + sScreenLowerX +
-				" +X: " + sScreenHigherX +
-				" -Y: " + sScreenLowerY +
-				" +Y: " + sScreenHigherY
+
+		Log.i(TAG, "screenWidth: " + screenWidth + ", screenHeight: " + screenHeight);
+		Log.i(TAG, "Screen limits =>" + " -X: " + sScreenLowerX + " +X: " + sScreenHigherX +
+				" -Y: " + sScreenLowerY + " +Y: " + sScreenHigherY
 				);
 	}
 	
+	/**
+	 * Represents the game state, like the actual game score and multiplier, number of lives and
+	 * if the game is over or not.
+	 * 
+	 * This class should be static since we need to access these informations outside the game object,
+	 * like on UI activity. 
+	 */
 	public static class State {
 		private static long sScore;
 		private static int sScoreMultiplier;
-		private static int sLifes;
+		private static int sLives;
 		private static boolean sGameOver;
-		private static boolean sWinner;
 
 		public static void setScore (Score event) {
 			switch(event) {
@@ -436,15 +481,15 @@ public class Game {
 			}
 		}
 		
-		public static void setLifes(Lifes event) {
+		public static void setLives(Lives event) {
 			switch(event) {
 			case RESTART_LEVEL:
 				sGameOver = false;
-				sLifes = Config.LIFE_COUNT;
+				sLives = Config.LIFE_COUNT;
 				break;
 			case LOST_LIFE:
-				if (sLifes > 0) {
-					sLifes--;
+				if (sLives > 0) {
+					sLives--;
 				} else {
 					sGameOver = true;
 				}
@@ -452,8 +497,8 @@ public class Game {
 			}
 		}
 		
-		public static void setWinner(boolean event) {
-			sWinner = event;
+		public static void setGameOver(boolean gameIsOver) {
+			sGameOver = gameIsOver;
 		}
 		
 		public static boolean getGameOver() {
@@ -469,11 +514,7 @@ public class Game {
 		}
 
 		public static int getLifes() {
-			return sLifes;
-		}
-
-		public static boolean getWinner() {
-			return sWinner;
+			return sLives;
 		}
 	}
 }
