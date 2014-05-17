@@ -51,7 +51,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
-        android:drawablePadding="4dp"
+        android:drawablePadding="8dp"
         android:drawableLeft="@drawable/explosive_brick"
         android:text="@string/explosive_brick_explanation" />
 
@@ -59,7 +59,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
-        android:drawablePadding="4dp"
+        android:drawablePadding="8dp"
         android:drawableLeft="@drawable/moveable_brick"
         android:text="@string/moveable_brick_explanation" />
 
@@ -67,7 +67,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
-        android:drawablePadding="4dp"
+        android:drawablePadding="8dp"
         android:drawableLeft="@drawable/hard_brick"
         android:text="@string/hard_brick_explanation" />
 </TableLayout>
