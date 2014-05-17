@@ -21,12 +21,16 @@ import br.usp.ime.ep2.effects.Explosion;
 import br.usp.ime.ep2.forms.Ball;
 import br.usp.ime.ep2.forms.Brick;
 import br.usp.ime.ep2.forms.Brick.Type;
+import br.usp.ime.ep2.forms.MobileBrick;
 import br.usp.ime.ep2.forms.Paddle;
 
 public class Game {
 	private static final String TAG = Game.class.getSimpleName();
 	private static final int SCREEN_INITIAL_X = 0;
 	private static final int SCREEN_INITIAL_Y = 0;
+	
+	private static final int NUMBER_OF_LINES_OF_BRICKS = 4;
+	private static final int NUMBER_OF_COLUMNS_OF_BRICKS = 12;
 	
 	private Paddle mPaddle;
 	private Ball mBall;
@@ -35,6 +39,7 @@ public class Game {
 	private HashMap<String, Integer> mSoundIds;
 	private Context mContext;
 	private List<Explosion> mExplosions;
+	private List<MobileBrick> mMobileBricks;
 	
 	public static float sScreenHigherY;
 	public static float sScreenLowerY;
@@ -56,6 +61,9 @@ public class Game {
 	}
 	
 	public void resetElements() {
+		mExplosions = new ArrayList<Explosion>();
+		mMobileBricks = new ArrayList<MobileBrick>();
+		
 		sScreenHigherX = 1.0f;
 		sScreenLowerX = -1.0f;
 		sScreenHigherY = 1.0f;
@@ -81,9 +89,7 @@ public class Game {
 				" LeftX: " + mBall.getLeftX() +
 				" RightX: " + mBall.getRightX()
 				);
-		createLevel(8, 12, -0.55f, 0.7f, 0.1f, 0.04f);
-		
-		mExplosions = new ArrayList<Explosion>();
+		createLevel(NUMBER_OF_LINES_OF_BRICKS, NUMBER_OF_COLUMNS_OF_BRICKS, -0.55f, 0.7f, 0.1f, 0.04f);
 	}
 	
 	private void createLevel (int blocksX, int blocksY, float initialX, float initialY,
@@ -97,8 +103,14 @@ public class Game {
 		for (int i=0; i<mBricks.length; i++) {
 			for (int j=0; j<mBricks[i].length; j++) {
 				double prob = Math.random();
-				if (prob <= (Brick.GRAY_BRICK_PROBABILITY + Brick.EXPLOSIVE_BRICK_PROBABILITY)) {
-					if (prob <= Brick.EXPLOSIVE_BRICK_PROBABILITY) {
+				if (prob <= (Brick.MOBILE_BRICK_PROBABILITY + Brick.EXPLOSIVE_BRICK_PROBABILITY + Brick.GRAY_BRICK_PROBABILITY)) {
+					if (prob <= Brick.MOBILE_BRICK_PROBABILITY) {
+						MobileBrick mBrick = new MobileBrick(Colors.GREEN_GRADIENT, newPosX, newPosY, 0.1f, Type.MOBILE, 3);
+						mBrick.setXVelocity(mBrick.getWidth()/30);
+						mBrick.setGlobalBrickMatrixIndex(i, j);
+						mBricks[i][j] = mBrick;
+						mMobileBricks.add(mBrick);
+					} else if ((prob-Brick.MOBILE_BRICK_PROBABILITY) <= Brick.EXPLOSIVE_BRICK_PROBABILITY) {
 						mBricks[i][j] = new Brick(Colors.RED_GRADIENT, newPosX, newPosY, 0.1f, Type.EXPLOSIVE);
 					} else {
 						mBricks[i][j] = new Brick(Colors.GRAY_GRADIENT, newPosX, newPosY, 0.1f, Type.HARD);
@@ -168,7 +180,7 @@ public class Game {
 			if(!State.getGameOver()) {
 				float reflectedAngle = 0.0f, angleOfBallSlope = 0.0f;
 
-				Collision collisionType = detectColision();	
+				Collision collisionType = detectCollision();	
 
 				switch (collisionType) {
 				case WALL_RIGHT_LEFT_SIDE:
@@ -234,10 +246,19 @@ public class Game {
 			}
 
 			updateBrickExplosion();
+			
+			moveMobileBricks();
 
 			mBall.move();
 		}
 
+	}
+	
+	private void moveMobileBricks() {
+		for (int a = 0; a < mMobileBricks.size(); a++) {
+			Log.d(TAG, "going to call move, brick: ["+mMobileBricks.get(a).getIndexI()+"]["+mMobileBricks.get(a).getIndexJ()+"]");
+			mMobileBricks.get(a).move();
+		}
 	}
 	
 	private void decrementBrickLife(Brick brick, int i, int j) {
@@ -246,8 +267,53 @@ public class Game {
 			mBricks[i][j].setColor(Colors.RAINBOW);
 		}
 	}
+	
+	private void detectCollisionOfMobileBricks() {
+		for (int a = 0; a < mMobileBricks.size(); a++) {
+			boolean collided = false;
+			MobileBrick mBrick = mMobileBricks.get(a);
+			
+			int i = mBrick.getIndexI();
+			int j = mBrick.getIndexJ();
+			
+			for (int x = 0; x < NUMBER_OF_COLUMNS_OF_BRICKS; x++) {
+				if (x != j) {
+					Brick brick = mBricks[i][x];
+					if ((brick != null) && (mBrick.detectCollisionWithBrick(brick))) {
+						Log.d(TAG, "going to call invert, brick: ["+i+"]["+j+"]");
+						mBrick.invertDirection();
+						collided = true;
+						break;
+					}
+				}
+			}
+			
+			if (!collided && mBrick.detectCollisionWithWall()) {
+				mBrick.invertDirection();
+			}
+			
+//			
+//			if ((j-1) >= 0) {
+//				Brick leftBrick = mBricks[i][j-1];
+//				if ((leftBrick != null) && (mBrick.detectCollisionWithBrick(leftBrick))) {
+//					mBrick.invertDirection();
+//				}
+//			} else { //check if collide with wall
+//				
+//			}
+//				
+//			if ((j+1) < NUMBER_OF_COLUMNS_OF_BRICKS) {
+//				Brick rightBrick = mBricks[i][j+1];
+//				if ((rightBrick != null) && (mBrick.detectCollisionWithBrick(rightBrick))) {
+//					mBrick.invertDirection();
+//				}
+//			}
+		}
+	}
 
-	private Collision detectColision() {
+	private Collision detectCollision() {
+		
+		detectCollisionOfMobileBricks();
 		
 		//detecting collision between ball and wall
 		if ((mBall.getRightX() >= sScreenHigherX)        //collided in the right wall
@@ -277,9 +343,7 @@ public class Game {
 		//if the game is finished, there should be no bricks left
 		boolean gameFinish = true;
 		//detecting collision between the ball and the bricks
-		Log.d(TAG, "mBricks.length: "+mBricks.length);
 		for (int i=0; i<mBricks.length; i++) {
-			Log.d(TAG, "mBricks[i].length: "+mBricks[i].length);
 			for (int j=0; j<mBricks[i].length; j++) {
 				if(mBricks[i][j] != null) {
 					gameFinish = false;
@@ -307,7 +371,7 @@ public class Game {
 								}
 								
 								return Collision.EX_BRICK_BALL;
-							}
+							} else if (mBricks[i][j].getType() == Type.MOBILE) deleteMobileBrick(i, j);
 							mBricks[i][j] = null; //Deleting brick
 						} else {
 							decrementBrickLife(mBricks[i][j], i, j);
@@ -321,6 +385,15 @@ public class Game {
 		
 		return Collision.NOT_AVAILABLE;
 	}	
+	
+	public void deleteMobileBrick(int i, int j) {
+		for (int a = 0; a < mMobileBricks.size(); a++) {
+			if (mMobileBricks.get(a).equal(i, j)) {
+				mMobileBricks.remove(a);
+				return;
+			}
+		}
+	}
 
 	public void updateScreenMeasures(float screenWidth, float screenHeight) {
 		Log.i(TAG, "screenWidth: " + screenWidth + ", screenHeight: " + screenHeight);

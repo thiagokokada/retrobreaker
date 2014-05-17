@@ -37,7 +37,7 @@ public class Constants {
 	}
 
 	public static final class Config {
-		public static final int LIFE_COUNT = 3;
+		public static final int LIFE_COUNT = 10;
 		public static final int HIT_SCORE = 100;
 		public static final int MAX_SCORE_MULTIPLIER = 8;
 		public static final boolean INVICIBILITY = false;
@@ -71,6 +71,13 @@ public class Constants {
 			WHITE_RGB[0],  WHITE_RGB[1],  WHITE_RGB[2],  1.0f,	// top left
 			BLACK_RGB[0],  BLACK_RGB[1],  BLACK_RGB[2],  1.0f,	// bottom right
 			RED_RGB[0],  RED_RGB[1],  RED_RGB[2],  1.0f,		// top right
+		};
+		
+		public static final float[] GREEN_GRADIENT = {
+			GREEN_RGB[0],  GREEN_RGB[1],  GREEN_RGB[2],  1.0f,		// bottom left
+			WHITE_RGB[0],  WHITE_RGB[1],  WHITE_RGB[2],  1.0f,	// top left
+			BLACK_RGB[0],  BLACK_RGB[1],  BLACK_RGB[2],  1.0f,	// bottom right
+			GREEN_RGB[0],  GREEN_RGB[1],  GREEN_RGB[2],  1.0f,		// top right
 		};
 
 	}
