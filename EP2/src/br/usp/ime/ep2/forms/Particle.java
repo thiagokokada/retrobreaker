@@ -1,5 +1,6 @@
 package br.usp.ime.ep2.forms;
 
+import br.usp.ime.ep2.Constants.Scales;
 import br.usp.ime.ep2.Game;
 
 /**
@@ -9,7 +10,6 @@ import br.usp.ime.ep2.Game;
  */
 public class Particle extends Quad {
 	
-	public static final float SCALE = 0.03f;
 	public static final float[] VERTICES = {
 		-0.25f, -0.25f, // bottom left
 		-0.25f,  0.25f, // top left
@@ -22,7 +22,7 @@ public class Particle extends Quad {
 	
 	public static final int DEFAULT_LIFETIME 	= 30;	// play with this
 	public static final int MAX_DIMENSION		= 5;	// the maximum width or height
-	public static final float MAX_SPEED			= ((VERTICES[3] - VERTICES[1])*SCALE)*3; // maximum speed (per update)
+	public static final float MAX_SPEED			= ((VERTICES[3] - VERTICES[1])*Scales.PARTICLE)*3; // maximum speed (per update)
 	
 	private int mState;			// particle is alive or dead
 	private double mXv, mYv;	// vertical and horizontal velocity

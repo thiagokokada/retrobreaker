@@ -2,7 +2,6 @@ package br.usp.ime.ep2.forms;
 
 import android.util.Log;
 import br.usp.ime.ep2.Game;
-import br.usp.ime.ep2.effects.Explosion;
 
 public class MobileBrick extends Brick {
 	private static final String TAG = MobileBrick.class.getSimpleName();
@@ -18,11 +17,8 @@ public class MobileBrick extends Brick {
 	public MobileBrick(float[] colors, float pos_x, float pos_y, float scale,
 			Type type, int wait) {
 		super(colors, pos_x, pos_y, scale, type);
-		// TODO Auto-generated constructor stub
 		
-//		mXVelocity = xVelocity;
 		mToWait = mFramesToWait = wait;
-		
 		collided = false;
 	}
 

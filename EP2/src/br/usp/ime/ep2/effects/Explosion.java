@@ -4,6 +4,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.util.Log;
 import br.usp.ime.ep2.Constants.Colors;
+import br.usp.ime.ep2.Constants.Scales;
 import br.usp.ime.ep2.forms.Particle;
 
 /**
@@ -31,7 +32,7 @@ public class Explosion {
 		mParticles = new Particle[particleNr];
 		
 	 	for (int i = 0; i < mParticles.length; i++) {
-			Particle p = new Particle(Colors.RAINBOW, x, y, Particle.SCALE);
+			Particle p = new Particle(Colors.RAINBOW, x, y, Scales.PARTICLE);
 			mParticles[i] = p;
 		}
 	 	mSize = particleNr;

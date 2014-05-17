@@ -24,13 +24,11 @@ public class Ball extends Quad {
 	private float mTrajectoryIncrement;
 	private float mBaseSpeed;
 
-	public Ball(float[] colors, float pos_x, float pos_y,
-			float last_x, float last_y, float scale, float trajectory_inc)
-	{
-		super(VERTICES, colors, pos_x, pos_y, scale);
+	public Ball(float[] colors, float initial_x, float initial_y, float scale, float trajectory_inc) {
+		super(VERTICES, colors, 0.0f, 0.0f, scale);
 		
-		mPrevPosX = last_x;
-		mPrevPosY = last_y;
+		mPrevPosX = initial_x;
+		mPrevPosY = initial_y;
 		
 		if (mPosX == mPrevPosX) {
 			mUndefinedSlope = true;

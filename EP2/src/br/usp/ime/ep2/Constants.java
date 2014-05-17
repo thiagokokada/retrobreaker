@@ -42,6 +42,21 @@ public class Constants {
 		public static final int MAX_SCORE_MULTIPLIER = 8;
 		public static final boolean INVICIBILITY = false;
 		public static final float WALL = 0.05f;
+		public static final float BALL_SPEED = 0.01f;
+		public static final float BALL_INITIAL_POS_X = 0.01f;
+		public static final float BALL_INITIAL_POS_Y = 0.05f;
+		public static final float PADDLE_INITIAL_POS_Y = -0.7f;
+		public static final float BRICKS_INITIAL_POS_Y = 0.5f;
+		public static final int NUMBER_OF_LINES_OF_BRICKS = 8;
+		public static final int NUMBER_OF_COLUMNS_OF_BRICKS = 12;
+		public static final float SCREEN_RATIO = 9.0f/16.0f; // Widescreen (16:9) on portrait
+	}
+	
+	public static final class Scales {
+		public static final float BRICK = 0.1f;
+		public static final float PADDLE = 0.1f;
+		public static final float BALL = 0.1f;
+		public static final float PARTICLE = 0.03f;
 	}
 	
 	public static final class Colors {
