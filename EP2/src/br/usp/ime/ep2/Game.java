@@ -101,12 +101,14 @@ public class Game {
 		float newPosY = initialY;
 		
 		for (int i=0; i<mBricks.length; i++) {
+			float sign = -1;
 			for (int j=0; j<mBricks[i].length; j++) {
+				sign *= -1; //consecutive bricks start moving to different directions
 				double prob = Math.random();
 				if (prob <= (Brick.MOBILE_BRICK_PROBABILITY + Brick.EXPLOSIVE_BRICK_PROBABILITY + Brick.GRAY_BRICK_PROBABILITY)) {
 					if (prob <= Brick.MOBILE_BRICK_PROBABILITY) {
 						MobileBrick mBrick = new MobileBrick(Colors.GREEN_GRADIENT, newPosX, newPosY, 0.1f, Type.MOBILE, 3);
-						mBrick.setXVelocity(mBrick.getWidth()/30);
+						mBrick.setXVelocity(sign * mBrick.getWidth()/30);
 						mBrick.setGlobalBrickMatrixIndex(i, j);
 						mBricks[i][j] = mBrick;
 						mMobileBricks.add(mBrick);
