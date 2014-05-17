@@ -76,11 +76,14 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 		SharedPreferences.Editor editor = mSharedPrefs.edit();
 		switch(pos) {
 		case 0: /*Can't die*/
-			editor.putFloat("ball_speed", 0.005f);
+			editor.putFloat("ball_speed", 0.008f);
 			editor.putInt("lives", 99);
 			editor.putInt("hit_score", 0);
 			editor.putInt("max_multiplier", 1);
 			editor.putBoolean("invincibility", true);
+			editor.putFloat("grey_brick_prob", 0.0f);
+			editor.putFloat("ex_brick_prob", 0.0f);
+			editor.putFloat("mobile_brick_prob", 0.0f);
 			break;
 		case 1: /*Easy*/
 			editor.putFloat("ball_speed", 0.008f);
@@ -88,6 +91,9 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 			editor.putInt("hit_score", 50);
 			editor.putInt("max_multiplier", 4);
 			editor.putBoolean("invincibility", false);
+			editor.putFloat("grey_brick_prob", 0.1f);
+			editor.putFloat("ex_brick_prob", 0.2f);
+			editor.putFloat("mobile_brick_prob", 0.0f);
 			break;
 		case 2: /*Normal*/
 			editor.putFloat("ball_speed", 0.01f);
@@ -95,6 +101,9 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 			editor.putInt("hit_score", 100);
 			editor.putInt("max_multiplier", 8);
 			editor.putBoolean("invincibility", false);
+			editor.putFloat("grey_brick_prob", 0.2f);
+			editor.putFloat("ex_brick_prob", 0.1f);
+			editor.putFloat("mobile_brick_prob", 0.05f);
 			break;
 		case 3: /*Hard*/
 			editor.putFloat("ball_speed", 0.02f);
@@ -102,6 +111,9 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 			editor.putInt("hit_score", 150);
 			editor.putInt("max_multiplier", 16);
 			editor.putBoolean("invincibility", false);
+			editor.putFloat("grey_brick_prob", 0.3f);
+			editor.putFloat("ex_brick_prob", 0.05f);
+			editor.putFloat("mobile_brick_prob", 0.1f);
 			break;
 
 		}

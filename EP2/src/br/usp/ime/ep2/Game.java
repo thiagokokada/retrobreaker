@@ -48,6 +48,9 @@ public class Game {
 	protected static int sScoreMultiplier;
 	protected static float sBallSpeed;
 	protected static boolean sInvincibility;
+	protected static float sGrayBrickProb;
+	protected static float sExplosiveBrickProb;
+	protected static float sMobileBrickProb;
 	
 	public static float sScreenHigherY;
 	public static float sScreenLowerY;
@@ -57,12 +60,16 @@ public class Game {
 	public Game(Context context) {
 		mContext = context;
 		
+		// Load user difficult choice
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
 		sLifeCount = sharedPrefs.getInt("lives", 7777);
 		sHitScore = sharedPrefs.getInt("hit_score", 7777);
 		sScoreMultiplier = sharedPrefs.getInt("max_multiplier", 0);
 		sBallSpeed = sharedPrefs.getFloat("ball_speed", 0);
 		sInvincibility = sharedPrefs.getBoolean("invincibility", true);
+		sGrayBrickProb = sharedPrefs.getFloat("grey_brick_prob", 0.0f);
+		sExplosiveBrickProb = sharedPrefs.getFloat("ex_brick_prob", 0.0f);
+		sMobileBrickProb = sharedPrefs.getFloat("mobile_brick_prob", 0.0f);
 
 		// Load sound pool, audio shouldn't change between levels
 		mSoundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
@@ -134,14 +141,14 @@ public class Game {
 				sign *= -1; //consecutive bricks start moving to different directions
 				// Create special bricks (explosive and hard types) on a random probability
 				double prob = Math.random();
-				if (prob <= (Brick.MOBILE_BRICK_PROBABILITY + Brick.EXPLOSIVE_BRICK_PROBABILITY + Brick.GRAY_BRICK_PROBABILITY)) {
-					if (prob <= Brick.MOBILE_BRICK_PROBABILITY) {
+				if (prob <= (sMobileBrickProb + sExplosiveBrickProb + sGrayBrickProb)) {
+					if (prob <= sMobileBrickProb) {
 						MobileBrick mBrick = new MobileBrick(Colors.GREEN, newPosX, newPosY, Scales.BRICK, Type.MOBILE, 3);
 						mBrick.setXVelocity(sign * mBrick.getWidth()/30);
 						mBrick.setGlobalBrickMatrixIndex(i, j);
 						mBricks[i][j] = mBrick;
 						mMobileBricks.add(mBrick);
-					} else if ((prob-Brick.MOBILE_BRICK_PROBABILITY) <= Brick.EXPLOSIVE_BRICK_PROBABILITY) {
+					} else if ((prob - sMobileBrickProb) <= sExplosiveBrickProb) {
 						mBricks[i][j] = new Brick(Colors.RED, newPosX, newPosY, Scales.BRICK, Type.EXPLOSIVE);
 					} else {
 						mBricks[i][j] = new Brick(Colors.GRAY, newPosX, newPosY, Scales.BRICK, Type.HARD);
