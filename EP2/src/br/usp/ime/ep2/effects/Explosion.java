@@ -4,6 +4,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.util.Log;
 import br.usp.ime.ep2.Constants.Colors;
+import br.usp.ime.ep2.forms.Particle;
 
 /**
  * @author impaler
@@ -17,111 +18,111 @@ public class Explosion {
 	public static final int STATE_ALIVE 	= 0;	// at least 1 particle is alive
 	public static final int STATE_DEAD 		= 1;	// all particles are dead
 	
-	private Particle[] particles;			// particles in the explosion
-	private float x, y;						// the explosion's origin
-	private float gravity;					// the gravity of the explosion (+ upward, - down)
-	private float wind;						// speed of wind on horizontal
-	private int size;						// number of particles
-	private int state;						// whether it's still active or not
+	private Particle[] mParticles;			// particles in the explosion
+	private float mX, mY;					// the explosion's origin
+	private float mGravity;					// the gravity of the explosion (+ upward, - down)
+	private float mWind;					// speed of wind on horizontal
+	private int mSize;						// number of particles
+	private int mState;						// whether it's still active or not
 	
 	public Explosion(int particleNr, float x, float y) {
 		Log.d(TAG, "Explosion created at " + x + "," + y);
-		this.state = STATE_ALIVE;
-		this.particles = new Particle[particleNr];
-	 	for (int i = 0; i < this.particles.length; i++) {
-			Particle p = new Particle(Colors.RAINBOW, x, y, Particle.scale);
-			this.particles[i] = p;
+		mState = STATE_ALIVE;
+		mParticles = new Particle[particleNr];
+		
+	 	for (int i = 0; i < mParticles.length; i++) {
+			Particle p = new Particle(Colors.RAINBOW, x, y, Particle.SCALE);
+			mParticles[i] = p;
 		}
-	 	this.size = particleNr;
+	 	mSize = particleNr;
 	}
 	
 	public Particle[] getParticles() {
-		return particles;
+		return mParticles;
 	}
 	public void setParticles(Particle[] particles) {
-		this.particles = particles;
+		mParticles = particles;
 	}
 	public float getX() {
-		return x;
+		return mX;
 	}
 	public void setX(float x) {
-		this.x = x;
+		mX = x;
 	}
 	public float getY() {
-		return y;
+		return mY;
 	}
 	public void setY(float y) {
-		this.y = y;
+		mY = y;
 	}
 	public float getGravity() {
-		return gravity;
+		return mGravity;
 	}
 	public void setGravity(float gravity) {
-		this.gravity = gravity;
+		mGravity = gravity;
 	}
 	public float getWind() {
-		return wind;
+		return mWind;
 	}
 	public void setWind(float wind) {
-		this.wind = wind;
+		mWind = wind;
 	}
 	public int getSize() {
-		return size;
+		return mSize;
 	}
 	public void setSize(int size) {
-		this.size = size;
+		mSize = size;
 	}
 	
 	public int getState() {
-		return state;
+		return mState;
 	}
 
 	public void setState(int state) {
-		this.state = state;
+		mState = state;
 	}
 
 	// helper methods -------------------------
 	public boolean isAlive() {
-		return this.state == STATE_ALIVE;
+		return mState == STATE_ALIVE;
 	}
 	public boolean isDead() {
-		return this.state == STATE_DEAD;
+		return mState == STATE_DEAD;
 	}
 
 	public void update() {
-		if (this.state != STATE_DEAD) {
+		if (mState != STATE_DEAD) {
 			boolean isDead = true;
-			for (int i = 0; i < this.particles.length; i++) {
-				if (this.particles[i].isAlive()) {
-					this.particles[i].update();
+			for (int i = 0; i < mParticles.length; i++) {
+				if (mParticles[i].isAlive()) {
+					mParticles[i].update();
 					isDead = false;
 				}
 			}
 			if (isDead)
-				this.state = STATE_DEAD; 
+				mState = STATE_DEAD; 
 		}
 	}
 	
-	public void update2(/*Rect container*/) {
+	public void update2() {
 		Log.d(TAG, "updating explosion");
-		if (this.state != STATE_DEAD) {
+		if (mState != STATE_DEAD) {
 			boolean isDead = true;
-			for (int i = 0; i < this.particles.length; i++) {
-				if (this.particles[i].isAlive()) {
-					this.particles[i].update2(/*container*/);
+			for (int i = 0; i < mParticles.length; i++) {
+				if (mParticles[i].isAlive()) {
+					mParticles[i].update2();
 					isDead = false;
 				}
 			}
 			if (isDead)
-				this.state = STATE_DEAD; 
+				mState = STATE_DEAD; 
 		}
 	}
 
-	public void draw(/*Canvas canvas*/GL10 gl) {
-		for(int i = 0; i < this.particles.length; i++) {
-			if (this.particles[i].isAlive()) {
-//				this.particles[i].draw(canvas);
-				this.particles[i].draw(gl);
+	public void draw(GL10 gl) {
+		for(int i = 0; i < mParticles.length; i++) {
+			if (mParticles[i].isAlive()) {
+				mParticles[i].draw(gl);
 			}
 		}
 	}
