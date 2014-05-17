@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
@@ -51,12 +52,17 @@ public class UI extends Activity {
 		mHighScoreSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		mSharedPrefsEditor = mHighScoreSharedPrefs.edit();
 		mHighScore = mHighScoreSharedPrefs.getLong("high_score", 0);
-		// Initialize TextViews to show user game state (both high and actual
-		// score, current score multiplier and number of lives remaining)
+		/* Initialize TextViews to show user game state (both high and actual
+		 * score, current score multiplier and number of lives remaining) and change
+		 * color of them to give that retro style ;). */
 		mScoreTextView = (TextView) findViewById(R.id.score);
-		mHighScoreTextView = (TextView) findViewById(R.id.highScore);
+		mScoreTextView.setTextColor(Color.WHITE);
 		mScoreMultiplierTextView = (TextView) findViewById(R.id.scoreMultiplier);
+		mScoreMultiplierTextView.setTextColor(Color.WHITE);
 		mLivesTextView = (TextView) findViewById(R.id.lives);
+		mLivesTextView.setTextColor(Color.WHITE);
+		mHighScoreTextView = (TextView) findViewById(R.id.highScore);
+		mHighScoreTextView.setTextColor(Color.GRAY);
 
 		// Initialize SoundPool to play a music if the user beats his high score
 		mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
@@ -145,10 +151,12 @@ public class UI extends Activity {
 					mScoreTextView.setText("Score: " + String.format("%08d", State.getScore()));
 					mScoreMultiplierTextView.setText("Multiplier: " + State.getScoreMultiplier() + "x");
 
-					// If the user beats the high score, keep updating the High Score text on the fly
+					/* If the user beats the high score, keep updating the High Score text on the fly
+					 * with green text to caught user attention. */
 					if(State.getScore() > mHighScore) {
 						mHighScore = State.getScore();
 						mNewHighScore = true;
+						mHighScoreTextView.setTextColor(Color.GREEN);
 					}
 
 					mHighScoreTextView.setText("High score: " + String.format("%08d", mHighScore));
@@ -167,7 +175,7 @@ public class UI extends Activity {
 					 * at least one time more on updateUI() to show the Game Over dialog. We can't
 					 * put showGameOverDialog() on the else condition of the Timer either, because
 					 * Timer is not running on UI thread and even if it was, we would enter on a infinite
-					 * loop and get a really annoying succession of dialogs and maybe victory fanfares ;) */ 
+					 * loop and get a really annoying succession of dialogs and maybe victory fanfares ;). */ 
 					mFinish = true;
 				}
 			}
