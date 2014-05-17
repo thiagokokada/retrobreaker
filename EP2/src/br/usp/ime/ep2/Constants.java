@@ -46,7 +46,7 @@ public class Constants {
 		public static final float BALL_INITIAL_POS_X = 0.01f;
 		public static final float BALL_INITIAL_POS_Y = 0.05f;
 		public static final float PADDLE_INITIAL_POS_Y = -0.7f;
-		public static final float BRICKS_INITIAL_POS_Y = 0.5f;
+		public static final float BRICKS_INITIAL_POS_Y = 0.4f;
 		public static final int NUMBER_OF_LINES_OF_BRICKS = 8;
 		public static final int NUMBER_OF_COLUMNS_OF_BRICKS = 11;
 		public static final float SPACE_BETWEEN_BRICKS = 0.01f;
