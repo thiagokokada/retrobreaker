@@ -11,19 +11,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="High score: :("
+        android:text="@string/high_score"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Button
         android:id="@+id/newGameButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Game" />
+        android:text="@string/new_game" />
 
     <Button
         android:id="@+id/resetScoreButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Reset High Score" />
+        android:text="@string/reset_high_score" />
 
 </TableLayout>

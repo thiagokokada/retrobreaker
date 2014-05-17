@@ -99,17 +99,17 @@ public class UI extends Activity {
 	
 	private void showGameOverDialog(long finalScore, boolean newHighScore) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("Game Over");
+		builder.setTitle(R.string.game_over);
 		if(newHighScore){
-		builder.setMessage("New high score: " + finalScore + "\n" +
-				"Do you want to restart the game?");
+		builder.setMessage(getString(R.string.new_high_score) + finalScore + "\n" +
+				getString(R.string.do_you_want_to_restart_the_game));
 		} else {
-		builder.setMessage("Final score: " + finalScore + "\n" +
-				"Do you want to restart the game?");
+		builder.setMessage(getString(R.string.final_score) + finalScore + "\n" +
+				getString(R.string.do_you_want_to_restart_the_game));
 		}
 		
 		// If the user click Yes, restart this Activity so the user can play again
-		builder.setPositiveButton("Yes", new OnClickListener() {
+		builder.setPositiveButton(R.string.yes, new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				restartGame();
@@ -117,7 +117,7 @@ public class UI extends Activity {
 		});
 		
 		// If the user click No, go back to the MainActivity
-		builder.setNegativeButton("No", new OnClickListener() {
+		builder.setNegativeButton(R.string.no, new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				finish();
@@ -148,8 +148,8 @@ public class UI extends Activity {
 			public void run() {
 
 				if(!State.getGameOver()) {
-					mScoreTextView.setText("Score: " + String.format("%08d", State.getScore()));
-					mScoreMultiplierTextView.setText("Multiplier: " + State.getScoreMultiplier() + "x");
+					mScoreTextView.setText(getString(R.string.score) + String.format("%08d", State.getScore()));
+					mScoreMultiplierTextView.setText(getString(R.string.multiplier) + State.getScoreMultiplier() + "x");
 
 					/* If the user beats the high score, keep updating the High Score text on the fly
 					 * with green text to caught user attention. */
@@ -159,8 +159,8 @@ public class UI extends Activity {
 						mHighScoreTextView.setTextColor(Color.GREEN);
 					}
 
-					mHighScoreTextView.setText("High score: " + String.format("%08d", mHighScore));
-					mLivesTextView.setText("Lives: " + State.getLifes());
+					mHighScoreTextView.setText(getString(R.string.high_score) + String.format("%08d", mHighScore));
+					mLivesTextView.setText(getString(R.string.lives) + State.getLifes());
 					
 				} else {
 					/* If the user beats his High Score, save his new high score on SharedPreferences

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -12,29 +13,29 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_marginTop="8dp"
+        android:gravity="center"
         android:orientation="vertical" >
 
         <TextView
             android:id="@+id/highScore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="High score: :((((((("
+            android:text="@string/high_score"
             android:textStyle="bold"
             android:visibility="visible" />
 
         <LinearLayout
             android:id="@+id/linearLayout1"
-            android:gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:gravity="center" >
 
             <TextView
                 android:id="@+id/score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Score: :((((((("
+                android:text="@string/score"
                 android:textStyle="bold"
                 android:visibility="visible" />
 
@@ -42,13 +43,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="\t"
-                android:visibility="visible" />
+                android:visibility="visible"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/scoreMultiplier"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Multiplier: :("
+                android:text="@string/multiplier"
                 android:textStyle="bold"
                 android:visibility="visible" />
 
@@ -56,13 +58,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="\t"
-                android:visibility="visible" />
+                android:visibility="visible"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/lives"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lives: :("
+                android:text="@string/lives"
                 android:textStyle="bold"
                 android:visibility="visible" />
         </LinearLayout>

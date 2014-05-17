@@ -54,7 +54,7 @@ public class MainActivity extends Activity {
 	
 	private void updateScoreTextView() {
 		long highScore = mHighScoreSharedPrefs.getLong("high_score", 0);
-		mHighScoreTextView.setText("High Score: " +	 String.format("%08d", highScore));
+		mHighScoreTextView.setText(getString(R.string.high_score) +	 String.format("%08d", highScore));
 		
 	}
 }
