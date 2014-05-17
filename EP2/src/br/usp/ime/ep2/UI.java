@@ -168,7 +168,7 @@ public class UI extends Activity {
 					if(mNewHighScore) {
 						mSharedPrefsEditor.putLong("high_score", mHighScore);
 						mSharedPrefsEditor.commit();
-						mSoundPool.play(mSoundIds.get("victory_fanfare"), 100, 100, 1, 0, 1.0f);
+						mSoundPool.play(mSoundIds.get("victory_fanfare"), 100, 100, 0, 0, 1.0f);
 					}
 					showGameOverDialog(State.getScore(), mNewHighScore);
 					/* We can't use State.getGameOver() as a condition to Timer since we need to pass

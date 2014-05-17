@@ -37,11 +37,6 @@ public class Constants {
 	}
 
 	public static final class Config {
-//		public static final int LIFE_COUNT = 3;
-//		public static final int HIT_SCORE = 100;
-//		public static final int MAX_SCORE_MULTIPLIER = 8;
-//		public static final float BALL_SPEED = 0.01f;
-//		public static final boolean INVICIBILITY = false;
 		public static final float WALL = 0.05f;
 		public static final float BALL_INITIAL_POS_X = 0.01f;
 		public static final float BALL_INITIAL_POS_Y = 0.05f;
