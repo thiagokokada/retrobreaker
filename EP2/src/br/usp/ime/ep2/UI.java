@@ -164,7 +164,7 @@ public class UI extends Activity {
 					
 				} else {
 					/* If the user beats his High Score, save his new high score on SharedPreferences
-					 *  and play a music as a way to congratulate him ;) */
+					 * and play a music as a way to congratulate him ;) */
 					if(mNewHighScore) {
 						mSharedPrefsEditor.putLong("high_score", mHighScore);
 						mSharedPrefsEditor.commit();

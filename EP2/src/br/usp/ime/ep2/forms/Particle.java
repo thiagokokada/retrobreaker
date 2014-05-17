@@ -2,6 +2,7 @@ package br.usp.ime.ep2.forms;
 
 import br.usp.ime.ep2.Constants.Scales;
 import br.usp.ime.ep2.Game;
+import br.usp.ime.ep2.Game.State;
 
 /**
  * @author impaler
@@ -129,11 +130,11 @@ public class Particle extends Quad {
 	public void update2() {		
 		// Update with collision
 		if (isAlive()) {
-			if (mPosX <= Game.sScreenLowerX || mPosX >= Game.sScreenHigherX - getWidth()) {
+			if (mPosX <= State.getScreenLowerX() || mPosX >= State.getScreenHigherX() - getWidth()) {
 				mXv *= -1;
 			}
 			// Bottom is 480 and top is 0 !!!
-			if (mPosY <= Game.sScreenHigherY || mPosY >= Game.sScreenLowerY - getHeight()) {
+			if (mPosY <= State.getScreenHigherY() || mPosY >= State.getScreenLowerY() - getHeight()) {
 				mYv *= -1;
 			}
 		}

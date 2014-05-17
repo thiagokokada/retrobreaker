@@ -1,7 +1,7 @@
 package br.usp.ime.ep2.forms;
 
 import android.util.Log;
-import br.usp.ime.ep2.Game;
+import br.usp.ime.ep2.Game.State;
 
 public class MobileBrick extends Brick {
 	private static final String TAG = MobileBrick.class.getSimpleName();
@@ -81,9 +81,9 @@ public class MobileBrick extends Brick {
 	public boolean detectCollisionWithWall() {
 		if (mToWait > 0) return false;
 		
-		if ((this.getRightX() >= Game.sScreenHigherX)        //collided in the right wall
-				|| (this.getLeftX() <= Game.sScreenLowerX)) {
-			if (this.getRightX() >= Game.sScreenHigherX) {
+		if ((this.getRightX() >= State.getScreenHigherX())        //collided in the right wall
+				|| (this.getLeftX() <= State.getScreenLowerX())) {
+			if (this.getRightX() >= State.getScreenHigherX()) {
 				if (mXVelocity < 0) mXVelocity *= -1;
 				Log.d(TAG, "collided in the right wall, brick: ["+mIndexI+"]["+mIndexJ+"]");
 			} else  {

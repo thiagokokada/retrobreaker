@@ -28,11 +28,13 @@ import br.usp.ime.ep2.forms.MobileBrick;
 import br.usp.ime.ep2.forms.Paddle;
 
 public class Game {
+	
+	// Constants
 	private static final String TAG = Game.class.getSimpleName();
 	private static final int SCREEN_INITIAL_X = 0;
 	private static final int SCREEN_INITIAL_Y = 0;
 	
-	
+	//Game objects
 	private Paddle mPaddle;
 	private Ball mBall;
 	private Brick[][] mBricks;
@@ -42,20 +44,15 @@ public class Game {
 	private List<Explosion> mExplosions;
 	private List<MobileBrick> mMobileBricks;
 	
-	// Game preferences
-	protected static int sLifeCount;
-	protected static int sHitScore;
-	protected static int sScoreMultiplier;
-	protected static float sBallSpeed;
-	protected static boolean sInvincibility;
-	protected static float sGrayBrickProb;
-	protected static float sExplosiveBrickProb;
-	protected static float sMobileBrickProb;
-	
-	public static float sScreenHigherY;
-	public static float sScreenLowerY;
-	public static float sScreenHigherX;
-	public static float sScreenLowerX;
+	// Game State preferences
+	private static int sLifeCount;
+	private static int sHitScore;
+	private static int sScoreMultiplier;
+	private static float sBallSpeed;
+	private static boolean sInvincibility;
+	private static float sGrayBrickProb;
+	private static float sExplosiveBrickProb;
+	private static float sMobileBrickProb;
 	
 	public Game(Context context) {
 		mContext = context;
@@ -90,10 +87,7 @@ public class Game {
 		
 		/* We don't have the screen measures on the first call of this function,
 		 * so set to a sane default. */
-		sScreenHigherX = 1.0f;
-		sScreenLowerX = -1.0f;
-		sScreenHigherY = 1.0f;
-		sScreenLowerY = -1.0f;
+		State.setScreenMeasures(2.0f, 2.0f);
 		
 		// Initialize game state
 		State.setGameOver(false);
@@ -373,17 +367,17 @@ public class Game {
 		detectCollisionOfMobileBricks();
 		
 		// Detecting collision between ball and wall
-		if ((mBall.getRightX() >= sScreenHigherX)			//collided in the right wall
-				|| (mBall.getLeftX() <= sScreenLowerX))		//collided in the left wall 
+		if ((mBall.getRightX() >= State.getScreenHigherX())				//collided in the right wall
+				|| (mBall.getLeftX() <= State.getScreenLowerX()))		//collided in the left wall 
 		{	
 			return Collision.WALL_RIGHT_LEFT_SIDE;
-		} else if ((mBall.getTopY() >= sScreenHigherY)		//collided in the top wall
-				|| (mBall.getBottomY() <= sScreenLowerY)	//collided in the bottom wall...
-				&& sInvincibility)							//and invincibility is on
+		} else if ((mBall.getTopY() >= State.getScreenHigherY())		//collided in the top wall
+				|| (mBall.getBottomY() <= State.getScreenLowerY())		//collided in the bottom wall...
+				&& sInvincibility)										//and invincibility is on
 		{
 			return Collision.WALL_TOP_BOTTOM_SIDE;
-		} else if (mBall.getBottomY() <= sScreenLowerY		//if invincibility is off and the ball
-			&& !sInvincibility)							//collided with bottom wall, user loses a life
+		} else if (mBall.getBottomY() <= State.getScreenLowerY()		//if invincibility is off and the ball
+			&& !sInvincibility)											//collided with bottom wall, user loses a life
 		{
 			return Collision.LIFE_LOST;
 		}
@@ -449,20 +443,6 @@ public class Game {
 			}
 		}
 	}
-
-	public void updateScreenMeasures(float screenWidth, float screenHeight) {
-		/* Calculate the new screen measure. This is important since we need to delimit a wall
-		 * to the ball. */
-		sScreenLowerX = SCREEN_INITIAL_X - screenWidth/2;
-		sScreenHigherX = SCREEN_INITIAL_X + screenWidth/2;
-		sScreenLowerY = SCREEN_INITIAL_Y - screenHeight/2;
-		sScreenHigherY = SCREEN_INITIAL_Y + screenHeight/2;
-
-		Log.i(TAG, "screenWidth: " + screenWidth + ", screenHeight: " + screenHeight);
-		Log.i(TAG, "Screen limits =>" + " -X: " + sScreenLowerX + " +X: " + sScreenHigherX +
-				" -Y: " + sScreenLowerY + " +Y: " + sScreenHigherY
-				);
-	}
 	
 	/**
 	 * Represents the game state, like the actual game score and multiplier, number of lives and
@@ -476,6 +456,10 @@ public class Game {
 		private static int sScoreMultiplier;
 		private static int sLives;
 		private static boolean sGameOver;
+		private static float sScreenHigherY;
+		private static float sScreenLowerY;
+		private static float sScreenHigherX;
+		private static float sScreenLowerX;
 
 		public static void setScore (Score event) {
 			switch(event) {
@@ -544,6 +528,31 @@ public class Game {
 
 		public static int getLifes() {
 			return sLives;
+		}
+	
+		public static float getScreenLowerX() {
+			return sScreenLowerX;
+		}
+
+		public static float getScreenHigherX() {
+			return sScreenHigherX;
+		}
+
+		public static float getScreenLowerY() {
+			return sScreenLowerY;
+		}
+
+		public static float getScreenHigherY() {
+			return sScreenHigherY;
+		}
+
+		public static void setScreenMeasures(float screenWidth, float screenHeight) {
+			/* Calculate the new screen measure. This is important since we need to delimit a wall
+			 * to the ball. */
+			sScreenLowerX = SCREEN_INITIAL_X - screenWidth/2;
+			sScreenHigherX = SCREEN_INITIAL_X + screenWidth/2;
+			sScreenLowerY = SCREEN_INITIAL_Y - screenHeight/2;
+			sScreenHigherY = SCREEN_INITIAL_Y + screenHeight/2;
 		}
 	}
 }

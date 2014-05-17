@@ -6,7 +6,7 @@ import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import br.usp.ime.ep2.Game;
+import br.usp.ime.ep2.Game.State;
 
 public abstract class Quad {
 	
@@ -100,22 +100,22 @@ public abstract class Quad {
 	}
 	
 	public void setPosX(float x) {
-		if (x >= Game.sScreenLowerX && x <= Game.sScreenHigherX) {
+		if (x >= State.getScreenLowerX() && x <= State.getScreenHigherX()) {
 			mPosX = x;
-		} else if (x < Game.sScreenLowerX) {
-			mPosX = Game.sScreenLowerX;
-		} else if (x > Game.sScreenHigherX) {
-			mPosX = Game.sScreenHigherX;
+		} else if (x < State.getScreenLowerX()) {
+			mPosX = State.getScreenLowerX();
+		} else if (x > State.getScreenHigherX()) {
+			mPosX = State.getScreenHigherX();
 		}
 	}
 
 	public void setPosY(float y) {
-		if (y >= Game.sScreenLowerY && y <= Game.sScreenHigherY) {
+		if (y >= State.getScreenLowerY() && y <= State.getScreenHigherY()) {
 			mPosY = y;
-		} else if (y < Game.sScreenLowerY) {
-			mPosY = Game.sScreenLowerY;
-		} else if (y > Game.sScreenHigherY) {
-			mPosY = Game.sScreenHigherY;
+		} else if (y < State.getScreenLowerY()) {
+			mPosY = State.getScreenLowerY();
+		} else if (y > State.getScreenHigherY()) {
+			mPosY = State.getScreenHigherY();
 		}
 	}
 	

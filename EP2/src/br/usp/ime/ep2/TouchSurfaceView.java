@@ -4,6 +4,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import br.usp.ime.ep2.Constants.Config;
+import br.usp.ime.ep2.Game.State;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
@@ -57,7 +58,7 @@ class TouchSurfaceView extends GLSurfaceView {
 			mScreenHeight = height;
 			
 			float ratio = (float) width / height;
-			mGame.updateScreenMeasures((2.0f * ratio) - Config.WALL, 2.0f - Config.WALL);
+			State.setScreenMeasures((2.0f * ratio) - Config.WALL, 2.0f - Config.WALL);
 
 			gl.glViewport(0, 0, width, height);
 			gl.glMatrixMode(GL10.GL_PROJECTION);
