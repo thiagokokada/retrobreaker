@@ -1,7 +1,6 @@
 package br.usp.ime.ep2.forms;
 
 import br.usp.ime.ep2.Constants.Scales;
-import br.usp.ime.ep2.Game;
 import br.usp.ime.ep2.Game.State;
 
 /**
