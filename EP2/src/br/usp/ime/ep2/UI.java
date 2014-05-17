@@ -163,6 +163,8 @@ public class UI extends Activity {
 					mLivesTextView.setText(getString(R.string.lives) + State.getLifes());
 					
 				} else {
+					/* Show user score and ask if he wants to play again */
+					showGameOverDialog(State.getScore(), mNewHighScore);
 					/* If the user beats his High Score, save his new high score on SharedPreferences
 					 * and play a music as a way to congratulate him ;) */
 					if(mNewHighScore) {
@@ -170,7 +172,6 @@ public class UI extends Activity {
 						mSharedPrefsEditor.commit();
 						mSoundPool.play(mSoundIds.get("victory_fanfare"), 100, 100, 0, 0, 1.0f);
 					}
-					showGameOverDialog(State.getScore(), mNewHighScore);
 					/* We can't use State.getGameOver() as a condition to Timer since we need to pass
 					 * at least one time more on updateUI() to show the Game Over dialog. We can't
 					 * put showGameOverDialog() on the else condition of the Timer either, because
