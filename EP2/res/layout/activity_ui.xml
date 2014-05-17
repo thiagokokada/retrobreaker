@@ -35,36 +35,25 @@
                 android:id="@+id/score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
                 android:text="@string/score"
                 android:textStyle="bold"
                 android:visibility="visible" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="\t"
-                android:visibility="visible"
-                tools:ignore="HardcodedText" />
-
-            <TextView
                 android:id="@+id/scoreMultiplier"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
                 android:text="@string/multiplier"
                 android:textStyle="bold"
                 android:visibility="visible" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="\t"
-                android:visibility="visible"
-                tools:ignore="HardcodedText" />
-
-            <TextView
                 android:id="@+id/lives"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
                 android:text="@string/lives"
                 android:textStyle="bold"
                 android:visibility="visible" />
