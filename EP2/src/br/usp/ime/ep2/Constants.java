@@ -48,7 +48,8 @@ public class Constants {
 		public static final float PADDLE_INITIAL_POS_Y = -0.7f;
 		public static final float BRICKS_INITIAL_POS_Y = 0.5f;
 		public static final int NUMBER_OF_LINES_OF_BRICKS = 8;
-		public static final int NUMBER_OF_COLUMNS_OF_BRICKS = 12;
+		public static final int NUMBER_OF_COLUMNS_OF_BRICKS = 11;
+		public static final float SPACE_BETWEEN_BRICKS = 0.01f;
 		public static final float SCREEN_RATIO = 9.0f/16.0f; // Widescreen (16:9) on portrait
 	}
 	
@@ -68,32 +69,32 @@ public class Constants {
 		static final float[] BLUE_RGB = {0/RGB_UPPER_BOUND, 0/RGB_UPPER_BOUND, 255/RGB_UPPER_BOUND};
 		static final float[] GREEN_RGB = {0/RGB_UPPER_BOUND, 255/RGB_UPPER_BOUND, 0/RGB_UPPER_BOUND};
 
-		public static final float[] RAINBOW = {
-			BLACK_RGB[0],  BLACK_RGB[1],  BLACK_RGB[2],  1.0f,	// bottom left
-			RED_RGB[0],  RED_RGB[1],  RED_RGB[2],  1.0f,		// top left
-			BLUE_RGB[0],  BLUE_RGB[1],  BLUE_RGB[2],  1.0f,		// bottom right
-			GREEN_RGB[0],  GREEN_RGB[1],  GREEN_RGB[2],  1.0f,	// top right
+		public static final float[] WHITE = {
+			WHITE_RGB[0],  WHITE_RGB[1],  WHITE_RGB[2],  1.0f,	// bottom left
+			WHITE_RGB[0],  WHITE_RGB[1],  WHITE_RGB[2],  1.0f,	// top left
+			WHITE_RGB[0],  WHITE_RGB[1],  WHITE_RGB[2],  1.0f,	// bottom right
+			WHITE_RGB[0],  WHITE_RGB[1],  WHITE_RGB[2],  1.0f,	// top right
 		};
 		
-		public static final float[] GRAY_GRADIENT = {
-			GRAY_RGB[0],  GRAY_RGB[1],  GRAY_RGB[2],  1.0f,		// bottom left
-			WHITE_RGB[0],  WHITE_RGB[1],  WHITE_RGB[2],  1.0f,	// top left
-			BLACK_RGB[0],  BLACK_RGB[1],  BLACK_RGB[2],  1.0f,	// bottom right
-			GRAY_RGB[0],  GRAY_RGB[1],  GRAY_RGB[2],  1.0f,		// top right
+		public static final float[] GRAY = {
+			GRAY_RGB[0],  GRAY_RGB[1],  GRAY_RGB[2],  1.0f,
+			GRAY_RGB[0],  GRAY_RGB[1],  GRAY_RGB[2],  1.0f,
+			GRAY_RGB[0],  GRAY_RGB[1],  GRAY_RGB[2],  1.0f,
+			GRAY_RGB[0],  GRAY_RGB[1],  GRAY_RGB[2],  1.0f,
 		};
 		
-		public static final float[] RED_GRADIENT = {
-			RED_RGB[0],  RED_RGB[1],  RED_RGB[2],  1.0f,		// bottom left
-			WHITE_RGB[0],  WHITE_RGB[1],  WHITE_RGB[2],  1.0f,	// top left
-			BLACK_RGB[0],  BLACK_RGB[1],  BLACK_RGB[2],  1.0f,	// bottom right
-			RED_RGB[0],  RED_RGB[1],  RED_RGB[2],  1.0f,		// top right
+		public static final float[] RED = {
+			RED_RGB[0],  RED_RGB[1],  RED_RGB[2],  1.0f,
+			RED_RGB[0],  RED_RGB[1],  RED_RGB[2],  1.0f,
+			RED_RGB[0],  RED_RGB[1],  RED_RGB[2],  1.0f,
+			RED_RGB[0],  RED_RGB[1],  RED_RGB[2],  1.0f,
 		};
 		
-		public static final float[] GREEN_GRADIENT = {
-			GREEN_RGB[0],  GREEN_RGB[1],  GREEN_RGB[2],  1.0f,		// bottom left
-			WHITE_RGB[0],  WHITE_RGB[1],  WHITE_RGB[2],  1.0f,	// top left
-			BLACK_RGB[0],  BLACK_RGB[1],  BLACK_RGB[2],  1.0f,	// bottom right
-			GREEN_RGB[0],  GREEN_RGB[1],  GREEN_RGB[2],  1.0f,		// top right
+		public static final float[] GREEN = {
+			GREEN_RGB[0],  GREEN_RGB[1],  GREEN_RGB[2],  1.0f,
+			GREEN_RGB[0],  GREEN_RGB[1],  GREEN_RGB[2],  1.0f,
+			GREEN_RGB[0],  GREEN_RGB[1],  GREEN_RGB[2],  1.0f,
+			GREEN_RGB[0],  GREEN_RGB[1],  GREEN_RGB[2],  1.0f,
 		};
 
 	}

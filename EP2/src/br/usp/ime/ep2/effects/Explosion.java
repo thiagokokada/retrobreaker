@@ -32,7 +32,7 @@ public class Explosion {
 		mParticles = new Particle[particleNr];
 		
 	 	for (int i = 0; i < mParticles.length; i++) {
-			Particle p = new Particle(Colors.RAINBOW, x, y, Scales.PARTICLE);
+			Particle p = new Particle(Colors.RED, x, y, Scales.PARTICLE);
 			mParticles[i] = p;
 		}
 	 	mSize = particleNr;

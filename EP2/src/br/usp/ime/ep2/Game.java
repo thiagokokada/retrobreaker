@@ -79,7 +79,7 @@ public class Game {
 		State.setScoreMultiplier(ScoreMultiplier.RESTART_LEVEL);
 		
 		// Initialize graphics
-		mPaddle = new Paddle(Colors.RAINBOW, Config.PADDLE_INITIAL_POS_Y, Scales.PADDLE);
+		mPaddle = new Paddle(Colors.WHITE, Config.PADDLE_INITIAL_POS_Y, Scales.PADDLE);
 		Log.d(TAG, "Created paddle:" + 
 				" BottomY: " + mPaddle.getBottomY() +
 				" TopY: " + mPaddle.getTopY() +
@@ -87,7 +87,7 @@ public class Game {
 				" RightX: " + mPaddle.getRightX()
 				);
 		
-		mBall = new Ball(Colors.RAINBOW, Config.BALL_INITIAL_POS_X, Config.BALL_INITIAL_POS_Y,
+		mBall = new Ball(Colors.WHITE, Config.BALL_INITIAL_POS_X, Config.BALL_INITIAL_POS_Y,
 				Scales.BALL, Config.BALL_SPEED);
 		Log.d(TAG, "Created ball:" + 
 				" BottomY: " + mBall.getBottomY() +
@@ -97,8 +97,8 @@ public class Game {
 				);
 		
 		/* The first brick should be put on the corner of the screen, but if we put too close
-		 * to screen the brick matrix doesn't stay on center. The 0.01f compensates this.*/
-		float initialX = -Config.SCREEN_RATIO + 0.01f;
+		 * to screen the brick matrix doesn't stay on center. The constant compensates this.*/
+		float initialX = -Config.SCREEN_RATIO + Config.SPACE_BETWEEN_BRICKS;
 		createLevel(Config.NUMBER_OF_LINES_OF_BRICKS, Config.NUMBER_OF_COLUMNS_OF_BRICKS,
 				initialX, Config.BRICKS_INITIAL_POS_Y);
 
@@ -120,26 +120,26 @@ public class Game {
 				double prob = Math.random();
 				if (prob <= (Brick.MOBILE_BRICK_PROBABILITY + Brick.EXPLOSIVE_BRICK_PROBABILITY + Brick.GRAY_BRICK_PROBABILITY)) {
 					if (prob <= Brick.MOBILE_BRICK_PROBABILITY) {
-						MobileBrick mBrick = new MobileBrick(Colors.GREEN_GRADIENT, newPosX, newPosY, Scales.BRICK, Type.MOBILE, 3);
+						MobileBrick mBrick = new MobileBrick(Colors.GREEN, newPosX, newPosY, Scales.BRICK, Type.MOBILE, 3);
 						mBrick.setXVelocity(sign * mBrick.getWidth()/30);
 						mBrick.setGlobalBrickMatrixIndex(i, j);
 						mBricks[i][j] = mBrick;
 						mMobileBricks.add(mBrick);
 					} else if ((prob-Brick.MOBILE_BRICK_PROBABILITY) <= Brick.EXPLOSIVE_BRICK_PROBABILITY) {
-						mBricks[i][j] = new Brick(Colors.RED_GRADIENT, newPosX, newPosY, Scales.BRICK, Type.EXPLOSIVE);
+						mBricks[i][j] = new Brick(Colors.RED, newPosX, newPosY, Scales.BRICK, Type.EXPLOSIVE);
 					} else {
-						mBricks[i][j] = new Brick(Colors.GRAY_GRADIENT, newPosX, newPosY, Scales.BRICK, Type.HARD);
+						mBricks[i][j] = new Brick(Colors.GRAY, newPosX, newPosY, Scales.BRICK, Type.HARD);
 					}
 				} else {
-					mBricks[i][j] = new Brick(Colors.RAINBOW, newPosX, newPosY, Scales.BRICK, Type.NORMAL);
+					mBricks[i][j] = new Brick(Colors.WHITE, newPosX, newPosY, Scales.BRICK, Type.NORMAL);
 				}
 				// The position of the next brick on the same line should be on the right side of the last brick
-				newPosX += mBricks[i][j].getSizeX();
+				newPosX += mBricks[i][j].getSizeX() + Config.SPACE_BETWEEN_BRICKS;
 			}
 			// Finished filling a line of bricks, resetting to initial X position so we can do the same on the next line
 			newPosX = initialX;
 			// Same as the X position, put the next line of bricks on bottom of the last one
-			newPosY += mBricks[i][0].getSizeY();
+			newPosY += mBricks[i][0].getSizeY() + Config.SPACE_BETWEEN_BRICKS;
 		}
 
 	}
@@ -266,7 +266,7 @@ public class Game {
 				mSoundPool.play(mSoundIds.get("lost_life"), 100, 100, 1, 0, 1.0f);
 				// If the user still has lives left, create a new ball and reset score multiplier
 				if (!State.getGameOver()) {
-					mBall = new Ball(Colors.RAINBOW, Config.BALL_INITIAL_POS_X, Config.BALL_INITIAL_POS_Y,
+					mBall = new Ball(Colors.WHITE, Config.BALL_INITIAL_POS_X, Config.BALL_INITIAL_POS_Y,
 							Scales.BALL, Config.BALL_SPEED);
 					State.setScoreMultiplier(ScoreMultiplier.LOST_LIFE);
 				}
@@ -315,7 +315,7 @@ public class Game {
 	private void decrementBrickLife(int i, int j) {
 		mBricks[i][j].decrementLives();
 		if (mBricks[i][j].getType() == Type.HARD) {
-			mBricks[i][j].setColor(Colors.RAINBOW);
+			mBricks[i][j].setColor(Colors.WHITE);
 		}
 	}
 	
