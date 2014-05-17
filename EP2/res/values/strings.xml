@@ -15,5 +15,6 @@
     <string name="new_high_score">"New high score: "</string>
     <string name="do_you_want_to_restart_the_game">Do you want to restart the game?</string>
     <string name="final_score">"Final score: "</string>
+    <string name="difficult">"Difficult:"</string>
 
 </resources>

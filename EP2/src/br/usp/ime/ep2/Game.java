@@ -7,8 +7,10 @@ import java.util.List;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import br.usp.ime.ep2.Constants.Collision;
 import br.usp.ime.ep2.Constants.Colors;
@@ -40,6 +42,13 @@ public class Game {
 	private List<Explosion> mExplosions;
 	private List<MobileBrick> mMobileBricks;
 	
+	// Game preferences
+	protected static int sLifeCount;
+	protected static int sHitScore;
+	protected static int sScoreMultiplier;
+	protected static float sBallSpeed;
+	protected static boolean sInvincibility;
+	
 	public static float sScreenHigherY;
 	public static float sScreenLowerY;
 	public static float sScreenHigherX;
@@ -47,6 +56,13 @@ public class Game {
 	
 	public Game(Context context) {
 		mContext = context;
+		
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+		sLifeCount = sharedPrefs.getInt("lives", 7777);
+		sHitScore = sharedPrefs.getInt("hit_score", 7777);
+		sScoreMultiplier = sharedPrefs.getInt("max_multiplier", 0);
+		sBallSpeed = sharedPrefs.getFloat("ball_speed", 0);
+		sInvincibility = sharedPrefs.getBoolean("invincibility", true);
 
 		// Load sound pool, audio shouldn't change between levels
 		mSoundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
@@ -88,7 +104,7 @@ public class Game {
 				);
 		
 		mBall = new Ball(Colors.WHITE, Config.BALL_INITIAL_POS_X, Config.BALL_INITIAL_POS_Y,
-				Scales.BALL, Config.BALL_SPEED);
+				Scales.BALL, sBallSpeed);
 		Log.d(TAG, "Created ball:" + 
 				" BottomY: " + mBall.getBottomY() +
 				" TopY: " + mBall.getTopY() +
@@ -267,7 +283,7 @@ public class Game {
 				// If the user still has lives left, create a new ball and reset score multiplier
 				if (!State.getGameOver()) {
 					mBall = new Ball(Colors.WHITE, Config.BALL_INITIAL_POS_X, Config.BALL_INITIAL_POS_Y,
-							Scales.BALL, Config.BALL_SPEED);
+							Scales.BALL, sBallSpeed);
 					State.setScoreMultiplier(ScoreMultiplier.LOST_LIFE);
 				}
 				break;
@@ -356,11 +372,11 @@ public class Game {
 			return Collision.WALL_RIGHT_LEFT_SIDE;
 		} else if ((mBall.getTopY() >= sScreenHigherY)		//collided in the top wall
 				|| (mBall.getBottomY() <= sScreenLowerY)	//collided in the bottom wall...
-				&& Config.INVICIBILITY)						//and invincibility is on
+				&& sInvincibility)							//and invincibility is on
 		{
 			return Collision.WALL_TOP_BOTTOM_SIDE;
 		} else if (mBall.getBottomY() <= sScreenLowerY		//if invincibility is off and the ball
-			&& !Config.INVICIBILITY)						//collided with bottom wall, user loses a life
+			&& !sInvincibility)							//collided with bottom wall, user loses a life
 		{
 			return Collision.LIFE_LOST;
 		}
@@ -456,13 +472,13 @@ public class Game {
 		public static void setScore (Score event) {
 			switch(event) {
 			case BRICK_HIT:
-				sScore += Config.HIT_SCORE * getScoreMultiplier();
+				sScore += Game.sHitScore * getScoreMultiplier();
 				break;
 			case RESTART_LEVEL:
 				sScore = 0;
 				break;
 			case EX_BRICK_HIT:
-				sScore += Config.HIT_SCORE * 2 * getScoreMultiplier();
+				sScore += Game.sHitScore * 2 * getScoreMultiplier();
 				break;
 			}
 		}
@@ -474,7 +490,7 @@ public class Game {
 				sScoreMultiplier = 1;
 				break;
 			case BRICK_HIT:
-				if (sScoreMultiplier < Config.MAX_SCORE_MULTIPLIER) {
+				if (sScoreMultiplier < Game.sScoreMultiplier) {
 					sScoreMultiplier *= 2;
 				}
 				break;
@@ -490,7 +506,7 @@ public class Game {
 			switch(event) {
 			case RESTART_LEVEL:
 				sGameOver = false;
-				sLives = Config.LIFE_COUNT;
+				sLives = Game.sLifeCount;
 				break;
 			case LOST_LIFE:
 				if (sLives > 0) {

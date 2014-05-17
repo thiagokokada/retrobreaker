@@ -29,7 +29,7 @@ public class UI extends Activity {
 	private TextView mScoreMultiplierTextView;
 	private TextView mLivesTextView;
 	private TextView mHighScoreTextView;
-	private SharedPreferences mHighScoreSharedPrefs;
+	private SharedPreferences mSharedPrefs;
 	private SharedPreferences.Editor mSharedPrefsEditor;
 	private long mHighScore;
 	private boolean mNewHighScore;
@@ -49,9 +49,9 @@ public class UI extends Activity {
 		
 		mTouchSurfaceView = (TouchSurfaceView) findViewById(R.id.opengl);
 		// Initialize SharedPreferences, so we can save the user High Score
-		mHighScoreSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-		mSharedPrefsEditor = mHighScoreSharedPrefs.edit();
-		mHighScore = mHighScoreSharedPrefs.getLong("high_score", 0);
+		mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		mSharedPrefsEditor = mSharedPrefs.edit();
+		mHighScore = mSharedPrefs.getLong("high_score", 0);
 		/* Initialize TextViews to show user game state (both high and actual
 		 * score, current score multiplier and number of lives remaining) and change
 		 * color of them to give that retro style ;). */
