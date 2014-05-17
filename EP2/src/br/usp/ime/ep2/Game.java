@@ -29,7 +29,7 @@ public class Game {
 	private static final int SCREEN_INITIAL_X = 0;
 	private static final int SCREEN_INITIAL_Y = 0;
 	
-	private static final int NUMBER_OF_LINES_OF_BRICKS = 4;
+	private static final int NUMBER_OF_LINES_OF_BRICKS = 8;
 	private static final int NUMBER_OF_COLUMNS_OF_BRICKS = 12;
 	
 	private Paddle mPaddle;
@@ -100,25 +100,27 @@ public class Game {
 		float newPosX = initialX;
 		float newPosY = initialY;
 		
+		float width = (Brick.VERTICES[4] - Brick.VERTICES[0])*Brick.scale;
+		
 		for (int i=0; i<mBricks.length; i++) {
-			float sign = -1;
+			float sign = 1;
 			for (int j=0; j<mBricks[i].length; j++) {
 				sign *= -1; //consecutive bricks start moving to different directions
 				double prob = Math.random();
 				if (prob <= (Brick.MOBILE_BRICK_PROBABILITY + Brick.EXPLOSIVE_BRICK_PROBABILITY + Brick.GRAY_BRICK_PROBABILITY)) {
 					if (prob <= Brick.MOBILE_BRICK_PROBABILITY) {
-						MobileBrick mBrick = new MobileBrick(Colors.GREEN_GRADIENT, newPosX, newPosY, 0.1f, Type.MOBILE, 3);
+						MobileBrick mBrick = new MobileBrick(Colors.GREEN_GRADIENT, newPosX, newPosY, Brick.scale, Type.MOBILE, 3);
 						mBrick.setXVelocity(sign * mBrick.getWidth()/30);
 						mBrick.setGlobalBrickMatrixIndex(i, j);
 						mBricks[i][j] = mBrick;
 						mMobileBricks.add(mBrick);
 					} else if ((prob-Brick.MOBILE_BRICK_PROBABILITY) <= Brick.EXPLOSIVE_BRICK_PROBABILITY) {
-						mBricks[i][j] = new Brick(Colors.RED_GRADIENT, newPosX, newPosY, 0.1f, Type.EXPLOSIVE);
+						mBricks[i][j] = new Brick(Colors.RED_GRADIENT, newPosX, newPosY, Brick.scale, Type.EXPLOSIVE);
 					} else {
-						mBricks[i][j] = new Brick(Colors.GRAY_GRADIENT, newPosX, newPosY, 0.1f, Type.HARD);
+						mBricks[i][j] = new Brick(Colors.GRAY_GRADIENT, newPosX, newPosY, Brick.scale, Type.HARD);
 					}
 				} else {
-					mBricks[i][j] = new Brick(Colors.RAINBOW, newPosX, newPosY, 0.1f, Type.NORMAL);
+					mBricks[i][j] = new Brick(Colors.RAINBOW, newPosX, newPosY, Brick.scale, Type.NORMAL);
 				}
 				newPosX += spaceX;
 			}
@@ -293,23 +295,6 @@ public class Game {
 			if (!collided && mBrick.detectCollisionWithWall()) {
 				mBrick.invertDirection();
 			}
-			
-//			
-//			if ((j-1) >= 0) {
-//				Brick leftBrick = mBricks[i][j-1];
-//				if ((leftBrick != null) && (mBrick.detectCollisionWithBrick(leftBrick))) {
-//					mBrick.invertDirection();
-//				}
-//			} else { //check if collide with wall
-//				
-//			}
-//				
-//			if ((j+1) < NUMBER_OF_COLUMNS_OF_BRICKS) {
-//				Brick rightBrick = mBricks[i][j+1];
-//				if ((rightBrick != null) && (mBrick.detectCollisionWithBrick(rightBrick))) {
-//					mBrick.invertDirection();
-//				}
-//			}
 		}
 	}
 

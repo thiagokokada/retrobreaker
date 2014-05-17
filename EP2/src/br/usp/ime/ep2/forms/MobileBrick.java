@@ -45,12 +45,12 @@ public class MobileBrick extends Brick {
 	
 	public void move() {
 		if (mToWait == 0) {
-			if (collided) mXVelocity *= 2;
+			if (collided) mXVelocity *= 2; //I want to get out very quickly from the collision area
 			Log.d(TAG, "move, mXVelocity of ["+mIndexI+"]["+mIndexJ+"] is "+mXVelocity);
 			Log.d(TAG, "move, mPosX of ["+mIndexI+"]["+mIndexJ+"] is "+mPosX);
 			mPosX += mXVelocity;
 			if (collided) {
-				mXVelocity /= 2;
+				mXVelocity /= 2; //restore the normal value
 				collided = false;
 			}
 			mToWait = mFramesToWait;
@@ -66,20 +66,34 @@ public class MobileBrick extends Brick {
 	}
 	
 	public boolean detectCollisionWithBrick(Brick other) {
+		if (mToWait > 0) return false;
+		
 		if (this.getTopY() >= other.getBottomY() && this.getBottomY() <= other.getTopY() &&
 				this.getRightX() >= other.getLeftX() && this.getLeftX() <= other.getRightX()) {
-			if (this.getLeftX() < other.getLeftX()) Log.d(TAG, "collided in the right brick, brick: ["+mIndexI+"]["+mIndexJ+"]");
-			else Log.d(TAG, "collided in the left brick, brick: ["+mIndexI+"]["+mIndexJ+"]");
+			if (this.getLeftX() < other.getLeftX()) {
+				if (mXVelocity < 0) mXVelocity *= -1;
+				Log.d(TAG, "collided in the right brick, brick: ["+mIndexI+"]["+mIndexJ+"]");
+			} else {
+				if (mXVelocity > 0) mXVelocity *= -1;
+				Log.d(TAG, "collided in the left brick, brick: ["+mIndexI+"]["+mIndexJ+"]");
+			}
 			collided = true;
 			return true;
 		} else return false;
 	}
 	
 	public boolean detectCollisionWithWall() {
+		if (mToWait > 0) return false;
+		
 		if ((this.getRightX() >= Game.sScreenHigherX)        //collided in the right wall
 				|| (this.getLeftX() <= Game.sScreenLowerX)) {
-			if (this.getRightX() >= Game.sScreenHigherX) Log.d(TAG, "collided in the right wall, brick: ["+mIndexI+"]["+mIndexJ+"]");
-			else  Log.d(TAG, "collided in the left wall, brick: ["+mIndexI+"]["+mIndexJ+"]");
+			if (this.getRightX() >= Game.sScreenHigherX) {
+				if (mXVelocity < 0) mXVelocity *= -1;
+				Log.d(TAG, "collided in the right wall, brick: ["+mIndexI+"]["+mIndexJ+"]");
+			} else  {
+				if (mXVelocity > 0) mXVelocity *= -1;
+				Log.d(TAG, "collided in the left wall, brick: ["+mIndexI+"]["+mIndexJ+"]");
+			}
 			collided = true;
 			return true;
 		} else return false;
