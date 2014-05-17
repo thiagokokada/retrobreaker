@@ -427,8 +427,9 @@ public class Game {
 					}
 				}
 			}
-			State.setGameOver(gameFinish);
 		}
+		// If there is no more blocks, the game is over
+		State.setGameOver(gameFinish);
 		
 		return Collision.NOT_AVAILABLE;
 	}	
