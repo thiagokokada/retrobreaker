@@ -282,6 +282,7 @@ public class Game {
 					mBall = new Ball(Colors.WHITE, Config.BALL_INITIAL_POS_X, Config.BALL_INITIAL_POS_Y,
 							Scales.BALL, sBallSpeed);
 					State.setScoreMultiplier(ScoreMultiplier.LOST_LIFE);
+					State.setGameStarted(false);
 				}
 				break;
 			case NOT_AVAILABLE:
