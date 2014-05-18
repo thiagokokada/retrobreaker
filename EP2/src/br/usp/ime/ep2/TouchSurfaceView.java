@@ -80,7 +80,14 @@ class TouchSurfaceView extends GLSurfaceView {
 			float ratio = (float) width / height;
 			State.setScreenMeasures((2.0f * ratio) - Config.WALL, 2.0f - Config.WALL);
 
-			gl.glViewport(0, 0, width, height);
+			// Define a fixed game screen ratio independently of the screen resolution
+			if(ratio >= Config.SCREEN_RATIO) {
+				int newWidth = Math.round(height * Config.SCREEN_RATIO);
+				gl.glViewport((width - newWidth)/2, 0, newWidth, height);
+			} else {
+				int newHeight = Math.round(width/Config.SCREEN_RATIO);
+				gl.glViewport(0, (height - newHeight)/2, width, newHeight);
+			}
 			gl.glMatrixMode(GL10.GL_PROJECTION);
 			gl.glLoadIdentity();
 			gl.glOrthof(-ratio, ratio, -1.0f, 1.0f, -1.0f, 1.0f);
