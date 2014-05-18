@@ -62,6 +62,8 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		/* Since the score may change between activities, update the
+		 * score view here instead of onCreate(). */
 		updateScoreTextView();
 	}
 	

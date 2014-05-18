@@ -119,18 +119,20 @@ public class UI extends Activity {
 		mTouchSurfaceView.onPause();
 	}
 	
+	/* Change to immersive mode. Since this is only supported on API 19 (KitKat),
+	 * build this code only on newer versions of Android. */
 	@TargetApi(Build.VERSION_CODES.KITKAT)
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
-	        super.onWindowFocusChanged(hasFocus);
-	    if (hasFocus) {
-	        mDecorView.setSystemUiVisibility(
-	                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-	                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-	                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-	                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-	                | View.SYSTEM_UI_FLAG_FULLSCREEN
-	                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);}
+		super.onWindowFocusChanged(hasFocus);
+		if (hasFocus) {
+			mDecorView.setSystemUiVisibility(
+					View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+					| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+					| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+					| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+					| View.SYSTEM_UI_FLAG_FULLSCREEN
+					| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);}
 	}
 	
 	private void showGameOverDialog(long finalScore, boolean newHighScore) {
@@ -166,7 +168,10 @@ public class UI extends Activity {
 		if(!isFinishing()) mDialogBuilder.show();
 	}
 	
-	// Original idea: http://stackoverflow.com/a/16467733/2751730
+	/* recreate() method appeared on API 11 (Honeycomb), before this version we
+	 * have to make a ugly hack to restart the Activity (and we need to recreate
+	 * the Activity to create a valid game state).
+	 * Original idea: http://stackoverflow.com/a/16467733/2751730 */
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void restartGame() {
 		if (Build.VERSION.SDK_INT >= 11) {
@@ -187,6 +192,8 @@ public class UI extends Activity {
 			@Override
 			public void run() {
 				
+				/* Show a "Ready?" text in red for the user to know when the game is
+				 * paused and ready waiting for the user input */
 				if(State.getGamePaused()) {
 					mReadyTextView.setVisibility(View.VISIBLE);
 				} else {
