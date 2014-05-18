@@ -106,7 +106,10 @@ public class UI extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		// Save the score on pause
+		/* The user can exit the app and even press back button to go back to the
+		 * MainActivity. In both cases, the user can lose it's high score (if
+		 * Android's OOM killer closes the app or the user press "New Game" on MainActivity.
+		 * So save the score on pause */
 		if(mNewHighScore) {
 			mSharedPrefsEditor.putLong("high_score", mHighScore);
 			mSharedPrefsEditor.commit();
