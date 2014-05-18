@@ -87,21 +87,21 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 			break;
 		case 1: /*Easy*/
 			editor.putFloat("ball_speed", 0.008f);
-			editor.putInt("lives", 4);
+			editor.putInt("lives", 5);
 			editor.putInt("hit_score", 50);
 			editor.putInt("max_multiplier", 4);
 			editor.putBoolean("invincibility", false);
-			editor.putFloat("grey_brick_prob", 0.1f);
-			editor.putFloat("ex_brick_prob", 0.2f);
+			editor.putFloat("grey_brick_prob", 0.15f);
+			editor.putFloat("ex_brick_prob", 0.15f);
 			editor.putFloat("mobile_brick_prob", 0.0f);
 			break;
 		case 2: /*Normal*/
 			editor.putFloat("ball_speed", 0.01f);
-			editor.putInt("lives", 2);
+			editor.putInt("lives", 3);
 			editor.putInt("hit_score", 100);
 			editor.putInt("max_multiplier", 8);
 			editor.putBoolean("invincibility", false);
-			editor.putFloat("grey_brick_prob", 0.2f);
+			editor.putFloat("grey_brick_prob", 0.25f);
 			editor.putFloat("ex_brick_prob", 0.1f);
 			editor.putFloat("mobile_brick_prob", 0.05f);
 			break;
@@ -111,7 +111,7 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 			editor.putInt("hit_score", 150);
 			editor.putInt("max_multiplier", 16);
 			editor.putBoolean("invincibility", false);
-			editor.putFloat("grey_brick_prob", 0.3f);
+			editor.putFloat("grey_brick_prob", 0.35f);
 			editor.putFloat("ex_brick_prob", 0.05f);
 			editor.putFloat("mobile_brick_prob", 0.1f);
 			break;
