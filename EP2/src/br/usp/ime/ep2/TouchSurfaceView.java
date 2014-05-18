@@ -58,7 +58,7 @@ class TouchSurfaceView extends GLSurfaceView {
 			 * this allows the game to run with the same "real" speed independently
 			 * of the FPS. */
 			while (mLag >= Config.MS_PER_UPDATE) {
-				if (State.getGameStarted()) {
+				if (!State.getGameStarted()) {
 					mGame.updateState();
 				}
 				mLag -= Config.MS_PER_UPDATE;
@@ -164,7 +164,7 @@ class TouchSurfaceView extends GLSurfaceView {
 		
 		case MotionEvent.ACTION_DOWN:
 			// Only start the game when the user clicks on the screen
-			State.setGameStarted(true);
+			State.setGamePaused(false);
 			break;
 		}
 		return true;

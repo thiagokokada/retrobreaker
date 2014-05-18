@@ -90,7 +90,7 @@ public class Game {
 		State.setScreenMeasures(2.0f, 2.0f);
 		
 		// Initialize game state
-		State.setGameStarted(false);
+		State.setGamePaused(true);
 		State.setGameOver(false);
 		State.setLives(Lives.RESTART_LEVEL);
 		State.setScore(Score.RESTART_LEVEL);
@@ -282,7 +282,7 @@ public class Game {
 					mBall = new Ball(Colors.WHITE, Config.BALL_INITIAL_POS_X, Config.BALL_INITIAL_POS_Y,
 							Scales.BALL, sBallSpeed);
 					State.setScoreMultiplier(ScoreMultiplier.LOST_LIFE);
-					State.setGameStarted(false);
+					State.setGamePaused(true);
 				}
 				break;
 			case NOT_AVAILABLE:
@@ -457,7 +457,7 @@ public class Game {
 		private static float sScreenLowerY;
 		private static float sScreenHigherX;
 		private static float sScreenLowerX;
-		private static boolean sGameStarted;
+		private static boolean sGamePaused;
 
 		public static void setScore (Score event) {
 			switch(event) {
@@ -512,8 +512,8 @@ public class Game {
 			sGameOver = gameIsOver;
 		}
 		
-		public static void setGameStarted(boolean gameStarted) {
-			sGameStarted = gameStarted;
+		public static void setGamePaused(boolean gamePaused) {
+			sGamePaused = gamePaused;
 		}
 		
 		public static boolean getGameOver() {
@@ -521,7 +521,7 @@ public class Game {
 		}
 		
 		public static boolean getGameStarted() {
-			return sGameStarted;
+			return sGamePaused;
 		}
 
 		public static long getScore() {
