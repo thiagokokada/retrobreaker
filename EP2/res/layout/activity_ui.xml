@@ -11,6 +11,7 @@
         android:layout_height="match_parent" />
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -58,6 +59,15 @@
                 android:textStyle="bold"
                 android:visibility="visible" />
         </LinearLayout>
-    </LinearLayout>
 
+        <TextView
+            android:id="@+id/ready"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:text="@string/ready"
+            android:visibility="invisible"
+			android:textAppearance="?android:attr/textAppearanceLarge" />
+        
+    </LinearLayout>
 </RelativeLayout>

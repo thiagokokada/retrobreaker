@@ -520,7 +520,7 @@ public class Game {
 			return sGameOver;
 		}
 		
-		public static boolean getGameStarted() {
+		public static boolean getGamePaused() {
 			return sGamePaused;
 		}
 

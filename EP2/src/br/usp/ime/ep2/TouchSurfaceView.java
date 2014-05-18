@@ -58,7 +58,7 @@ class TouchSurfaceView extends GLSurfaceView {
 			 * this allows the game to run with the same "real" speed independently
 			 * of the FPS. */
 			while (mLag >= Config.MS_PER_UPDATE) {
-				if (!State.getGameStarted()) {
+				if (!State.getGamePaused()) {
 					mGame.updateState();
 				}
 				mLag -= Config.MS_PER_UPDATE;

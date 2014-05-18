@@ -18,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.view.View;
 import android.widget.TextView;
 import br.usp.ime.ep2.Constants.Config;
 import br.usp.ime.ep2.Game.State;
@@ -30,6 +31,7 @@ public class UI extends Activity {
 	private TextView mScoreMultiplierTextView;
 	private TextView mLivesTextView;
 	private TextView mHighScoreTextView;
+	private TextView mReadyTextView;
 	private SharedPreferences mSharedPrefs;
 	private SharedPreferences.Editor mSharedPrefsEditor;
 	private long mHighScore;
@@ -64,6 +66,8 @@ public class UI extends Activity {
 		mLivesTextView.setTextColor(Color.WHITE);
 		mHighScoreTextView = (TextView) findViewById(R.id.highScore);
 		mHighScoreTextView.setTextColor(Color.GRAY);
+		mReadyTextView = (TextView) findViewById(R.id.ready);
+		mReadyTextView.setTextColor(Color.RED);
 
 		// Initialize SoundPool to play a music if the user beats his high score
 		mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
@@ -147,6 +151,12 @@ public class UI extends Activity {
 		mHandler.post(new Runnable() {
 			@Override
 			public void run() {
+				
+				if(State.getGamePaused()) {
+					mReadyTextView.setVisibility(View.VISIBLE);
+				} else {
+					mReadyTextView.setVisibility(View.INVISIBLE);
+				}
 
 				if(!State.getGameOver()) {
 					mScoreTextView.setText(getString(R.string.score) + String.format("%08d", State.getScore()));

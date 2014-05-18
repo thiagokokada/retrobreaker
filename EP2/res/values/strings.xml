@@ -23,5 +23,6 @@
     <string name="special_bricks">Special bricks:</string>
     <string name="red_brick">Red brick</string>
     <string name="green_brick">Green brick</string>
+    <string name="ready">Ready?</string>
 
 </resources>
