@@ -87,7 +87,7 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 			break;
 		case 1: /*Easy*/
 			editor.putFloat("ball_speed", 0.008f);
-			editor.putInt("lives", 5);
+			editor.putInt("lives", 3);
 			editor.putInt("hit_score", 50);
 			editor.putInt("max_multiplier", 4);
 			editor.putBoolean("invincibility", false);
@@ -97,7 +97,7 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 			break;
 		case 2: /*Normal*/
 			editor.putFloat("ball_speed", 0.01f);
-			editor.putInt("lives", 3);
+			editor.putInt("lives", 2);
 			editor.putInt("hit_score", 100);
 			editor.putInt("max_multiplier", 8);
 			editor.putBoolean("invincibility", false);
