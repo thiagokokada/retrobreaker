@@ -48,7 +48,7 @@ class TouchSurfaceView extends GLSurfaceView {
 			Log.v(TAG, "FPS: " + Constants.MS_PER_SECONDS/mDeltaTime);
 			
 			gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-			mGame.updateState(mDeltaTime);
+			mGame.updateState();
 			mGame.drawElements(gl);
 		}
 

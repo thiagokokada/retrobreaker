@@ -22,7 +22,6 @@ public class Ball extends Quad {
 	private float mSlope;
 	private boolean mUndefinedSlope;
 	private float mTrajectoryIncrement;
-	private float mBaseSpeed;
 
 	public Ball(float[] colors, float initial_x, float initial_y, float scale, float trajectory_inc) {
 		super(VERTICES, colors, 0.0f, 0.0f, scale);
@@ -37,8 +36,7 @@ public class Ball extends Quad {
 			mSlope = (mPosY - mPrevPosY)/(mPosX - mPrevPosX);
 		}
 		
-		mBaseSpeed = trajectory_inc;
-		mTrajectoryIncrement = mBaseSpeed;
+		mTrajectoryIncrement = trajectory_inc;
 	}
 	
 	private float getY2InEquation(float x1, float y1, float x2) {
@@ -127,14 +125,6 @@ public class Ball extends Quad {
 	public String toString() {
 		return this.getClass().getSimpleName() + " form, PosX: " + getPosX() +
 				", PrevPosX: " + mPrevPosX + ", PosY: " + getPosY() + ", PrevPosY: " + mPrevPosY;
-	}
-	
-	/* The ball speed should depend on the time that a frame is 
-	 * rendered instead of a constant */
-	public void setBallSpeed(float deltaTime) {
-		mTrajectoryIncrement =
-				mBaseSpeed * (Constants.MAX_FPS/(Constants.MS_PER_SECONDS / deltaTime));
-		Log.v(TAG, "mTrajetoryIncrement: " + mTrajectoryIncrement);
 	}
 	
 	public void move() {

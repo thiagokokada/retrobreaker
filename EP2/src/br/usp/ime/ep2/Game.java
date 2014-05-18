@@ -209,17 +209,12 @@ public class Game {
 		return Constants.ANGLE_OF_REFLECTION_BOUND * (x2 - x1)/(mPaddle.getWidth()/2);
 	}
 
-	public void updateState(float deltaTime) {
+	public void updateState() {
 		
 		/* If the game is over, stop updating state (so we don't have unwanted
 		 * events after the game is over) and freeze the last frame so user can see
 		 * what happened. */
 		if(!State.getGameOver()) {
-			
-			/* The frame rate can be variable, so instead of using a fixed ball speed we
-			 * actually compensate the ball speed: if the FPS is less than 60FPS, we
-			 * increase the speed of the ball. */
-			mBall.setBallSpeed(deltaTime);
 
 			float reflectedAngle = 0.0f, angleOfBallSlope = 0.0f;
 
