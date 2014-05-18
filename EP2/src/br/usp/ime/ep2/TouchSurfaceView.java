@@ -97,12 +97,17 @@ class TouchSurfaceView extends GLSurfaceView {
 		}
 
 		public void updatePaddlePosition(final float x, final float y) {
-			queueEvent(new Runnable() {
-				@Override
-				public void run() {
-					mGame.updatePaddlePosX(x);
-				}
-			} );
+			/* Don't allow the user to update paddle position
+			 * until he unpause the game (i.e. clicks on screen
+			 * again) */
+			if(!State.getGamePaused()) {
+				queueEvent(new Runnable() {
+					@Override
+					public void run() {
+						mGame.updatePaddlePosX(x);
+					}
+				} );
+			}
 		}
 
 		/**
