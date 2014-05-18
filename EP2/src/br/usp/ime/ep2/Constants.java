@@ -36,10 +36,10 @@ public class Constants {
 		public static final long MS_PER_UPDATE = 15 /* milliseconds */;
 		public static final int FPS_LIMIT = 0; // Set to 0 to disable it
 		public static final float WALL = 0.05f;
-		public static final float BALL_INITIAL_POS_X = 0.05f;
-		public static final float BALL_INITIAL_POS_Y = 0.1f;
-		public static final float BALL_AFTER_POS_X = 0.04f;
-		public static final float BALL_AFTER_POS_Y = 0.0f;
+		public static final float BALL_INITIAL_POS_X = 0.25f;
+		public static final float BALL_INITIAL_POS_Y = 0.4f;
+		public static final float BALL_AFTER_POS_X = 0.2f;
+		public static final float BALL_AFTER_POS_Y = 0.2f;
 		public static final float PADDLE_INITIAL_POS_Y = -0.7f;
 		public static final float BRICKS_INITIAL_POS_Y = 0.35f;
 		public static final int NUMBER_OF_LINES_OF_BRICKS = 8;
