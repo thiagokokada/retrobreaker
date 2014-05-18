@@ -106,6 +106,11 @@ public class UI extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
+		// Save the score on pause
+		if(mNewHighScore) {
+			mSharedPrefsEditor.putLong("high_score", mHighScore);
+			mSharedPrefsEditor.commit();
+		}
 		// Pause the game if the user exits the app
 		State.setGamePaused(true);
 		mTouchSurfaceView.onPause();
