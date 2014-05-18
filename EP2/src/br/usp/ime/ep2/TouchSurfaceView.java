@@ -78,7 +78,7 @@ class TouchSurfaceView extends GLSurfaceView {
 			mScreenHeight = height;
 			
 			float ratio = (float) width / height;
-			State.setScreenMeasures((2.0f * ratio) - Config.WALL, 2.0f - Config.WALL);
+			State.setScreenMeasures((2.0f * Config.SCREEN_RATIO) - Config.WALL, 2.0f - Config.WALL);
 
 			// Define a fixed game screen ratio independently of the screen resolution
 			if(ratio >= Config.SCREEN_RATIO) {
@@ -90,9 +90,9 @@ class TouchSurfaceView extends GLSurfaceView {
 			}
 			gl.glMatrixMode(GL10.GL_PROJECTION);
 			gl.glLoadIdentity();
-			gl.glOrthof(-ratio, ratio, -1.0f, 1.0f, -1.0f, 1.0f);
+			gl.glOrthof(-Config.SCREEN_RATIO, Config.SCREEN_RATIO, -1.0f, 1.0f, -1.0f, 1.0f);
 
-			Matrix.orthoM(mUnprojectProjMatrix, 0, -ratio, ratio, -1.0f, 1.0f, -1.0f, 1.0f);
+			Matrix.orthoM(mUnprojectProjMatrix, 0, -Config.SCREEN_RATIO, Config.SCREEN_RATIO, -1.0f, 1.0f, -1.0f, 1.0f);
 			Matrix.setIdentityM(mUnprojectViewMatrix, 0);
 		}
 

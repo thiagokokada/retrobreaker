@@ -114,11 +114,8 @@ public class Game {
 				" RightX: " + mBall.getRightX()
 				);
 		
-		/* The first brick should be put on the corner of the screen, but if we put too close
-		 * to screen the brick matrix doesn't stay on center. The constant compensates this.*/
-		float initialX = -Config.SCREEN_RATIO + Config.SPACE_BETWEEN_BRICKS;
 		createLevel(Config.NUMBER_OF_LINES_OF_BRICKS, Config.NUMBER_OF_COLUMNS_OF_BRICKS,
-				initialX, Config.BRICKS_INITIAL_POS_Y);
+				Config.BRICKS_INITIAL_POS_X, Config.BRICKS_INITIAL_POS_Y);
 
 		mExplosions = new ArrayList<Explosion>();
 	}

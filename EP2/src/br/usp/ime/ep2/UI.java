@@ -40,6 +40,7 @@ public class UI extends Activity {
 	private boolean mFinish;
 	private SoundPool mSoundPool;
 	private HashMap<String, Integer> mSoundIds;
+	private View mDecorView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +51,7 @@ public class UI extends Activity {
 		mHandler = new Handler();
 		mNewHighScore = false;
 		mFinish = false;
+		mDecorView = getWindow().getDecorView();
 		
 		mTouchSurfaceView = (TouchSurfaceView) findViewById(R.id.opengl);
 		// Initialize SharedPreferences, so we can save the user High Score
@@ -107,6 +109,20 @@ public class UI extends Activity {
 		// Pause the game if the user exits the app
 		State.setGamePaused(true);
 		mTouchSurfaceView.onPause();
+	}
+	
+	@TargetApi(Build.VERSION_CODES.KITKAT)
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+	        super.onWindowFocusChanged(hasFocus);
+	    if (hasFocus) {
+	        mDecorView.setSystemUiVisibility(
+	                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+	                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+	                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+	                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+	                | View.SYSTEM_UI_FLAG_FULLSCREEN
+	                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);}
 	}
 	
 	private void showGameOverDialog(long finalScore, boolean newHighScore) {

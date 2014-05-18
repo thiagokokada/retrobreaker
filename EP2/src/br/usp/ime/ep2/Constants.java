@@ -35,17 +35,18 @@ public class Constants {
 	public static final class Config {
 		public static final long MS_PER_UPDATE = 15 /* milliseconds */;
 		public static final int FPS_LIMIT = 0; // Set to 0 to disable it
+		public static final float SCREEN_RATIO = 9.0f/16.0f; // Widescreen (16:9) on portrait
 		public static final float WALL = 0.05f;
 		public static final float BALL_INITIAL_POS_X = 0.25f;
 		public static final float BALL_INITIAL_POS_Y = 0.4f;
 		public static final float BALL_AFTER_POS_X = 0.2f;
 		public static final float BALL_AFTER_POS_Y = 0.2f;
 		public static final float PADDLE_INITIAL_POS_Y = -0.7f;
+		public static final float BRICKS_INITIAL_POS_X = -0.5f;
 		public static final float BRICKS_INITIAL_POS_Y = 0.35f;
 		public static final int NUMBER_OF_LINES_OF_BRICKS = 8;
-		public static final int NUMBER_OF_COLUMNS_OF_BRICKS = 11;
+		public static final int NUMBER_OF_COLUMNS_OF_BRICKS = 10;
 		public static final float SPACE_BETWEEN_BRICKS = 0.01f;
-		public static final float SCREEN_RATIO = 9.0f/16.0f; // Widescreen (16:9) on portrait
 	}
 	
 	public static final class Scales {
