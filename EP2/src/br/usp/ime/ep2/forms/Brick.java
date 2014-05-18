@@ -21,8 +21,8 @@ public class Brick extends Quad {
 	private int mLives;
 	private Type mType;
 
-	public Brick(float[] colors, float pos_x, float pos_y, float scale, Type type) {
-		super(VERTICES, colors, pos_x, pos_y, scale);
+	public Brick(float[] colors, float posX, float posY, float scale, Type type) {
+		super(VERTICES, colors, posX, posY, scale);
 		mType = type;
 		switch (type) {
 		case NORMAL:

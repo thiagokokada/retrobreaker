@@ -97,7 +97,8 @@ public class Game {
 		State.setScoreMultiplier(ScoreMultiplier.RESTART_LEVEL);
 		
 		// Initialize graphics
-		mPaddle = new Paddle(Colors.WHITE, Config.PADDLE_INITIAL_POS_Y, Scales.PADDLE);
+		mPaddle = new Paddle(Colors.WHITE, Config.PADDLE_INITIAL_POS_X, Config.PADDLE_INITIAL_POS_Y,
+				Scales.PADDLE);
 		Log.d(TAG, "Created paddle:" + 
 				" BottomY: " + mPaddle.getBottomY() +
 				" TopY: " + mPaddle.getTopY() +

@@ -14,9 +14,9 @@ public class MobileBrick extends Brick {
 	
 	private int mIndexI, mIndexJ;
 
-	public MobileBrick(float[] colors, float pos_x, float pos_y, float scale,
+	public MobileBrick(float[] colors, float posX, float posY, float scale,
 			Type type, int wait) {
-		super(colors, pos_x, pos_y, scale, type);
+		super(colors, posX, posY, scale, type);
 		
 		mToWait = mFramesToWait = wait;
 		collided = false;

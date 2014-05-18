@@ -21,12 +21,12 @@ public abstract class Quad {
 
 	private static final int FLOAT_SIZE_BYTES = Float.SIZE / 8;
 
-	public Quad(float[] vertices, float[] colors, float pos_x, float pos_y, float scale) {
+	public Quad(float[] vertices, float[] colors, float posX, float posY, float scale) {
 		mVertices = vertices;
 		mColors = colors;
 		mScale = scale;
-		setPosX(pos_x);
-		setPosY(pos_y);
+		setPosX(posX);
+		setPosY(posY);
 
 		ByteBuffer vbb = ByteBuffer.allocateDirect(mVertices.length * FLOAT_SIZE_BYTES);
 		vbb.order(ByteOrder.nativeOrder());

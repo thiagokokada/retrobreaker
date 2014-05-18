@@ -28,6 +28,22 @@ public class Particle extends Quad {
 	private double mXv, mYv;	// vertical and horizontal velocity
 	private int mAge;			// current age of the particle
 	private int mLifetime;		// particle dies when it reaches this value
+
+	public Particle(float[] colors, float posX, float posY, float scale) {
+		super(VERTICES, colors, posX, posY, scale);
+		mPosX = posX;
+		mPosY = posY;
+		mState = Particle.STATE_ALIVE;
+		mLifetime = DEFAULT_LIFETIME;
+		mAge = 0;
+		mXv = (rndDbl(0, MAX_SPEED * 2) - MAX_SPEED);
+		mYv = (rndDbl(0, MAX_SPEED * 2) - MAX_SPEED);
+		// Smoothing out the diagonal speed
+		if (mXv * mXv + mYv * mYv > MAX_SPEED * MAX_SPEED) {
+			mXv *= 0.7;
+			mYv *= 0.7;
+		}
+	}
 	
 	public int getState() {
 		return mState;
@@ -75,22 +91,6 @@ public class Particle extends Quad {
 	}
 	public boolean isDead() {
 		return mState == STATE_DEAD;
-	}
-
-	public Particle(float[] colors, float pos_x, float pos_y, float scale) {
-		super(VERTICES, colors, pos_x, pos_y, scale);
-		mPosX = pos_x;
-		mPosY = pos_y;
-		mState = Particle.STATE_ALIVE;
-		mLifetime = DEFAULT_LIFETIME;
-		mAge = 0;
-		mXv = (rndDbl(0, MAX_SPEED * 2) - MAX_SPEED);
-		mYv = (rndDbl(0, MAX_SPEED * 2) - MAX_SPEED);
-		// Smoothing out the diagonal speed
-		if (mXv * mXv + mYv * mYv > MAX_SPEED * MAX_SPEED) {
-			mXv *= 0.7;
-			mYv *= 0.7;
-		}
 	}
 	
 	/**
