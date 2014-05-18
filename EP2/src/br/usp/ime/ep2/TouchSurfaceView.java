@@ -104,7 +104,7 @@ class TouchSurfaceView extends GLSurfaceView {
 			/* Don't allow the user to update paddle position
 			 * until he unpause the game (i.e. clicks on screen
 			 * again) */
-			if(!State.getGamePaused()) {
+			if(!State.getGamePaused() && !State.getGameOver()) {
 				queueEvent(new Runnable() {
 					@Override
 					public void run() {
