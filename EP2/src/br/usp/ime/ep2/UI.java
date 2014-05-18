@@ -27,6 +27,7 @@ public class UI extends Activity {
 
 	private TouchSurfaceView mTouchSurfaceView;
 	private Handler mHandler;
+	private AlertDialog.Builder mDialogBuilder;
 	private TextView mScoreTextView;
 	private TextView mScoreMultiplierTextView;
 	private TextView mLivesTextView;
@@ -55,6 +56,10 @@ public class UI extends Activity {
 		mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		mSharedPrefsEditor = mSharedPrefs.edit();
 		mHighScore = mSharedPrefs.getLong("high_score", 0);
+		/* Better initialize everything used on UI thread on onCreate() method.
+		 * This should fix "BadTokenException"
+		 * More information: http://stackoverflow.com/a/18385404/2751730 */
+		mDialogBuilder = new AlertDialog.Builder(this);
 		/* Initialize TextViews to show user game state (both high and actual
 		 * score, current score multiplier and number of lives remaining) and change
 		 * color of them to give that retro style ;). */
@@ -105,18 +110,18 @@ public class UI extends Activity {
 	}
 	
 	private void showGameOverDialog(long finalScore, boolean newHighScore) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(R.string.game_over);
+		mDialogBuilder.setTitle(R.string.game_over);
+		// Show a different message if the player beats the high score or not
 		if(newHighScore){
-		builder.setMessage(getString(R.string.new_high_score) + finalScore + "\n" +
+		mDialogBuilder.setMessage(getString(R.string.new_high_score) + finalScore + "\n" +
 				getString(R.string.do_you_want_to_restart_the_game));
 		} else {
-		builder.setMessage(getString(R.string.final_score) + finalScore + "\n" +
+		mDialogBuilder.setMessage(getString(R.string.final_score) + finalScore + "\n" +
 				getString(R.string.do_you_want_to_restart_the_game));
 		}
 		
 		// If the user click Yes, restart this Activity so the user can play again
-		builder.setPositiveButton(R.string.yes, new OnClickListener() {
+		mDialogBuilder.setPositiveButton(R.string.yes, new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				restartGame();
@@ -124,13 +129,13 @@ public class UI extends Activity {
 		});
 		
 		// If the user click No, go back to the MainActivity
-		builder.setNegativeButton(R.string.no, new OnClickListener() {
+		mDialogBuilder.setNegativeButton(R.string.no, new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				finish();
 			}
 		});
-		builder.show();
+		mDialogBuilder.show();
 	}
 	
 	// Original idea: http://stackoverflow.com/a/16467733/2751730
