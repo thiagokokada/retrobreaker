@@ -99,6 +99,8 @@ public class UI extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
+		// Pause the game if the user exits the app
+		State.setGamePaused(true);
 		mTouchSurfaceView.onPause();
 	}
 	
