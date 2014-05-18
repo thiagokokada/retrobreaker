@@ -38,7 +38,7 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		mLevelSpinner.setAdapter(adapter);
 		mLevelSpinner.setOnItemSelectedListener(this);
-		mLevelSpinner.setSelection(2); // Default to difficult "normal"
+		mLevelSpinner.setSelection(mSharedPrefs.getInt("level_pref", 2)); // Default to difficult "normal"
 		
 		mNewGameButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -117,6 +117,8 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 			break;
 
 		}
+		// Save user preference so we can restore it later
+		editor.putInt("level_pref", pos);
 		editor.commit();
 	}
 
