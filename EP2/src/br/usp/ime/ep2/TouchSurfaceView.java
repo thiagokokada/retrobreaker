@@ -20,7 +20,8 @@ class TouchSurfaceView extends GLSurfaceView {
 
 	private long mPrevFrameTime;
 	private long mCurrentTime;
-	private long mDeltaTime;
+	private long mElapsedTime;
+	private long mLag;
 
 	private Renderer mRenderer;
 
@@ -42,13 +43,18 @@ class TouchSurfaceView extends GLSurfaceView {
 		@Override
 		public void onDrawFrame(GL10 gl) {
 			mCurrentTime = System.nanoTime();
-			mDeltaTime = (mCurrentTime - mPrevFrameTime)/Constants.NANOS_PER_SECONDS;
-			mPrevFrameTime = mCurrentTime; //+ limitFps(30);
-		
-			Log.v(TAG, "FPS: " + Constants.MS_PER_SECONDS/mDeltaTime);
+			mElapsedTime = (mCurrentTime - mPrevFrameTime)/Constants.NANOS_PER_SECONDS;
+			mLag += mElapsedTime;
+			mPrevFrameTime = mCurrentTime; //+ limitFps(5);
+			Log.v(TAG, "FPS: " + Constants.MS_PER_SECONDS/mElapsedTime);
+			
+			// Using game Loop: http://gameprogrammingpatterns.com/game-loop.html
+			while (mLag >= Config.MS_PER_UPDATE) {
+				mGame.updateState();
+				mLag -= Config.MS_PER_UPDATE;
+			}
 			
 			gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-			mGame.updateState();
 			mGame.drawElements(gl);
 		}
 
@@ -92,9 +98,9 @@ class TouchSurfaceView extends GLSurfaceView {
 		@SuppressWarnings("unused")
 		private long limitFps(long maxFps) {
 			long framesPerSec = Constants.MS_PER_SECONDS / maxFps;
-			if (mDeltaTime < framesPerSec){
-				long sleepTime = framesPerSec - mDeltaTime;
-				Log.v(TAG, "deltaTime: " + mDeltaTime + "ms, frame limit set to: "
+			if (mElapsedTime < framesPerSec){
+				long sleepTime = framesPerSec - mElapsedTime;
+				Log.v(TAG, "deltaTime: " + mElapsedTime + "ms, frame limit set to: "
 						+ framesPerSec + "ms, waiting " + sleepTime + "ms");
 				try {
 					Thread.sleep(sleepTime);

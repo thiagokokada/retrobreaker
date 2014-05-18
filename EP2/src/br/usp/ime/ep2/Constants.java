@@ -8,10 +8,6 @@ public class Constants {
 	public static final long MS_PER_SECONDS = 1000 /* milliseconds */;
 	public static final long NANOS_PER_SECONDS = 1000 /* nanoseconds */ * MS_PER_SECONDS;
 
-	//The game runs at a maximum velocity of 60FPS
-	public static final int MAX_FPS = 60;
-	public static final long MAX_MS_PER_FRAME = (long) Math.ceil(1.0/MAX_FPS * MS_PER_SECONDS);
-
 	public static enum Collision {
 		NOT_AVAILABLE, WALL_RIGHT_LEFT_SIDE, WALL_TOP_BOTTOM_SIDE, PADDLE_BALL, BRICK_BALL, EX_BRICK_BALL, LIFE_LOST
 	}
@@ -37,6 +33,7 @@ public class Constants {
 	}
 
 	public static final class Config {
+		public static final long MS_PER_UPDATE = 15 /* milliseconds */;
 		public static final float WALL = 0.05f;
 		public static final float BALL_INITIAL_POS_X = 0.01f;
 		public static final float BALL_INITIAL_POS_Y = 0.05f;

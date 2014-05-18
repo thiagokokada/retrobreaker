@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.widget.TextView;
+import br.usp.ime.ep2.Constants.Config;
 import br.usp.ime.ep2.Game.State;
 
 public class UI extends Activity {
@@ -82,7 +83,7 @@ public class UI extends Activity {
 					return;
 				}
 			}
-		}, 0, Constants.MAX_MS_PER_FRAME * 15);
+		}, 0, Config.MS_PER_UPDATE * 15);
 	}
 
 	@Override
