@@ -95,6 +95,14 @@ class TouchSurfaceView extends GLSurfaceView {
 			} );
 		}
 
+		/**
+		 * For debugging purposes. We can artificially limit the game
+		 * FPS with this code.
+		 * 
+		 * @param maxFps: the maximum FPS the game should run
+		 * @return the time passed since limit FPS executed (needed to
+		 * proper update previous time)
+		 */
 		@SuppressWarnings("unused")
 		private long limitFps(long maxFps) {
 			long framesPerSec = Constants.MS_PER_SECONDS / maxFps;
