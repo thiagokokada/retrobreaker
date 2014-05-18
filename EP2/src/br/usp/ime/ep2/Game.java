@@ -45,9 +45,9 @@ public class Game {
 	private List<MobileBrick> mMobileBricks;
 	
 	// Game State preferences
-	private static int sLifeCount;
+	private static int sLifeStock;
 	private static int sHitScore;
-	private static int sScoreMultiplier;
+	private static int sMaxScoreMultiplier;
 	private static float sBallSpeed;
 	private static boolean sInvincibility;
 	private static float sGrayBrickProb;
@@ -59,9 +59,9 @@ public class Game {
 		
 		// Load user difficult choice
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-		sLifeCount = sharedPrefs.getInt("lives", 7777);
+		sLifeStock = sharedPrefs.getInt("life_stock", 7777);
 		sHitScore = sharedPrefs.getInt("hit_score", 7777);
-		sScoreMultiplier = sharedPrefs.getInt("max_multiplier", 0);
+		sMaxScoreMultiplier = sharedPrefs.getInt("max_multiplier", 0);
 		sBallSpeed = sharedPrefs.getFloat("ball_speed", 0);
 		sInvincibility = sharedPrefs.getBoolean("invincibility", true);
 		sGrayBrickProb = sharedPrefs.getFloat("grey_brick_prob", 0.0f);
@@ -462,13 +462,13 @@ public class Game {
 		public static void setScore (Score event) {
 			switch(event) {
 			case BRICK_HIT:
-				sScore += Game.sHitScore * getScoreMultiplier();
+				sScore += sHitScore * getScoreMultiplier();
 				break;
 			case RESTART_LEVEL:
 				sScore = 0;
 				break;
 			case EX_BRICK_HIT:
-				sScore += Game.sHitScore * 2 * getScoreMultiplier();
+				sScore += sHitScore * 2 * getScoreMultiplier();
 				break;
 			}
 		}
@@ -480,7 +480,7 @@ public class Game {
 				sScoreMultiplier = 1;
 				break;
 			case BRICK_HIT:
-				if (sScoreMultiplier < Game.sScoreMultiplier) {
+				if (sScoreMultiplier < sMaxScoreMultiplier) {
 					sScoreMultiplier *= 2;
 				}
 				break;
@@ -496,7 +496,7 @@ public class Game {
 			switch(event) {
 			case RESTART_LEVEL:
 				sGameOver = false;
-				sLives = Game.sLifeCount;
+				sLives = sLifeStock;
 				break;
 			case LOST_LIFE:
 				if (sLives > 0) {
