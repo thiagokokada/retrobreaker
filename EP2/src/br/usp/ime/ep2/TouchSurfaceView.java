@@ -40,15 +40,23 @@ class TouchSurfaceView extends GLSurfaceView {
 			mPrevFrameTime = System.nanoTime();
 		}
 
+		@SuppressWarnings("unused")
 		@Override
 		public void onDrawFrame(GL10 gl) {
 			mCurrentTime = System.nanoTime();
 			mElapsedTime = (mCurrentTime - mPrevFrameTime)/Constants.NANOS_PER_SECONDS;
 			mLag += mElapsedTime;
-			mPrevFrameTime = mCurrentTime; //+ limitFps(5);
+			/* You can set Config.FPS_LIMIT parameter on Constants.java file to limit
+			 * frame rendering for debugging purposes (but with game loop this shouldn't
+			 * be a problem anymore. */
+			mPrevFrameTime = mCurrentTime + (Config.FPS_LIMIT > 0 ? limitFps(Config.FPS_LIMIT) : 0);
 			Log.v(TAG, "FPS: " + Constants.MS_PER_SECONDS/mElapsedTime);
 			
-			// Using game Loop: http://gameprogrammingpatterns.com/game-loop.html
+			/* Using game loop: http://gameprogrammingpatterns.com/game-loop.html
+			 * This is a very simple implementation of a game loop, since we
+			 * don't try to compensate the rendering lag with it. Nonetheless,
+			 * this allows the game to run with the same "real" speed independently
+			 * of the FPS. */
 			while (mLag >= Config.MS_PER_UPDATE) {
 				mGame.updateState();
 				mLag -= Config.MS_PER_UPDATE;
@@ -99,12 +107,11 @@ class TouchSurfaceView extends GLSurfaceView {
 		 * For debugging purposes. We can artificially limit the game
 		 * FPS with this code.
 		 * 
-		 * @param maxFps: the maximum FPS the game should run
+		 * @param maxFps the maximum FPS the game should run
 		 * @return the time passed since limit FPS executed (needed to
 		 * proper update previous time)
 		 */
-		@SuppressWarnings("unused")
-		private long limitFps(long maxFps) {
+		private long limitFps(int maxFps) {
 			long framesPerSec = Constants.MS_PER_SECONDS / maxFps;
 			if (mElapsedTime < framesPerSec){
 				long sleepTime = framesPerSec - mElapsedTime;
@@ -143,7 +150,8 @@ class TouchSurfaceView extends GLSurfaceView {
 					0.0f, 0.0f, 0.0f, 0.0f
 			};
 
-			GLU.gluUnProject(screenX, screenY, 0, mUnprojectViewMatrix, 0, mUnprojectProjMatrix, 0, viewport, 0, resultWorldPos, 0);
+			GLU.gluUnProject(screenX, screenY, 0, mUnprojectViewMatrix, 0, mUnprojectProjMatrix, 0,
+					viewport, 0, resultWorldPos, 0);
 			resultWorldPos[0] /= resultWorldPos[3];
 			resultWorldPos[1] /= resultWorldPos[3];
 			resultWorldPos[2] /= resultWorldPos[3];
