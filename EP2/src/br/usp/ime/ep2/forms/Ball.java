@@ -23,11 +23,13 @@ public class Ball extends Quad {
 	private boolean mUndefinedSlope;
 	private float mTrajectoryIncrement;
 
-	public Ball(float[] colors, float initial_x, float initial_y, float scale, float trajectory_inc) {
-		super(VERTICES, colors, 0.0f, 0.0f, scale);
+	public Ball(float[] colors, float initialX, float initialY, float afterX, float afterY,
+			float scale, float trajetoryInc)
+	{
+		super(VERTICES, colors, afterX, afterY, scale);
 		
-		mPrevPosX = initial_x;
-		mPrevPosY = initial_y;
+		mPrevPosX = initialX;
+		mPrevPosY = initialY;
 		
 		if (mPosX == mPrevPosX) {
 			mUndefinedSlope = true;
@@ -36,7 +38,7 @@ public class Ball extends Quad {
 			mSlope = (mPosY - mPrevPosY)/(mPosX - mPrevPosX);
 		}
 		
-		mTrajectoryIncrement = trajectory_inc;
+		mTrajectoryIncrement = trajetoryInc;
 	}
 	
 	private float getY2InEquation(float x1, float y1, float x2) {

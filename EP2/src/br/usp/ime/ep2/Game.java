@@ -106,7 +106,7 @@ public class Game {
 				);
 		
 		mBall = new Ball(Colors.WHITE, Config.BALL_INITIAL_POS_X, Config.BALL_INITIAL_POS_Y,
-				Scales.BALL, sBallSpeed);
+				Config.BALL_AFTER_POS_X, Config.BALL_AFTER_POS_Y, Scales.BALL, sBallSpeed);
 		Log.d(TAG, "Created ball:" + 
 				" BottomY: " + mBall.getBottomY() +
 				" TopY: " + mBall.getTopY() +
@@ -280,7 +280,7 @@ public class Game {
 				// If the user still has lives left, create a new ball and reset score multiplier
 				if (!State.getGameOver()) {
 					mBall = new Ball(Colors.WHITE, Config.BALL_INITIAL_POS_X, Config.BALL_INITIAL_POS_Y,
-							Scales.BALL, sBallSpeed);
+							Config.BALL_AFTER_POS_X, Config.BALL_AFTER_POS_Y, Scales.BALL, sBallSpeed);
 					State.setScoreMultiplier(ScoreMultiplier.LOST_LIFE);
 					State.setGamePaused(true);
 				}
