@@ -90,6 +90,7 @@ public class Game {
 		State.setScreenMeasures(2.0f, 2.0f);
 		
 		// Initialize game state
+		State.setGameStarted(false);
 		State.setGameOver(false);
 		State.setLives(Lives.RESTART_LEVEL);
 		State.setScore(Score.RESTART_LEVEL);
@@ -455,6 +456,7 @@ public class Game {
 		private static float sScreenLowerY;
 		private static float sScreenHigherX;
 		private static float sScreenLowerX;
+		private static boolean sGameStarted;
 
 		public static void setScore (Score event) {
 			switch(event) {
@@ -509,8 +511,16 @@ public class Game {
 			sGameOver = gameIsOver;
 		}
 		
+		public static void setGameStarted(boolean gameStarted) {
+			sGameStarted = gameStarted;
+		}
+		
 		public static boolean getGameOver() {
 			return sGameOver;
+		}
+		
+		public static boolean getGameStarted() {
+			return sGameStarted;
 		}
 
 		public static long getScore() {
