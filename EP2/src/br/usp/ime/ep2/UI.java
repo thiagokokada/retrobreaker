@@ -135,7 +135,11 @@ public class UI extends Activity {
 				finish();
 			}
 		});
-		mDialogBuilder.show();
+		
+		/* To guarantee that the game will not FC, check if we can show (i.e. the
+		 * UI Activity is still on a valid state) the dialog before showing it.
+		 * Better be safe than sorry. */
+		if(!isFinishing()) mDialogBuilder.show();
 	}
 	
 	// Original idea: http://stackoverflow.com/a/16467733/2751730
