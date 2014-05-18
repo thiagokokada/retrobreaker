@@ -211,97 +211,89 @@ public class Game {
 	}
 
 	public void updateState() {
-		
-		/* If the game is over, stop updating state (so we don't have unwanted
-		 * events after the game is over) and freeze the last frame so user can see
-		 * what happened. */
-		if(!State.getGameOver()) {
+		float reflectedAngle = 0.0f, angleOfBallSlope = 0.0f;
 
-			float reflectedAngle = 0.0f, angleOfBallSlope = 0.0f;
+		Collision collisionType = detectCollision();	
 
-			Collision collisionType = detectCollision();	
-
-			switch (collisionType) {
-			case WALL_RIGHT_LEFT_SIDE:
-				/* Wall hit collision is almost the same, but the equation is different so we
-				 * need to differentiate here */
-				Log.d(TAG, "Right/Left side collision detected");
-				Log.d(TAG, "previous slope: " + mBall.getSlope());
-				mSoundPool.play(mSoundIds.get("wall_hit"), 100, 100, 1, 0, 1.0f);
-				mBall.turnToPerpendicularDirection(Hit.RIGHT_LEFT);
-				Log.d(TAG, "next slope: " + mBall.getSlope());
-				break;
-			case WALL_TOP_BOTTOM_SIDE:
-				Log.d(TAG, "Top/Bottom side collision detected");
-				Log.d(TAG, "previous slope: " + mBall.getSlope());
-				mSoundPool.play(mSoundIds.get("wall_hit"), 100, 100, 1, 0, 1.0f);
-				mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
-				Log.d(TAG, "next slope: " + mBall.getSlope());
-				break;
-			case BRICK_BALL:
-				// When the user hits a brick, increase the score and multiplier and play the sound effect
-				State.setScore(Score.BRICK_HIT);
-				Log.i(TAG, "Score multiplier: " + State.getScoreMultiplier() + " Score: " + State.getScore());
-				State.setScoreMultiplier(ScoreMultiplier.BRICK_HIT); // Update multiplier for the next brick hit
-				mSoundPool.play(mSoundIds.get("brick_hit"), 100, 100, 1, 0, 1.0f);
-				mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
-				break;
-			case EX_BRICK_BALL:
-				// Explosive brick has a different sound effect and score, but the rest is the same
-				State.setScore(Score.EX_BRICK_HIT);
-				Log.i(TAG, "Score multiplier: " + State.getScoreMultiplier() + " Score: " + State.getScore());
-				State.setScoreMultiplier(ScoreMultiplier.BRICK_HIT);
-				mSoundPool.play(mSoundIds.get("explosive_brick"), 100, 100, 1, 0, 1.0f);
-				mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
-				break;
-			case PADDLE_BALL:
-				Log.d(TAG, "collided into the top left part of the paddle");
-				Log.d(TAG, "paddlePosX: " + mPaddle.getPosX());
-				State.setScoreMultiplier(ScoreMultiplier.PADDLE_HIT);
-				mSoundPool.play(mSoundIds.get("paddle_hit"), 100, 100, 1, 0, 1.0f);
-				/* 
-				 * The angle of the slope (of the ball trajectory) is the complement of the angle of reflection.
-				 * Take a look at http://www.mathopenref.com/coordslope.html to get an idea of the angle of the slope.
-				 */
-				if (mPaddle.getPosX() >= mBall.getPosX()) {	//the ball hit the paddle in the right half-part.
-					reflectedAngle = calcReflectedAngle(mBall.getPosX(), mPaddle.getPosX());
-					angleOfBallSlope = (Constants.RIGHT_ANGLE - reflectedAngle);
-				} else {									//the ball hit the paddle in the left half-part.
-					reflectedAngle = calcReflectedAngle(mPaddle.getPosX(), mBall.getPosX());
-					/* Besides being the complement, the angle of the slope is the negative complement,
-					 * since the ball is going to the left. */
-					angleOfBallSlope = -1 * (Constants.RIGHT_ANGLE - reflectedAngle);
-				}
-				mBall.turnByAngle(angleOfBallSlope);
-				break;
-			case LIFE_LOST:
-				State.setLives(Lives.LOST_LIFE);
-				mSoundPool.play(mSoundIds.get("lost_life"), 100, 100, 1, 0, 1.0f);
-				// If the user still has lives left, create a new ball and reset score multiplier
-				if (!State.getGameOver()) {
-					mBall = new Ball(Colors.WHITE, Config.BALL_INITIAL_POS_X, Config.BALL_INITIAL_POS_Y,
-							Config.BALL_AFTER_POS_X, Config.BALL_AFTER_POS_Y, Scales.BALL, sBallSpeed);
-					State.setScoreMultiplier(ScoreMultiplier.LOST_LIFE);
-					State.setGamePaused(true);
-				}
-				break;
-			case NOT_AVAILABLE:
-				// Nothing to do here
-				break;
-			default:
-				Log.e(TAG, "Invalid collision");
-				break;
+		switch (collisionType) {
+		case WALL_RIGHT_LEFT_SIDE:
+			/* Wall hit collision is almost the same, but the equation is different so we
+			 * need to differentiate here */
+			Log.d(TAG, "Right/Left side collision detected");
+			Log.d(TAG, "previous slope: " + mBall.getSlope());
+			mSoundPool.play(mSoundIds.get("wall_hit"), 100, 100, 1, 0, 1.0f);
+			mBall.turnToPerpendicularDirection(Hit.RIGHT_LEFT);
+			Log.d(TAG, "next slope: " + mBall.getSlope());
+			break;
+		case WALL_TOP_BOTTOM_SIDE:
+			Log.d(TAG, "Top/Bottom side collision detected");
+			Log.d(TAG, "previous slope: " + mBall.getSlope());
+			mSoundPool.play(mSoundIds.get("wall_hit"), 100, 100, 1, 0, 1.0f);
+			mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
+			Log.d(TAG, "next slope: " + mBall.getSlope());
+			break;
+		case BRICK_BALL:
+			// When the user hits a brick, increase the score and multiplier and play the sound effect
+			State.setScore(Score.BRICK_HIT);
+			Log.i(TAG, "Score multiplier: " + State.getScoreMultiplier() + " Score: " + State.getScore());
+			State.setScoreMultiplier(ScoreMultiplier.BRICK_HIT); // Update multiplier for the next brick hit
+			mSoundPool.play(mSoundIds.get("brick_hit"), 100, 100, 1, 0, 1.0f);
+			mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
+			break;
+		case EX_BRICK_BALL:
+			// Explosive brick has a different sound effect and score, but the rest is the same
+			State.setScore(Score.EX_BRICK_HIT);
+			Log.i(TAG, "Score multiplier: " + State.getScoreMultiplier() + " Score: " + State.getScore());
+			State.setScoreMultiplier(ScoreMultiplier.BRICK_HIT);
+			mSoundPool.play(mSoundIds.get("explosive_brick"), 100, 100, 1, 0, 1.0f);
+			mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
+			break;
+		case PADDLE_BALL:
+			Log.d(TAG, "collided into the top left part of the paddle");
+			Log.d(TAG, "paddlePosX: " + mPaddle.getPosX());
+			State.setScoreMultiplier(ScoreMultiplier.PADDLE_HIT);
+			mSoundPool.play(mSoundIds.get("paddle_hit"), 100, 100, 1, 0, 1.0f);
+			/* 
+			 * The angle of the slope (of the ball trajectory) is the complement of the angle of reflection.
+			 * Take a look at http://www.mathopenref.com/coordslope.html to get an idea of the angle of the slope.
+			 */
+			if (mPaddle.getPosX() >= mBall.getPosX()) {	//the ball hit the paddle in the right half-part.
+				reflectedAngle = calcReflectedAngle(mBall.getPosX(), mPaddle.getPosX());
+				angleOfBallSlope = (Constants.RIGHT_ANGLE - reflectedAngle);
+			} else {									//the ball hit the paddle in the left half-part.
+				reflectedAngle = calcReflectedAngle(mPaddle.getPosX(), mBall.getPosX());
+				/* Besides being the complement, the angle of the slope is the negative complement,
+				 * since the ball is going to the left. */
+				angleOfBallSlope = -1 * (Constants.RIGHT_ANGLE - reflectedAngle);
 			}
-
-			updateBrickExplosion();
-			
-			moveMobileBricks();
-
-			mBall.move();
+			mBall.turnByAngle(angleOfBallSlope);
+			break;
+		case LIFE_LOST:
+			State.setLives(Lives.LOST_LIFE);
+			mSoundPool.play(mSoundIds.get("lost_life"), 100, 100, 1, 0, 1.0f);
+			// If the user still has lives left, create a new ball and reset score multiplier
+			if (!State.getGameOver()) {
+				mBall = new Ball(Colors.WHITE, Config.BALL_INITIAL_POS_X, Config.BALL_INITIAL_POS_Y,
+						Config.BALL_AFTER_POS_X, Config.BALL_AFTER_POS_Y, Scales.BALL, sBallSpeed);
+				State.setScoreMultiplier(ScoreMultiplier.LOST_LIFE);
+				State.setGamePaused(true);
+			}
+			break;
+		case NOT_AVAILABLE:
+			// Nothing to do here
+			break;
+		default:
+			Log.e(TAG, "Invalid collision");
+			break;
 		}
 
+		updateBrickExplosion();
+
+		moveMobileBricks();
+
+		mBall.move();
 	}
-	
+
 	private void moveMobileBricks() {
 		for (int a = 0; a < mMobileBricks.size(); a++) {
 			Log.d(TAG, "going to call move, brick: ["+mMobileBricks.get(a).getIndexI()+"]["+mMobileBricks.get(a).getIndexJ()+"]");
