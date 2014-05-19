@@ -29,7 +29,7 @@ If you're exit the application the game is paused automatically. You don't need 
 
 ## Use the source, Luke!
 
-This game was made on [Android Developer Tools](https://developer.android.com/tools/index.html), so it's easier to simple import this code on your Eclipse workspace. Just go to ```File->Import->Android->Existing Android Code Into Workspace``` or, if the EGit plug-in installed, ```File->Import->Git->Projects from Git``` and point the URI from this Git repository.
+This game was made on [Android Developer Tools](https://developer.android.com/tools/index.html), so it's easier to simple import this code on your Eclipse workspace. Just go to ```File->Import->Android->Existing Android Code Into Workspace``` or, if the EGit plug-in installed, ```File->Import->Git->Projects from Git``` and point the URI from this Git repository. You need Android SDK 4.4.2, since the application does use newer funcionality when it makes sense (like [Holo theme](https://developer.android.com/design/style/themes.html) and [immersive mode](https://developer.android.com/training/system-ui/immersive.html)).
 
 The code is organized in the following way:
 
