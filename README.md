@@ -1,9 +1,5 @@
 # Retro Breaker - a brick breaker game with a retro appearance for Android
 
-<p align="center">
-	<img src="screenshot.png" alt="Retro Breaker"/>
-</p>
-
 ## Introduction
 
 Retro Breaker is a simple brick breaker game with an old, retro appearance. This game was created for the Mobile Computing course (MAC5743) on IME-USP, 2014 class. It has the following game mechanics:
@@ -20,6 +16,8 @@ Retro Breaker is a simple brick breaker game with an old, retro appearance. This
 	+ Easy: the player starts with 3 stock lives, each hit has a base score of 50, the maximum score multiplier is 4x, the ball speed is slow, there is 15% of probability to appears both grey and red bricks and no probability to appear green bricks;
 	+ Normal: the player starts with 2 stock lives, each hit has a base score of 100, the maximum score multiplier is 8x, the ball speed is normal (or 1.5x faster than on *Easy* difficult), there is 25% of probability to appear grey bricks, 10% to red bricks and 5% probability to appear green bricks;
 	+ Hard: the player starts with 1 stock lives, each hit has a base score of 150, the maximum score multiplier is 16x, the ball speed is fast (or 2x faster than on *Easy* difficult), there is 35% of probability to appear grey bricks, 5% to red bricks and 10% probability to appear green bricks.
+
+Except if noted, it has pretty simple mechanics, like the original game. If you feel even a little bit of nostalgia, our objective was completed.
 
 ## Instructions
 
