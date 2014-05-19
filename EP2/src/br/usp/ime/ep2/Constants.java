@@ -36,7 +36,7 @@ public class Constants {
 		public static final long MS_PER_UPDATE = 15 /* milliseconds */;
 		public static final int FPS_LIMIT = 0; // Set to 0 to disable it
 		public static final float SCREEN_RATIO = 9.0f/16.0f; // Widescreen (16:9) on portrait
-		public static final float WALL = 0.05f;
+		public static final float WALL = 0.0f;
 		public static final float BALL_INITIAL_POS_X = 0.25f;
 		public static final float BALL_INITIAL_POS_Y = 0.4f;
 		public static final float BALL_AFTER_POS_X = 0.2f;
