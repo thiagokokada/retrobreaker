@@ -1,7 +1,7 @@
-package br.usp.ime.ep2.forms;
+package br.usp.ime.retrobreaker.forms;
 
 import android.util.Log;
-import br.usp.ime.ep2.Game.State;
+import br.usp.ime.retrobreaker.Game.State;
 
 public class MobileBrick extends Brick {
 	private static final String TAG = MobileBrick.class.getSimpleName();

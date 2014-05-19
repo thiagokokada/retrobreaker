@@ -1,4 +1,4 @@
-package br.usp.ime.ep2;
+package br.usp.ime.retrobreaker;
 
 public class Constants {
 

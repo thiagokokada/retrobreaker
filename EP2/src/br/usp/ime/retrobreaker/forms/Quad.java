@@ -1,4 +1,4 @@
-package br.usp.ime.ep2.forms;
+package br.usp.ime.retrobreaker.forms;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -6,7 +6,7 @@ import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import br.usp.ime.ep2.Game.State;
+import br.usp.ime.retrobreaker.Game.State;
 
 public abstract class Quad {
 	

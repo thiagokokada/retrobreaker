@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <br.usp.ime.ep2.TouchSurfaceView
+    <br.usp.ime.retrobreaker.TouchSurfaceView
         android:id="@+id/opengl"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

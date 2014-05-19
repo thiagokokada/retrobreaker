@@ -1,4 +1,4 @@
-package br.usp.ime.ep2;
+package br.usp.ime.retrobreaker;
 
 import java.util.HashMap;
 import java.util.Timer;
@@ -20,8 +20,8 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.TextView;
-import br.usp.ime.ep2.Constants.Config;
-import br.usp.ime.ep2.Game.State;
+import br.usp.ime.retrobreaker.Constants.Config;
+import br.usp.ime.retrobreaker.Game.State;
 
 public class UI extends Activity {
 

@@ -1,4 +1,4 @@
-package br.usp.ime.ep2.forms;
+package br.usp.ime.retrobreaker.forms;
 
 public class Brick extends Quad {
 	

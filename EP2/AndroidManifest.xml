@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="br.usp.ime.ep2"
+    package="br.usp.ime.retrobreaker"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -14,14 +14,14 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="br.usp.ime.ep2.UI"
+            android:name="br.usp.ime.retrobreaker.UI"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
         </activity>
         <activity
-            android:name="br.usp.ime.ep2.MainActivity"
+            android:name="br.usp.ime.retrobreaker.MainActivity"
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait" >
             <intent-filter>

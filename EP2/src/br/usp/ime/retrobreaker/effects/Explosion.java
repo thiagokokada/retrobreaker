@@ -1,11 +1,11 @@
-package br.usp.ime.ep2.effects;
+package br.usp.ime.retrobreaker.effects;
 
 import javax.microedition.khronos.opengles.GL10;
 
 import android.util.Log;
-import br.usp.ime.ep2.Constants.Colors;
-import br.usp.ime.ep2.Constants.Scales;
-import br.usp.ime.ep2.forms.Particle;
+import br.usp.ime.retrobreaker.Constants.Colors;
+import br.usp.ime.retrobreaker.Constants.Scales;
+import br.usp.ime.retrobreaker.forms.Particle;
 
 /**
  * @author impaler

@@ -1,8 +1,8 @@
-package br.usp.ime.ep2.forms;
+package br.usp.ime.retrobreaker.forms;
 
-import br.usp.ime.ep2.Constants;
-import br.usp.ime.ep2.Constants.BallDirection;
-import br.usp.ime.ep2.Constants.Hit;
+import br.usp.ime.retrobreaker.Constants;
+import br.usp.ime.retrobreaker.Constants.BallDirection;
+import br.usp.ime.retrobreaker.Constants.Hit;
 import android.util.Log;
 
 public class Ball extends Quad {

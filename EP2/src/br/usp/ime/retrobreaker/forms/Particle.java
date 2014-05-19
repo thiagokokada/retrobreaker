@@ -1,7 +1,7 @@
-package br.usp.ime.ep2.forms;
+package br.usp.ime.retrobreaker.forms;
 
-import br.usp.ime.ep2.Constants.Scales;
-import br.usp.ime.ep2.Game.State;
+import br.usp.ime.retrobreaker.Constants.Scales;
+import br.usp.ime.retrobreaker.Game.State;
 
 /**
  * @author impaler

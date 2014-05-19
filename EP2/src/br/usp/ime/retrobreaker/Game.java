@@ -1,4 +1,4 @@
-package br.usp.ime.ep2;
+package br.usp.ime.retrobreaker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,21 +12,21 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import br.usp.ime.ep2.Constants.Collision;
-import br.usp.ime.ep2.Constants.Colors;
-import br.usp.ime.ep2.Constants.Config;
-import br.usp.ime.ep2.Constants.Difficult;
-import br.usp.ime.ep2.Constants.Hit;
-import br.usp.ime.ep2.Constants.Lives;
-import br.usp.ime.ep2.Constants.Scales;
-import br.usp.ime.ep2.Constants.Score;
-import br.usp.ime.ep2.Constants.ScoreMultiplier;
-import br.usp.ime.ep2.effects.Explosion;
-import br.usp.ime.ep2.forms.Ball;
-import br.usp.ime.ep2.forms.Brick;
-import br.usp.ime.ep2.forms.Brick.Type;
-import br.usp.ime.ep2.forms.MobileBrick;
-import br.usp.ime.ep2.forms.Paddle;
+import br.usp.ime.retrobreaker.Constants.Collision;
+import br.usp.ime.retrobreaker.Constants.Colors;
+import br.usp.ime.retrobreaker.Constants.Config;
+import br.usp.ime.retrobreaker.Constants.Difficult;
+import br.usp.ime.retrobreaker.Constants.Hit;
+import br.usp.ime.retrobreaker.Constants.Lives;
+import br.usp.ime.retrobreaker.Constants.Scales;
+import br.usp.ime.retrobreaker.Constants.Score;
+import br.usp.ime.retrobreaker.Constants.ScoreMultiplier;
+import br.usp.ime.retrobreaker.effects.Explosion;
+import br.usp.ime.retrobreaker.forms.Ball;
+import br.usp.ime.retrobreaker.forms.Brick;
+import br.usp.ime.retrobreaker.forms.MobileBrick;
+import br.usp.ime.retrobreaker.forms.Paddle;
+import br.usp.ime.retrobreaker.forms.Brick.Type;
 
 public class Game {
 	
