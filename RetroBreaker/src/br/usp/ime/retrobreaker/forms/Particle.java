@@ -31,8 +31,6 @@ public class Particle extends Quad {
 
 	public Particle(float[] colors, float posX, float posY, float scale) {
 		super(VERTICES, colors, posX, posY, scale);
-		mPosX = posX;
-		mPosY = posY;
 		mState = Particle.STATE_ALIVE;
 		mLifetime = DEFAULT_LIFETIME;
 		mAge = 0;
