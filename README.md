@@ -33,17 +33,27 @@ This game was made on [Android Developer Tools](https://developer.android.com/to
 
 The code is organized in the following way:
 
-* ```br.usp.ime.ep2```: the main game code:
+* ```br.usp.ime.retrobreaker```: the main game code:
 	+ Constants: all game constants putting in one place so we can easily change them;
 	+ Game: the main game logic, including drawing methods to drawn them on screen;
 	+ MainActivity: the first activity that appears when you open the app; not related with the game *per se*, but include options that change the game in some way;
 	+ TouchSurfaceView: include OpenGL logic and methods to get the user finger position on screen;
 	+ UI: renders the user interface on screen (including actual/high score, score multiplier, number of lives and "Ready?" text).
-* ```br.usp.ime.ep2.forms```: the various objects rendered on screen:
+* ```br.usp.ime.retrobreaker.forms```: the various objects rendered on screen:
 	+ Quad: the base class of all forms. This is a abstract class, so you need to extend it first before using it;
 	+ Ball/Brick/MobileBrick/Paddle/Particle: extend classes of Quad that represents the diverse objects of the screen.
-* ```br.usp.ime.ep2.effects```: create special effects on screen:
+* ```br.usp.ime.retrobreaker.effects```: create special effects on screen:
 	+Explosion: generates a explosion effect on ball hit.
+
+## Compatibility
+
+This application should work on any Android device from version 2.2 up to the most recent version of Android (to this date, 4.4.2 KitKat). This application was tested on the following devices:
+* Moto X (running Android 4.4.2);
+* LG G Pad 8.3 (running CyanogenMod 11M6, Android 4.4.2);
+* [Genymotion](http://www.genymotion.com/) Custom Phone 7 (running Android 4.4.2);
+* Android emulator (running both Android 2.3.3 and Android 4.4.2).
+
+But it should work better if your device has a screen ratio of 16:9 (or 9:16 if you're couting portrait mode), since this is the internal resolution assumed by the code. Any other screen ratio of screen may distorce the image.
 
 ## Known bugs
 
