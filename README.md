@@ -48,12 +48,13 @@ The code is organized in the following way:
 ## Compatibility
 
 This application should work on any Android device from version 2.2 up to the most recent version of Android (to this date, 4.4.2 KitKat). This application was tested on the following devices:
+
 * Moto X (running Android 4.4.2);
 * LG G Pad 8.3 (running CyanogenMod 11M6, Android 4.4.2);
 * [Genymotion](http://www.genymotion.com/) Custom Phone 7 (running Android 4.4.2);
 * Android emulator (running both Android 2.3.3 and Android 4.4.2).
 
-But it should work better if your device has a screen ratio of 16:9 (or 9:16 if you're couting portrait mode), since this is the internal resolution assumed by the code. Any other screen ratio of screen may distorce the image.
+But the game should work better if your device has a screen ratio of 16:9 (or 9:16 if you're couting portrait mode), since this is the internal resolution assumed by the code. Any other screen ratio of screen may distorce the image.
 
 ## Known bugs
 
