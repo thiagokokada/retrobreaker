@@ -27,7 +27,6 @@ public class UI extends Activity {
 
 	private TouchSurfaceView mTouchSurfaceView;
 	private Handler mHandler;
-	private AlertDialog.Builder mDialogBuilder;
 	private TextView mScoreTextView;
 	private TextView mScoreMultiplierTextView;
 	private TextView mLivesTextView;
@@ -58,10 +57,7 @@ public class UI extends Activity {
 		mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		mSharedPrefsEditor = mSharedPrefs.edit();
 		mHighScore = mSharedPrefs.getLong("high_score", 0);
-		/* Better initialize everything used on UI thread on onCreate() method.
-		 * This should fix "BadTokenException"
-		 * More information: http://stackoverflow.com/a/18385404/2751730 */
-		mDialogBuilder = new AlertDialog.Builder(this);
+
 		/* Initialize TextViews to show user game state (both high and actual
 		 * score, current score multiplier and number of lives remaining) and change
 		 * color of them to give that retro style ;). */
@@ -125,29 +121,39 @@ public class UI extends Activity {
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
-		if (hasFocus) {
-			mDecorView.setSystemUiVisibility(
-					View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-					| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-					| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-					| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-					| View.SYSTEM_UI_FLAG_FULLSCREEN
-					| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);}
+	    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+	    	if (hasFocus) {
+	    		mDecorView.setSystemUiVisibility(
+	    				View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+	    				| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+	    				| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+	    				| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+	    				| View.SYSTEM_UI_FLAG_FULLSCREEN
+	    				| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+	    		}
+	    }
 	}
 	
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void showGameOverDialog(long finalScore, boolean newHighScore) {
-		mDialogBuilder.setTitle(R.string.game_over);
+		AlertDialog.Builder builder = null;
+	    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+	        builder = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK);
+	    } else {
+	    	builder = new AlertDialog.Builder(this);
+	    }
+		builder.setTitle(R.string.game_over);
 		// Show a different message if the player beats the high score or not
 		if(newHighScore){
-		mDialogBuilder.setMessage(getString(R.string.new_high_score) + finalScore + "\n" +
+		builder.setMessage(getString(R.string.new_high_score) + finalScore + "\n" +
 				getString(R.string.do_you_want_to_restart_the_game));
 		} else {
-		mDialogBuilder.setMessage(getString(R.string.final_score) + finalScore + "\n" +
+		builder.setMessage(getString(R.string.final_score) + finalScore + "\n" +
 				getString(R.string.do_you_want_to_restart_the_game));
 		}
 		
 		// If the user click Yes, restart this Activity so the user can play again
-		mDialogBuilder.setPositiveButton(R.string.yes, new OnClickListener() {
+		builder.setPositiveButton(R.string.yes, new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				restartGame();
@@ -155,7 +161,7 @@ public class UI extends Activity {
 		});
 		
 		// If the user click No, go back to the MainActivity
-		mDialogBuilder.setNegativeButton(R.string.no, new OnClickListener() {
+		builder.setNegativeButton(R.string.no, new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				finish();
@@ -165,7 +171,7 @@ public class UI extends Activity {
 		/* To guarantee that the game will not FC, check if we can show (i.e. the
 		 * UI Activity is still on a valid state) the dialog before showing it.
 		 * Better be safe than sorry. */
-		if(!isFinishing()) mDialogBuilder.show();
+		if(!isFinishing()) builder.show();
 	}
 	
 	/* recreate() method appeared on API 11 (Honeycomb), before this version we
@@ -174,7 +180,7 @@ public class UI extends Activity {
 	 * Original idea: http://stackoverflow.com/a/16467733/2751730 */
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void restartGame() {
-		if (Build.VERSION.SDK_INT >= 11) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 		    recreate();
 		} else {
 		    Intent intent = getIntent();
