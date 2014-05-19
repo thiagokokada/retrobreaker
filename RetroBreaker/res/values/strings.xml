@@ -17,7 +17,7 @@
     <string name="final_score">"Final score: "</string>
     <string name="difficult">"Difficult:"</string>
     <string name="explosive_brick_explanation">Explosive brick (break all bricks around it)</string>
-    <string name="moveable_brick_explanation">Moveable brick (keep moving to one side to another)</string>
+    <string name="moveable_brick_explanation">Moveable brick (keep moving from one side to another)</string>
     <string name="hard_brick_explanation">Hard brick (need 2 hits to break it)</string>
     <string name="gray_brick">Gray brick</string>
     <string name="special_bricks">Special bricks:</string>
