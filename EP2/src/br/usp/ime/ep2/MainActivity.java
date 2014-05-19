@@ -38,7 +38,7 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		mLevelSpinner.setAdapter(adapter);
 		mLevelSpinner.setOnItemSelectedListener(this);
-		mLevelSpinner.setSelection(mSharedPrefs.getInt("level_pref", 2)); // Default to difficult "normal"
+		mLevelSpinner.setSelection(mSharedPrefs.getInt("difficult_prefs", 2)); // Default to difficult "normal"
 		
 		mNewGameButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -75,51 +75,7 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 		SharedPreferences.Editor editor = mSharedPrefs.edit();
-		switch(pos) {
-		case 0: /*Can't die*/
-			editor.putFloat("ball_speed", 0.01f);
-			editor.putInt("life_stock", 99);
-			editor.putInt("hit_score", 0);
-			editor.putInt("max_multiplier", 1);
-			editor.putBoolean("invincibility", true);
-			editor.putFloat("grey_brick_prob", 0.1f);
-			editor.putFloat("ex_brick_prob", 0.1f);
-			editor.putFloat("mobile_brick_prob", 0.1f);
-			break;
-		case 1: /*Easy*/
-			editor.putFloat("ball_speed", 0.01f);
-			editor.putInt("life_stock", 3);
-			editor.putInt("hit_score", 50);
-			editor.putInt("max_multiplier", 4);
-			editor.putBoolean("invincibility", false);
-			editor.putFloat("grey_brick_prob", 0.15f);
-			editor.putFloat("ex_brick_prob", 0.15f);
-			editor.putFloat("mobile_brick_prob", 0.0f);
-			break;
-		case 2: /*Normal*/
-			editor.putFloat("ball_speed", 0.015f);
-			editor.putInt("life_stock", 2);
-			editor.putInt("hit_score", 100);
-			editor.putInt("max_multiplier", 8);
-			editor.putBoolean("invincibility", false);
-			editor.putFloat("grey_brick_prob", 0.25f);
-			editor.putFloat("ex_brick_prob", 0.1f);
-			editor.putFloat("mobile_brick_prob", 0.05f);
-			break;
-		case 3: /*Hard*/
-			editor.putFloat("ball_speed", 0.02f);
-			editor.putInt("life_stock", 1);
-			editor.putInt("hit_score", 150);
-			editor.putInt("max_multiplier", 16);
-			editor.putBoolean("invincibility", false);
-			editor.putFloat("grey_brick_prob", 0.35f);
-			editor.putFloat("ex_brick_prob", 0.05f);
-			editor.putFloat("mobile_brick_prob", 0.1f);
-			break;
-
-		}
-		// Save user preference so we can restore it later
-		editor.putInt("level_pref", pos);
+		editor.putInt("difficult_prefs", pos);
 		editor.commit();
 	}
 
