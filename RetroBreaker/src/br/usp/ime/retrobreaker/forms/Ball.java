@@ -76,7 +76,7 @@ public class Ball extends Quad {
 		if (mUndefinedSlope) {
 			float tempY = mPrevPosY;
 			mPrevPosY = mPosY;
-			mPosY = tempY;
+			setPosX(tempY);
 			return;
 		}
 		
@@ -85,12 +85,12 @@ public class Ball extends Quad {
 		float tempY = mPosY;
 		switch(hitedSide) {
 		case RIGHT_LEFT:
-			mPosY = getY2InEquation(mPosX, mPosY, mPrevPosX);
-			mPosX = mPrevPosX;
+			setPosY(getY2InEquation(mPosX, mPosY, mPrevPosX));
+			setPosX(mPrevPosX);
 			break;
 		case TOP_BOTTOM:
-			mPosX = getX2InEquation(mPosX, mPosY, mPrevPosY);
-			mPosY = mPrevPosY;
+			setPosX(getX2InEquation(mPosX, mPosY, mPrevPosY));
+			setPosY(mPrevPosY);
 			break;
 		}
 		
@@ -113,8 +113,8 @@ public class Ball extends Quad {
 		mSlope = (float) Math.tan(Math.toRadians(angle));
 		float tempX = mPosX;
 		float tempY = mPosY;
-		mPosX = getX2InEquation(mPosX, mPosY, mPrevPosY);
-		mPosY = mPrevPosY;
+		setPosX(getX2InEquation(mPosX, mPosY, mPrevPosY));
+		setPosY(mPrevPosY);
 		mPrevPosX = tempX;
 		mPrevPosY = tempY;
 		
@@ -141,8 +141,8 @@ public class Ball extends Quad {
 			mPrevPosY = mPosY;
 			if (Math.abs(mSlope) <= 1) {
 				float x2 = mPosX + mTrajectoryIncrement;
-				mPosY = getY2InEquation(mPosX, mPosY, x2);
-				mPosX = x2;
+				setPosY(getY2InEquation(mPosX, mPosY, x2));
+				setPosX(x2);
 			} else {
 				
 				float y2;
@@ -152,8 +152,8 @@ public class Ball extends Quad {
 				else {
 					y2 = mPosY - mTrajectoryIncrement;
 				}
-				mPosX = getX2InEquation(mPosX, mPosY, y2);
-				mPosY = y2;
+				setPosX(getX2InEquation(mPosX, mPosY, y2));
+				setPosY(y2);
 			}
 		} 
 		// Left upward/downward
@@ -164,14 +164,14 @@ public class Ball extends Quad {
 			mPrevPosY = mPosY;
 			if (Math.abs(mSlope) <= 1) {
 				float x2 = mPosX - mTrajectoryIncrement;
-				mPosY = getY2InEquation(mPosX, mPosY, x2);
-				mPosX = x2;	
+				setPosY(getY2InEquation(mPosX, mPosY, x2));
+				setPosX(x2);	
 			} else {
 				float y2;
 				if (dir == BallDirection.LEFT_UPWARD) y2 = mPosY + mTrajectoryIncrement;
 				else y2 = mPosY - mTrajectoryIncrement;
-				mPosX = getX2InEquation(mPosX, mPosY, y2);
-				mPosY = y2;
+				setPosX(getX2InEquation(mPosX, mPosY, y2));
+				setPosY(y2);
 			}
 		}
 		
@@ -179,10 +179,10 @@ public class Ball extends Quad {
 		else if (mPosX == mPrevPosX) {
 			if (mPosY > mPrevPosY) {	//upward
 				mPrevPosY = mPosY;
-				mPosY = mPosY + mTrajectoryIncrement;
+				setPosY(mPosY + mTrajectoryIncrement);
 			} else {					//downward
 				mPrevPosY = mPosY;
-				mPosY = mPosY - mTrajectoryIncrement;
+				setPosY(mPosY - mTrajectoryIncrement);
 			}
 		}
 
