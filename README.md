@@ -58,9 +58,9 @@ But the game should work better if your device has a screen ratio of 16:9 (or 9:
 
 ## Known bugs
 
-Sometimes, the ball will reflect infinitely on paddle or on the wall. In the paddle case just keep moving the paddle until the ball starts moving again. In the wall case there is no solution yet, we will try to fix it later (of course, you can make a Pull Request with the fix too).
+Sometimes, the ball will reflect infinitely on paddle or on the wall. In the paddle case just keep moving the paddle until the ball starts moving again. In the wall case there is no hope, the ball would just keep reflecting until going out of the stage. Both bugs should be fixed on the most commons cases but this code still need more test.
 
-The "Game Over screen" may not show on some conditions. This is thanks to strange bugs caused between the OpenGL rendering thread (TouchSurfaceView.java) and UI thread (UI.java), since we use both on the same view (OpenGL thread to draw the game graphics/calculate the game physics and UI thread to draw user information like Score/number of lives/Score multiplier/etc.).
+The "Game Over dialog" may not show on some conditions. This is thanks to strange bugs caused between the OpenGL rendering thread (TouchSurfaceView.java) and UI thread (UI.java), since we use both on the same view (OpenGL thread to draw the game graphics/calculate the game physics and UI thread to draw user information like Score/number of lives/Score multiplier/etc.). Before this bug would throws a exception causing a Force Close on the application. Now we check if there is a a valid context before trying to show the dialog. This may make the dialog not show in some cases, but it's better than a Force Close in your face.
 
 ## License
 
