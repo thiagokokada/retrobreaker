@@ -2,7 +2,6 @@ package br.usp.ime.retrobreaker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -26,9 +25,9 @@ import br.usp.ime.retrobreaker.Constants.ScoreMultiplier;
 import br.usp.ime.retrobreaker.effects.Explosion;
 import br.usp.ime.retrobreaker.forms.Ball;
 import br.usp.ime.retrobreaker.forms.Brick;
+import br.usp.ime.retrobreaker.forms.Brick.Type;
 import br.usp.ime.retrobreaker.forms.MobileBrick;
 import br.usp.ime.retrobreaker.forms.Paddle;
-import br.usp.ime.retrobreaker.forms.Brick.Type;
 
 public class Game {
 	

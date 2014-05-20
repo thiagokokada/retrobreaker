@@ -3,9 +3,6 @@ package br.usp.ime.retrobreaker;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import br.usp.ime.retrobreaker.Constants.Config;
-import br.usp.ime.retrobreaker.Game.State;
-
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
@@ -13,6 +10,8 @@ import android.opengl.Matrix;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import br.usp.ime.retrobreaker.Constants.Config;
+import br.usp.ime.retrobreaker.Game.State;
 
 class TouchSurfaceView extends GLSurfaceView {
 	
