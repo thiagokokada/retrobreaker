@@ -2,7 +2,9 @@ package br.usp.ime.retrobreaker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -44,7 +46,7 @@ public class Game {
 	private Context mContext;
 	private List<Explosion> mExplosions;
 	private List<MobileBrick> mMobileBricks;
-	private int[] mConsecutiveCollision;
+	private HashMap<Collision, Integer> mConsecutiveCollision;
 	
 	// Game State preferences
 	
@@ -82,7 +84,10 @@ public class Game {
 		State.setLives(Lives.RESTART_LEVEL);
 		State.setScore(Score.RESTART_LEVEL);
 		State.setScoreMultiplier(ScoreMultiplier.RESTART_LEVEL);
-		mConsecutiveCollision = new int[3];
+		mConsecutiveCollision = new HashMap<Collision, Integer>();
+		for (Collision type : Collision.values()) {
+			mConsecutiveCollision.put(type, 0);
+		}
 		
 		// Initialize graphics
 		mPaddle = new Paddle(Colors.WHITE, Config.PADDLE_INITIAL_POS_X, Config.PADDLE_INITIAL_POS_Y,
@@ -209,15 +214,21 @@ public class Game {
 
 		Collision collisionType = detectCollision();	
 
+		/* Sometimes the ball can enter a state where it would detect various hits between ball
+		 * and something (when the ball get a position that would detect both a top hit and a
+		 * bottom hit for example). Since this is physically impossible, add a delay every time
+		 * we detect a collision, so we can just skip this type of collision detection
+		 * during some frames. */
+		if(collisionType != Collision.NOT_AVAILABLE) {
+			if(mConsecutiveCollision.get(collisionType) > 0) {
+				Log.e(TAG, "Detected consecutive collision of type " + collisionType.name() + ", skipping.");
+				collisionType = Collision.NOT_AVAILABLE;
+			}
+			mConsecutiveCollision.put(collisionType, Config.MS_PER_UPDATE);
+		}
+
 		switch (collisionType) {
 		case WALL_RIGHT_LEFT_SIDE:
-			/* Sometimes the ball can enter a state where it would detect various hits between ball
-			 * and paddle/wall (when the ball get a position that would detect both a top hit and a
-			 * bottom hit for example). Since this is physically impossible, add a delay every time
-			 * the ball hit the paddle/wall, so we can just skip paddle/wall and ball detection
-			 * collision during some frames. */
-			if(mConsecutiveCollision[0] > 0) break;
-			mConsecutiveCollision[0] += Config.MS_PER_UPDATE;
 			/* Wall hit collision is almost the same, but the equation is different so we
 			 * need to differentiate here */
 			Log.d(TAG, "Right/Left side collision detected");
@@ -227,8 +238,6 @@ public class Game {
 			Log.d(TAG, "next slope: " + mBall.getSlope());
 			break;
 		case WALL_TOP_BOTTOM_SIDE:
-			if(mConsecutiveCollision[1] > 0) break;
-			mConsecutiveCollision[1] += Config.MS_PER_UPDATE;
 			Log.d(TAG, "Top/Bottom side collision detected");
 			Log.d(TAG, "previous slope: " + mBall.getSlope());
 			mSoundPool.play(mSoundIds.get("wall_hit"), 100, 100, 1, 0, 1.0f);
@@ -252,8 +261,6 @@ public class Game {
 			mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
 			break;
 		case PADDLE_BALL:
-			if(mConsecutiveCollision[2] > 0) break;
-			mConsecutiveCollision[2] += Config.MS_PER_UPDATE;
 			Log.d(TAG, "collided into the top left part of the paddle");
 			Log.d(TAG, "paddlePosX: " + mPaddle.getPosX());
 			State.setScoreMultiplier(ScoreMultiplier.PADDLE_HIT);
@@ -360,9 +367,10 @@ public class Game {
 
 	private Collision detectCollision() {
 		
-		for (int i = 0; i < mConsecutiveCollision.length; i++) {
-			if(mConsecutiveCollision[i] > 0) {
-				mConsecutiveCollision[i]--;
+		for (Map.Entry<Collision, Integer> entry : mConsecutiveCollision.entrySet()) {
+			int consecutiveCollisions = entry.getValue();
+			if (consecutiveCollisions > 0) {
+				entry.setValue(--consecutiveCollisions);
 			}
 		}
 		

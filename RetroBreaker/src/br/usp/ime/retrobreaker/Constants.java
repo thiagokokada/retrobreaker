@@ -33,7 +33,7 @@ public class Constants {
 	}
 
 	public static final class Config {
-		public static final long MS_PER_UPDATE = 15 /* milliseconds */;
+		public static final int MS_PER_UPDATE = 15 /* milliseconds */;
 		public static final int FPS_LIMIT = 0; // Set to 0 to disable it
 		public static final float SCREEN_RATIO = 9.0f/16.0f; // Widescreen (16:9) on portrait
 		public static final float WALL = 0.0f;
