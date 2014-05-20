@@ -128,7 +128,8 @@ public class Game {
 						Difficult.GREY_BRICK_PROB[State.getDifficult()]))
 				{
 					if (prob <= Difficult.MOBILE_BRICK_PROB[State.getDifficult()]) {
-						MobileBrick mBrick = new MobileBrick(Colors.GREEN, newPosX, newPosY, Scales.BRICK, Type.MOBILE, 3);
+						MobileBrick mBrick = new MobileBrick(Colors.GREEN, newPosX, newPosY,
+								Scales.BRICK, Type.MOBILE, 3);
 						mBrick.setXVelocity(sign * mBrick.getWidth()/30);
 						mBrick.setGlobalBrickMatrixIndex(i, j);
 						mBricks[i][j] = mBrick;
@@ -146,7 +147,7 @@ public class Game {
 				// The position of the next brick on the same line should be on the right side of the last brick
 				newPosX += mBricks[i][j].getSizeX() + Config.SPACE_BETWEEN_BRICKS;
 			}
-			// Finished filling a line of bricks, resetting to initial X position so we can do the same on the next line
+			// Finished filling a line of bricks, resetting to initial X position to fill the next line
 			newPosX = initialX;
 			// Same as the X position, put the next line of bricks on bottom of the last one
 			newPosY += mBricks[i][0].getSizeY() + Config.SPACE_BETWEEN_BRICKS;
@@ -192,7 +193,8 @@ public class Game {
 	
 	/*
 	 * We see the paddle as a circumference. The paddle's width is proportional to (2 * ANGLE_OF_REFLECTION_BOUND). 
-	 * In other words, the half of the width of the paddle is proportional to Constants.ANGLE_OF_REFLECTION_BOUND degrees.
+	 * In other words, the half of the width of the paddle is proportional to Constants.ANGLE_OF_REFLECTION_BOUND
+	 * degrees.
 	 * 
 	 * x2 - x1			reflected angle
 	 * --------  = 	------------------------
@@ -295,7 +297,8 @@ public class Game {
 
 	private void moveMobileBricks() {
 		for (int a = 0; a < mMobileBricks.size(); a++) {
-			Log.d(TAG, "going to call move, brick: ["+mMobileBricks.get(a).getIndexI()+"]["+mMobileBricks.get(a).getIndexJ()+"]");
+			Log.d(TAG, "Going to call move, brick: " + 
+					"[" + mMobileBricks.get(a).getIndexI() + "][" + mMobileBricks.get(a).getIndexJ() + "]");
 			mMobileBricks.get(a).move();
 		}
 	}
@@ -385,38 +388,48 @@ public class Game {
 		boolean gameFinish = true;
 		
 		for (int i=0; i<mBricks.length; i++) {
+			/* This should optimize the collision processing a little: since Java has short-circuit operators, on the
+			 * first time Y position is the same between brick/ball, we know the collision will happen (if it happen)
+			 * on the same row (even if not on the same block). */
+			boolean checkedLine =  false;
 			for (int j=0; j<mBricks[i].length; j++) {
 				// Check if the brick is not destroyed yet
 				if(mBricks[i][j] != null) {
 					// If there are still bricks, the game is not over yet
 					gameFinish = false;
 
-					// Detecting collision between the ball and the bricks
-					if (mBall.getTopY() >= mBricks[i][j].getBottomY()
-							&& mBall.getBottomY() <= mBricks[i][j].getTopY()
-							&& mBall.getRightX() >= mBricks[i][j].getLeftX()
-							&& mBall.getLeftX() <= mBricks[i][j].getRightX()
-							)
+					// Check if the ball is in the same Y position than ball
+					if (checkedLine
+							|| (mBall.getTopY() >= mBricks[i][j].getBottomY()
+							&& mBall.getBottomY() <= mBricks[i][j].getTopY()))
 					{
-						Log.d(TAG, "Detected collision between ball and brick[" + i + "][" + j + "]");
-						/* Since the update happens so fast (on each draw frame) we can update the brick
-						 * state on the next frame. */
-						if (mBricks[i][j].getLives() == 0) {
-							if (mBricks[i][j].getType() == Type.EXPLOSIVE) {
-								Log.d(TAG, "inserted explosion");
-								mExplosions.add(new Explosion
-										(Brick.GRAY_EXPLOSION_SIZE, mBricks[i][j].getPosX(), mBricks[i][j].getPosY()));
-								// Explosive brick is a special type of collision, treat this case
-								explosiveBrick(i, j);
-								return Collision.EX_BRICK_BALL;
-							} else if (mBricks[i][j].getType() == Type.MOBILE){
-								deleteMobileBrick(i, j);
+						checkedLine = true;
+						// Check if the collision actually happened
+						if (mBall.getRightX() >= mBricks[i][j].getLeftX()
+								&& mBall.getLeftX() <= mBricks[i][j].getRightX())
+						{
+							Log.d(TAG, "Detected collision between ball and brick[" + i + "][" + j + "]");
+							/* Since the update happens so fast (on each draw frame) we can update the brick
+							 * state on the next frame. */
+							if (mBricks[i][j].getLives() == 0) {
+								if (mBricks[i][j].getType() == Type.EXPLOSIVE) {
+									Log.d(TAG, "inserted explosion");
+									mExplosions.add(new Explosion(Brick.GRAY_EXPLOSION_SIZE,
+											mBricks[i][j].getPosX(), mBricks[i][j].getPosY()));
+									// Explosive brick is a special type of collision, treat this case
+									explosiveBrick(i, j);
+									return Collision.EX_BRICK_BALL;
+								} else if (mBricks[i][j].getType() == Type.MOBILE){
+									deleteMobileBrick(i, j);
+								}
+								mBricks[i][j] = null; // Deleting brick
+							} else {
+								decrementBrickLife(i, j);
 							}
-							mBricks[i][j] = null; // Deleting brick
-						} else {
-							decrementBrickLife(i, j);
+							return Collision.BRICK_BALL;
 						}
-						return Collision.BRICK_BALL;
+					} else {
+						break;
 					}
 				}
 			}
