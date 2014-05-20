@@ -62,7 +62,7 @@ public class Constants {
 		public static final float[] GREY_BRICK_PROB = { 0.1f, 0.15f, 0.25f, 0.35f };
 		public static final float[] EX_BRICK_PROB = { 0.1f, 0.15f, 0.1f, 0.05f };
 		public static final float[] MOBILE_BRICK_PROB = { 0.1f, 0.0f, 0.05f, 0.1f };
-		public static final float[] MOBILE_BRICK_SPEED = { 0.0f, 0.0f, 0.0035f, 0.005f };
+		public static final float[] MOBILE_BRICK_SPEED = { 0.002f, 0.0f, 0.0035f, 0.005f };
 	}
 	
 	public static final class Scales {
