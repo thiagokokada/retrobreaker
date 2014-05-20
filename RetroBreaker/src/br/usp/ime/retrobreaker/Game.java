@@ -395,9 +395,10 @@ public class Game {
 		boolean gameFinish = true;
 		
 		for (int i = 0; i<mBricks.length; i++) {
-			/* This should optimize the collision processing a little: since Java has short-circuit operators, on the
-			 * first time Y position is the same between brick/ball, we know the collision will happen (if it happen)
-			 * on the same row (even if not on the same block). */
+			/* This should optimize the collision processing a little: on the first time Y position is the same
+			 * between brick/ball, we know the collision will happen (if it happen) on the same row (even if not
+			 * on the same block). Since && is a short-circuit operator, using this variable here will optimize
+			 * things by not evaluating again the position Y from both Ball and Bricks*/
 			boolean checkedLine =  false;
 			for (int j=0; j<mBricks[i].length; j++) {
 				// Check if the brick is not destroyed yet
