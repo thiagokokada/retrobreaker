@@ -122,9 +122,9 @@ public class Game {
 		float newPosY = initialY;
 		
 		for (int i = 0; i < blocksX; i++) {
-			float sign = 1;
+			int sign = 1;
 			for (int j = 0; j < blocksY; j++) {
-				sign *= -1; //consecutive bricks start moving to different directions
+				sign *= -1; // Consecutive bricks start moving to different directions
 				// Create special bricks (explosive and hard types) on a random probability
 				double prob = Math.random();
 				if (prob <= (Difficult.MOBILE_BRICK_PROB[State.getDifficult()] +
@@ -132,12 +132,11 @@ public class Game {
 						Difficult.GREY_BRICK_PROB[State.getDifficult()]))
 				{
 					if (prob <= Difficult.MOBILE_BRICK_PROB[State.getDifficult()]) {
-						MobileBrick mBrick = new MobileBrick(Colors.GREEN, newPosX, newPosY,
-								Scales.BRICK, Type.MOBILE, 3);
-						mBrick.setXVelocity(sign * mBrick.getWidth()/30);
-						mBrick.setGlobalBrickMatrixIndex(i, j);
-						mBricks[i][j] = mBrick;
-						mMobileBricks.add(mBrick);
+						MobileBrick brick = new MobileBrick(Colors.GREEN,
+								newPosX, newPosY, Scales.BRICK, Type.MOBILE, Config.MOBILE_BRICK_SKIP_FRAMES,
+								i, j, sign * Difficult.MOBILE_BRICK_SPEED[State.getDifficult()]);
+						mBricks[i][j] = brick;
+						mMobileBricks.add(brick);
 					} else if ((prob - Difficult.MOBILE_BRICK_PROB[State.getDifficult()]) <=
 							Difficult.EX_BRICK_PROB[State.getDifficult()])
 					{
