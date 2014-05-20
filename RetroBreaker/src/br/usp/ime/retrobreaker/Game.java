@@ -550,6 +550,10 @@ public class Game {
 		}
 		
 		public static void setGameOver(boolean gameIsOver) {
+			// Add bonus points for each extra life the user has
+			if (gameIsOver) {
+				sScore += sLives * Difficult.LIFE_SCORE_BONUS[sDifficult];
+			}
 			sGameOver = gameIsOver;
 		}
 		

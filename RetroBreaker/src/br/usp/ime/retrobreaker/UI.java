@@ -206,22 +206,21 @@ public class UI extends Activity {
 					mReadyTextView.setVisibility(View.INVISIBLE);
 				}
 
-				if(!State.getGameOver()) {
-					mScoreTextView.setText(getString(R.string.score) + String.format("%08d", State.getScore()));
-					mScoreMultiplierTextView.setText(getString(R.string.multiplier) + State.getScoreMultiplier() + "x");
+				mScoreTextView.setText(getString(R.string.score) + String.format("%08d", State.getScore()));
+				mScoreMultiplierTextView.setText(getString(R.string.multiplier) + State.getScoreMultiplier() + "x");
 
-					/* If the user beats the high score, keep updating the High Score text on the fly
-					 * with green text to caught user attention. */
-					if(State.getScore() > mHighScore) {
-						mHighScore = State.getScore();
-						mNewHighScore = true;
-						mHighScoreTextView.setTextColor(Color.GREEN);
-					}
+				/* If the user beats the high score, keep updating the High Score text on the fly
+				 * with green text to caught user attention. */
+				if(State.getScore() > mHighScore) {
+					mHighScore = State.getScore();
+					mNewHighScore = true;
+					mHighScoreTextView.setTextColor(Color.GREEN);
+				}
 
-					mHighScoreTextView.setText(getString(R.string.high_score) + String.format("%08d", mHighScore));
-					mLivesTextView.setText(getString(R.string.lives) + State.getLifes());
+				mHighScoreTextView.setText(getString(R.string.high_score) + String.format("%08d", mHighScore));
+				mLivesTextView.setText(getString(R.string.lives) + State.getLifes());
 					
-				} else {
+				if (State.getGameOver()) {
 					/* Show user score and ask if he wants to play again */
 					showGameOverDialog(State.getScore(), mNewHighScore);
 					/* If the user beats his High Score, save his new high score on SharedPreferences

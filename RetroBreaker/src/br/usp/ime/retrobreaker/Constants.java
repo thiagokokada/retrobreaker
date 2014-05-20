@@ -52,11 +52,12 @@ public class Constants {
 	
 	public static final class Difficult {
 		// 0 = Can't die, 1 = Easy, 2 = Normal, 3 = Hard
-		public static final float[] BALL_SPEED = { 0.01f, 0.01f, 0.015f, 0.02f };
 		public static final int[] LIFE_STOCK = { 99, 3, 2, 1 };
 		public static final int[] HIT_SCORE = { 0, 50, 100, 150 };
+		public static final int[] LIFE_SCORE_BONUS = { 0, 2500, 5000, 10000 };
 		public static final int[] MAX_SCORE_MULTIPLIER = { 1, 4, 8, 16 };
 		public static final boolean[] INVINCIBILITY = { true, false, false, false };
+		public static final float[] BALL_SPEED = { 0.01f, 0.01f, 0.015f, 0.02f };
 		public static final float[] GREY_BRICK_PROB = { 0.1f, 0.15f, 0.25f, 0.35f };
 		public static final float[] EX_BRICK_PROB = { 0.1f, 0.15f, 0.1f, 0.05f };
 		public static final float[] MOBILE_BRICK_PROB = { 0.1f, 0.0f, 0.05f, 0.1f };
