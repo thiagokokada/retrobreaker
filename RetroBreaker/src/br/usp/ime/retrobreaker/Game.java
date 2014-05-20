@@ -44,7 +44,7 @@ public class Game {
 	private Context mContext;
 	private List<Explosion> mExplosions;
 	private List<MobileBrick> mMobileBricks;
-	private int mConsecutiveCollision;
+	private int[] mConsecutiveCollision;
 	
 	// Game State preferences
 	
@@ -82,7 +82,7 @@ public class Game {
 		State.setLives(Lives.RESTART_LEVEL);
 		State.setScore(Score.RESTART_LEVEL);
 		State.setScoreMultiplier(ScoreMultiplier.RESTART_LEVEL);
-		mConsecutiveCollision = 0;
+		mConsecutiveCollision = new int[3];
 		
 		// Initialize graphics
 		mPaddle = new Paddle(Colors.WHITE, Config.PADDLE_INITIAL_POS_X, Config.PADDLE_INITIAL_POS_Y,
@@ -211,6 +211,13 @@ public class Game {
 
 		switch (collisionType) {
 		case WALL_RIGHT_LEFT_SIDE:
+			/* Sometimes the ball can enter a state where it would detect various hits between ball
+			 * and paddle/wall (when the ball get a position that would detect both a top hit and a
+			 * bottom hit for example). Since this is physically impossible, add a delay every time
+			 * the ball hit the paddle/wall, so we can just skip paddle/wall and ball detection
+			 * collision during some frames. */
+			if(mConsecutiveCollision[0] > 0) break;
+			mConsecutiveCollision[0] += Config.MS_PER_UPDATE;
 			/* Wall hit collision is almost the same, but the equation is different so we
 			 * need to differentiate here */
 			Log.d(TAG, "Right/Left side collision detected");
@@ -220,6 +227,8 @@ public class Game {
 			Log.d(TAG, "next slope: " + mBall.getSlope());
 			break;
 		case WALL_TOP_BOTTOM_SIDE:
+			if(mConsecutiveCollision[1] > 0) break;
+			mConsecutiveCollision[1] += Config.MS_PER_UPDATE;
 			Log.d(TAG, "Top/Bottom side collision detected");
 			Log.d(TAG, "previous slope: " + mBall.getSlope());
 			mSoundPool.play(mSoundIds.get("wall_hit"), 100, 100, 1, 0, 1.0f);
@@ -243,12 +252,8 @@ public class Game {
 			mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
 			break;
 		case PADDLE_BALL:
-			/* Sometimes the ball can enter a state where it would detect various hits between ball
-			 * and paddle (when the ball get a position that would detect both a top hit and a
-			 * bottom hit for example). Since this is physically impossible, add a delay every time
-			 * the ball hit the paddle, so we can just skip paddle/ball detection for sometime. */
-			if(mConsecutiveCollision > 0) break;
-			mConsecutiveCollision += Config.MS_PER_UPDATE;
+			if(mConsecutiveCollision[2] > 0) break;
+			mConsecutiveCollision[2] += Config.MS_PER_UPDATE;
 			Log.d(TAG, "collided into the top left part of the paddle");
 			Log.d(TAG, "paddlePosX: " + mPaddle.getPosX());
 			State.setScoreMultiplier(ScoreMultiplier.PADDLE_HIT);
@@ -355,8 +360,10 @@ public class Game {
 
 	private Collision detectCollision() {
 		
-		if(mConsecutiveCollision > 0) {
-			mConsecutiveCollision--;
+		for (int i = 0; i < mConsecutiveCollision.length; i++) {
+			if(mConsecutiveCollision[i] > 0) {
+				mConsecutiveCollision[i]--;
+			}
 		}
 		
 		detectCollisionOfMobileBricks();
@@ -387,7 +394,7 @@ public class Game {
 		// If the game is finished, there should be no bricks left
 		boolean gameFinish = true;
 		
-		for (int i=0; i<mBricks.length; i++) {
+		for (int i = 0; i<mBricks.length; i++) {
 			/* This should optimize the collision processing a little: since Java has short-circuit operators, on the
 			 * first time Y position is the same between brick/ball, we know the collision will happen (if it happen)
 			 * on the same row (even if not on the same block). */
