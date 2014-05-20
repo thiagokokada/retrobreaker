@@ -83,10 +83,8 @@ public class Game {
 		State.setLives(Lives.RESTART_LEVEL);
 		State.setScore(Score.RESTART_LEVEL);
 		State.setScoreMultiplier(ScoreMultiplier.RESTART_LEVEL);
-		
-		// Initialize consecutive collision detection
 		mConsecutiveCollision = new HashMap<Collision, Integer>();
-		for (Collision type : Config.CONSECUTIVE_COLLISION_DETECTION) {
+		for (Collision type : Collision.values()) {
 			mConsecutiveCollision.put(type, 0);
 		}
 		
@@ -219,18 +217,15 @@ public class Game {
 		 * bottom hit for example). Since this is physically impossible, add a delay every time
 		 * we detect a collision, so we can just skip this type of collision detection
 		 * during some frames. */
-		Collision aux = collisionType;
-		for(Map.Entry<Collision, Integer> entry : mConsecutiveCollision.entrySet()) {
-			if(entry.getKey() == aux) {
-				if(entry.getValue() > 0) {
-					Log.d(TAG, "Detected consecutive collision of type " + aux.name() + ", skipping.");
-					collisionType = Collision.NOT_AVAILABLE;
-				}
-				mConsecutiveCollision.put(aux, Config.MS_PER_UPDATE);
+		if(collisionType != Collision.NOT_AVAILABLE) {
+			if(mConsecutiveCollision.get(collisionType) > 0) {
+				Log.d(TAG, "Detected consecutive collision of type " + collisionType.name() + ", skipping.");
+				collisionType = Collision.NOT_AVAILABLE;
 			}
+			mConsecutiveCollision.put(collisionType, Config.MS_PER_UPDATE);
 		}
-		
-		switch(collisionType) {
+
+		switch (collisionType) {
 		case WALL_RIGHT_LEFT_SIDE:
 			/* Wall hit collision is almost the same, but the equation is different so we
 			 * need to differentiate here */

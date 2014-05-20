@@ -49,9 +49,6 @@ public class Constants {
 		public static final float BRICKS_INITIAL_POS_X = -0.495f;
 		public static final float BRICKS_INITIAL_POS_Y = 0.3f;
 		public static final float SPACE_BETWEEN_BRICKS = 0.01f;
-		public static final Collision[] CONSECUTIVE_COLLISION_DETECTION = {
-			Collision.WALL_RIGHT_LEFT_SIDE, Collision.WALL_TOP_BOTTOM_SIDE, Collision.PADDLE_BALL
-			};
 	}
 	
 	public static final class Difficult {
