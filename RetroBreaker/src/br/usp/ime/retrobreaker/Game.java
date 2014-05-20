@@ -47,19 +47,9 @@ public class Game {
 	private int mConsecutiveCollision;
 	
 	// Game State preferences
-	private static int sDifficult;
 	
 	public Game(Context context) {
 		mContext = context;
-		
-		// Load user difficult choice
-		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-		sDifficult = sharedPrefs.getInt("difficult_prefs", -1);
-		if (sDifficult < 0) {
-			Log.e(TAG, "Invalid difficult preference: " + sDifficult);
-			// If there is some problem on difficult setting, set it to debug ("Can't die")
-			sDifficult = 0;
-		}
 
 		// Load sound pool, audio shouldn't change between levels
 		mSoundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
@@ -82,6 +72,10 @@ public class Game {
 		 * so set to a sane default. */
 		State.setScreenMeasures(2.0f, 2.0f);
 		
+		// Load user difficult choice
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+		State.setDifficult(sharedPrefs.getInt("difficult_prefs", -1));
+		
 		// Initialize game state
 		State.setGamePaused(true);
 		State.setGameOver(false);
@@ -101,7 +95,8 @@ public class Game {
 				);
 		
 		mBall = new Ball(Colors.WHITE, Config.BALL_INITIAL_POS_X, Config.BALL_INITIAL_POS_Y,
-				Config.BALL_AFTER_POS_X, Config.BALL_AFTER_POS_Y, Scales.BALL, Difficult.BALL_SPEED[sDifficult]);
+				Config.BALL_AFTER_POS_X, Config.BALL_AFTER_POS_Y, Scales.BALL,
+				Difficult.BALL_SPEED[State.getDifficult()]);
 		Log.d(TAG, "Created ball:" + 
 				" BottomY: " + mBall.getBottomY() +
 				" TopY: " + mBall.getTopY() +
@@ -128,16 +123,19 @@ public class Game {
 				sign *= -1; //consecutive bricks start moving to different directions
 				// Create special bricks (explosive and hard types) on a random probability
 				double prob = Math.random();
-				if (prob <= (Difficult.MOBILE_BRICK_PROB[sDifficult] + Difficult.EX_BRICK_PROB[sDifficult]
-						+ Difficult.GREY_BRICK_PROB[sDifficult]))
+				if (prob <= (Difficult.MOBILE_BRICK_PROB[State.getDifficult()] +
+						Difficult.EX_BRICK_PROB[State.getDifficult()] +
+						Difficult.GREY_BRICK_PROB[State.getDifficult()]))
 				{
-					if (prob <= Difficult.MOBILE_BRICK_PROB[sDifficult]) {
+					if (prob <= Difficult.MOBILE_BRICK_PROB[State.getDifficult()]) {
 						MobileBrick mBrick = new MobileBrick(Colors.GREEN, newPosX, newPosY, Scales.BRICK, Type.MOBILE, 3);
 						mBrick.setXVelocity(sign * mBrick.getWidth()/30);
 						mBrick.setGlobalBrickMatrixIndex(i, j);
 						mBricks[i][j] = mBrick;
 						mMobileBricks.add(mBrick);
-					} else if ((prob - Difficult.MOBILE_BRICK_PROB[sDifficult]) <= Difficult.EX_BRICK_PROB[sDifficult]) {
+					} else if ((prob - Difficult.MOBILE_BRICK_PROB[State.getDifficult()]) <=
+							Difficult.EX_BRICK_PROB[State.getDifficult()])
+					{
 						mBricks[i][j] = new Brick(Colors.RED, newPosX, newPosY, Scales.BRICK, Type.EXPLOSIVE);
 					} else {
 						mBricks[i][j] = new Brick(Colors.GRAY, newPosX, newPosY, Scales.BRICK, Type.HARD);
@@ -274,7 +272,8 @@ public class Game {
 			// If the user still has lives left, create a new ball and reset score multiplier
 			if (!State.getGameOver()) {
 				mBall = new Ball(Colors.WHITE, Config.BALL_INITIAL_POS_X, Config.BALL_INITIAL_POS_Y,
-						Config.BALL_AFTER_POS_X, Config.BALL_AFTER_POS_Y, Scales.BALL, Difficult.BALL_SPEED[sDifficult]);
+						Config.BALL_AFTER_POS_X, Config.BALL_AFTER_POS_Y, Scales.BALL,
+						Difficult.BALL_SPEED[State.getDifficult()]);
 				State.setScoreMultiplier(ScoreMultiplier.LOST_LIFE);
 				State.setGamePaused(true);
 			}
@@ -366,11 +365,11 @@ public class Game {
 			return Collision.WALL_RIGHT_LEFT_SIDE;
 		} else if ((mBall.getTopY() >= State.getScreenHigherY())		//collided in the top wall
 				|| (mBall.getBottomY() <= State.getScreenLowerY())		//collided in the bottom wall...
-				&& Difficult.INVINCIBILITY[sDifficult])					//and invincibility is on
+				&& Difficult.INVINCIBILITY[State.getDifficult()])		//and invincibility is on
 		{
 			return Collision.WALL_TOP_BOTTOM_SIDE;
 		} else if (mBall.getBottomY() <= State.getScreenLowerY()		//if invincibility is off and the ball
-			&& !Difficult.INVINCIBILITY[sDifficult])					//collided with bottom wall, user loses a life
+			&& !Difficult.INVINCIBILITY[State.getDifficult()])			//collided with bottom wall, user loses a life
 		{
 			return Collision.LIFE_LOST;
 		}
@@ -454,6 +453,7 @@ public class Game {
 		private static float sScreenHigherX;
 		private static float sScreenLowerX;
 		private static boolean sGamePaused;
+		private static int sDifficult;
 
 		public static void setScore (Score event) {
 			switch(event) {
@@ -502,6 +502,20 @@ public class Game {
 				}
 				break;
 			}
+		}
+		
+		public static void setDifficult(int difficult) {
+			if (difficult < 0) {
+				Log.e(TAG, "Invalid difficult preference: " + difficult);
+				// If there is some problem on difficult setting, set it to debug ("Can't die")
+				sDifficult = 0;
+			} else {
+				sDifficult = difficult;
+			}
+		}
+		
+		public static int getDifficult() {
+			return sDifficult;
 		}
 		
 		public static void setGameOver(boolean gameIsOver) {
