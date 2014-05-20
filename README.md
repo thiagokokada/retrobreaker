@@ -4,20 +4,20 @@
 
 Retro Breaker is a simple brick breaker game with an old, retro appearance. This game was created for the Mobile Computing course (MAC5743) on IME-USP, 2014 class. It has the following game mechanics:
 
-* Retro graphics: no textures, just plain colors and simple animation;
-* Sound effects: different sound effects for each possible game event (e.g. hitting a brick, hitting a wall, hitting the paddle...);
-* Score multiplier: each time the ball breaks a brick, it increases the score multiplier for the next hit. If the ball hits the paddle, this score multiplier is reduced. If the player loses a life, this score multiplier is reset. This is to incentive the player to hit consecutive bricks;
-* Multiple brick types: there is four types of brick:
-	+ White bricks: this is the basic brick, it just waits to be broke;
-	+ Red bricks: this bricks explodes, breaking all bricks around it and leaving a nice explosion effect;
-	+ Gray bricks: this is almost the same as the White brick, but needs two hits instead of one to break;
-	+ Green bricks: this bricks moves horizontally if there isn't any obstacle. Try to break this brick before breaking his neighborhood, this will make things easier.
-* Random generated levels with different difficult settings: there are three different difficult settings (*Easy*, *Normal* and *Hard*; except for *Can't die* that exist mostly for debugging purposes, since you can't score); each difficult has a different number of stock lives, hit score, max score multiplier, ball speed and generates a random level with the number of special bricks according to a probability:
-	+ Easy: the player starts with 3 stock lives, each hit has a base score of 50, the maximum score multiplier is 4x, the ball speed is slow, there is 15% of probability to appears both grey and red bricks and no probability to appear green bricks;
-	+ Normal: the player starts with 2 stock lives, each hit has a base score of 100, the maximum score multiplier is 8x, the ball speed is normal (or 1.5x faster than on *Easy* difficult), there is 25% of probability to appear grey bricks, 10% to red bricks and 5% probability to appear green bricks;
-	+ Hard: the player starts with 1 stock lives, each hit has a base score of 150, the maximum score multiplier is 16x, the ball speed is fast (or 2x faster than on *Easy* difficult), there is 35% of probability to appear grey bricks, 5% to red bricks and 10% probability to appear green bricks.
+* **Retro graphics**: no textures, just plain colors and simple animation;
+* **Sound effects**: different sound effects for each possible game event (e.g. hitting a brick, hitting a wall, hitting the paddle...);
+* **Score multiplier**: each time the ball breaks a brick, it increases the score multiplier for the next hit. If the ball hits the paddle, this score multiplier is reduced. If the player loses a life, this score multiplier is reset. This is to incentive the player to hit consecutive bricks;
+* **Multiple brick types**: there is four types of brick:
+	+ *White bricks*: this is the basic brick, it just waits to be broken;
+	+ *Red bricks*: this bricks explodes, breaking all bricks around it and leaving a nice explosion effect;
+	+ *Gray bricks*: this is almost the same as the White brick, but needs two hits instead of one to break;
+	+ *Green bricks*: this bricks moves horizontally if there isn't any obstacle. Try to break this brick before breaking his neighborhood, this will make things easier.
+* **Random generated levels with different difficult settings**: there are three different difficult settings (*Easy*, *Normal* and *Hard*; except for *Can't die* that exist mostly for debugging purposes, since you can't score); each difficult has a different number of stock lives, hit score, max score multiplier, ball speed and generates a random level with the number of special bricks according to a probability:
+	+ *Easy*: the player starts with 3 stock lives, each hit has a base score of 50, the maximum score multiplier is 4x, the ball speed is slow, there is 15% of probability to appears both grey and red bricks and no probability to appear green bricks;
+	+ *Normal*: the player starts with 2 stock lives, each hit has a base score of 100, the maximum score multiplier is 8x, the ball speed is normal (or 1.5x faster than on *Easy* difficult), there is 25% of probability to appear grey bricks, 10% to red bricks and 5% probability to appear green bricks;
+	+ *Hard*: the player starts with 1 stock lives, each hit has a base score of 150, the maximum score multiplier is 16x, the ball speed is fast (or 2x faster than on *Easy* difficult), there is 35% of probability to appear grey bricks, 5% to red bricks and 10% probability to appear green bricks.
 
-Except if noted, it has pretty simple mechanics, like the original game. If you feel even a little bit of nostalgia, our objective was completed.
+This game has pretty simple mechanics, like the original game. If you feel even a little bit of nostalgia, our objective was completed.
 
 ## Instructions
 
@@ -34,16 +34,16 @@ This game was made on [Android Developer Tools](https://developer.android.com/to
 The code is organized in the following way:
 
 * ```br.usp.ime.retrobreaker```: the main game code:
-	+ Constants: all game constants putting in one place so we can easily change them;
-	+ Game: the main game logic, including drawing methods to drawn them on screen;
-	+ MainActivity: the first activity that appears when you open the app; not related with the game *per se*, but include options that change the game in some way;
-	+ TouchSurfaceView: include OpenGL logic and methods to get the user finger position on screen;
-	+ UI: renders the user interface on screen (including actual/high score, score multiplier, number of lives and "Ready?" text).
+	+ *Constants*: all game constants in one place so we can easily change them;
+	+ *Game*: the main game logic, including drawing methods, game physics, game state methods, etc.;
+	+ *MainActivity*: the first activity that appears when you open the app; not related with the game *per se*, but include options that change the game in some way;
+	+ *TouchSurfaceView*: include OpenGL logic and methods to get the user finger position on screen;
+	+ *UI*: renders the user interface on screen (including actual/high score, score multiplier, number of lives and "Ready?" text).
 * ```br.usp.ime.retrobreaker.forms```: the various objects rendered on screen:
-	+ Quad: the base class of all forms. This is a abstract class, so you need to extend it first before using it;
-	+ Ball/Brick/MobileBrick/Paddle/Particle: extend classes of Quad that represents the diverse objects of the screen.
+	+ *Quad*: the base class of all forms. This is a abstract class, so you need to extend it first before using it;
+	+ *Ball/Brick/MobileBrick/Paddle/Particle**: extend classes of Quad that represents the diverse objects of the screen.
 * ```br.usp.ime.retrobreaker.effects```: create special effects on screen:
-	+Explosion: generates a explosion effect on ball hit.
+	+ *Explosion*: generates a explosion effect on ball hit.
 
 ## Compatibility
 
@@ -60,11 +60,11 @@ But the game should work better if your device has a screen ratio of 16:9 (or 9:
 
 Sometimes, the ball will reflect infinitely on paddle or on the wall. In the paddle case just keep moving the paddle until the ball starts moving again. In the wall case there is no hope, the ball would just keep reflecting until going out of the stage. Both bugs should be fixed on the most commons cases but this code still need more test.
 
-The "Game Over dialog" may not show on some conditions. This is thanks to strange bugs caused between the OpenGL rendering thread (TouchSurfaceView.java) and UI thread (UI.java), since we use both on the same view (OpenGL thread to draw the game graphics/calculate the game physics and UI thread to draw user information like Score/number of lives/Score multiplier/etc.). Before this bug would throws a exception causing a Force Close on the application. Now we check if there is a a valid context before trying to show the dialog. This may make the dialog not show in some cases, but it's better than a Force Close in your face.
+The *Game Over dialog* may not show on some conditions. This is thanks to strange bugs caused between the OpenGL rendering thread (```TouchSurfaceView.java```) and UI thread (```UI.java```), since we use both on the same view (OpenGL thread to draw the game graphics/calculate the game physics and UI thread to draw user information like Score/number of lives/Score multiplier/etc.). Before this bug would throws a exception causing a Force Close on the application. Now we check if there is a a valid context before trying to show the dialog. This may make the dialog not show in some cases, but it's better than a Force Close in your face.
 
 ## License
 
-This code is licensed on MIT license (see LICENSE file for details) except if the file says otherwise. The exception is the audio files, that we are using either on a [fair use](https://en.wikipedia.org/wiki/Fair_use) basis or we are using royalty free music. But do understand that even when the music files are royalty free, you can't resell them (there was a clause on any site that I downloaded the music files saying that I could not sell them).
+This code is licensed on MIT license (see ```LICENSE``` file for details) except if the file itself says otherwise. The exception is the audio files, that we are using either on a [fair use](https://en.wikipedia.org/wiki/Fair_use) basis or we are using royalty free music. But do understand that even when the music files are royalty free, you can't resell them (there was a clause on any site that I downloaded the music files saying that I could not sell them).
 
 ## Credits
 
