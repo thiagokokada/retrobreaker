@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Retro Breaker</string>
+    <string name="title_activity_main">Retro Breaker</string>
+    <string name="high_score">"Melhor pontuação: "</string>
+    <string name="new_game">Novo jogo</string>
+    <string name="reset_high_score">Zerar a melhor pontuação</string>
+    <string name="score">"Pontuação: "</string>
+    <string name="multiplier">"Multiplicador: "</string>
+    <string name="lives">"Vidas: "</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
+    <string name="game_over">Fim de jogo</string>
+    <string name="new_high_score">"Nova melhor pontuação: "</string>
+    <string name="do_you_want_to_restart_the_game">Você quer recomeçar o jogo?</string>
+    <string name="final_score">"Pontuação final: "</string>
+    <string name="difficult">"Dificuldade:"</string>
+    <string name="explosive_brick_explanation">Bloco explosivo (quebra todos os blocos ao redor)</string>
+    <string name="moveable_brick_explanation">Bloco móvel (fica se movendo de um lado para o outro)</string>
+    <string name="hard_brick_explanation">Bloco duro (precisa de 2 toques para quebrar)</string>
+    <string name="gray_brick">Bloco cinza</string>
+    <string name="special_bricks">Blocos especiais:</string>
+    <string name="red_brick">Bloco vermelho</string>
+    <string name="green_brick">Bloco verde</string>
+    <string name="ready">Pronto?</string>
+
+</resources>
