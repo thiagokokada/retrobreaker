@@ -367,6 +367,9 @@ public class Game {
 
 	private Collision detectCollision() {
 		
+		/* Reduce the number of consecutive collisions by one on every new frame. Without this, after
+		 * a successful collision detection we would never get that type of collision detection again,
+		 * but on the same time we can reduce the number of false positive collision detection too. */
 		for (Map.Entry<Collision, Integer> entry : mConsecutiveCollision.entrySet()) {
 			int consecutiveCollisions = entry.getValue();
 			if (consecutiveCollisions > 0) {
