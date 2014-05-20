@@ -220,7 +220,7 @@ public class Game {
 		 * during some frames. */
 		if(collisionType != Collision.NOT_AVAILABLE) {
 			if(mConsecutiveCollision.get(collisionType) > 0) {
-				Log.e(TAG, "Detected consecutive collision of type " + collisionType.name() + ", skipping.");
+				Log.d(TAG, "Detected consecutive collision of type " + collisionType.name() + ", skipping.");
 				collisionType = Collision.NOT_AVAILABLE;
 			}
 			mConsecutiveCollision.put(collisionType, Config.MS_PER_UPDATE);
