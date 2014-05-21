@@ -84,7 +84,7 @@ public class Game {
 		State.setScore(Score.RESTART_LEVEL);
 		State.setScoreMultiplier(ScoreMultiplier.RESTART_LEVEL);
 		mConsecutiveCollision = new HashMap<Collision, Integer>();
-		for (Collision type : Collision.values()) {
+		for (Collision type : Config.CONSECUTIVE_COLLISION_DETECTION) {
 			mConsecutiveCollision.put(type, 0);
 		}
 		
@@ -217,13 +217,23 @@ public class Game {
 		 * bottom hit for example). Since this is physically impossible, add a delay every time
 		 * we detect a collision, so we can just skip this type of collision detection
 		 * during some frames. */
-		if(collisionType != Collision.NOT_AVAILABLE) {
-			if(mConsecutiveCollision.get(collisionType) > 0) {
-				Log.d(TAG, "Detected consecutive collision of type " + collisionType.name() + ", skipping.");
+		Collision aux = collisionType;
+		if(mConsecutiveCollision.containsKey(aux)) {
+			int actualValue = mConsecutiveCollision.get(aux);
+			if(actualValue > 0) {
+				Log.e(TAG, "Detected consecutive collision of type " + aux.name() + ", skipping.");
 				collisionType = Collision.NOT_AVAILABLE;
 			}
-			mConsecutiveCollision.put(collisionType, Config.MS_PER_UPDATE);
+			mConsecutiveCollision.put(aux, actualValue + Config.MS_PER_UPDATE);
 		}
+	
+//		if(collisionType != Collision.NOT_AVAILABLE) {
+//			if(mConsecutiveCollision.get(collisionType) > 0) {
+//				Log.d(TAG, "Detected consecutive collision of type " + collisionType.name() + ", skipping.");
+//				collisionType = Collision.NOT_AVAILABLE;
+//			}
+//			mConsecutiveCollision.put(collisionType, Config.MS_PER_UPDATE);
+//		}
 
 		switch (collisionType) {
 		case WALL_RIGHT_LEFT_SIDE:
