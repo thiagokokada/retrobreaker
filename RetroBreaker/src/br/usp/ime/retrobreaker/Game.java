@@ -183,7 +183,7 @@ public class Game {
 		for (int i = 0; i < mExplosions.size(); i++) {
 			Explosion explosion = mExplosions.get(i);
 			if (explosion.isAlive()) {
-				explosion.update2();
+				explosion.update();
 			}
 		}
 	}

@@ -43,76 +43,16 @@ public class Particle extends Quad {
 		}
 	}
 	
-	public int getState() {
-		return mState;
-	}
-
-	public void setState(int state) {
-		mState = state;
-	}
-
-	public double getXv() {
-		return mXv;
-	}
-
-	public void setXv(double xv) {
-		mXv = xv;
-	}
-
-	public double getYv() {
-		return mYv;
-	}
-
-	public void setYv(double yv) {
-		mYv = yv;
-	}
-
-	public int getAge() {
-		return mAge;
-	}
-
-	public void setAge(int age) {
-		mAge = age;
-	}
-
-	public int getLifetime() {
-		return mLifetime;
-	}
-
-	public void setLifetime(int lifetime) {
-		mLifetime = lifetime;
-	}
-	
 	// helper methods -------------------------
 	public boolean isAlive() {
 		return mState == STATE_ALIVE;
-	}
-	public boolean isDead() {
-		return mState == STATE_DEAD;
-	}
-	
-	/**
-	 * Resets the particle
-	 * @param x
-	 * @param y
-	 */
-	public void reset(float x, float y) {
-		mState = Particle.STATE_ALIVE;
-		mPosX = x;
-		mPosY = y;
-		mAge = 0;
-	}
-
-	// Return an integer that ranges from min inclusive to max inclusive.
-	static int rndInt(int min, int max) {
-		return (int) (min + Math.random() * (max - min + 1));
 	}
 
 	static double rndDbl(double min, double max) {
 		return min + (max - min) * Math.random();
 	}
 	
-	public void update() {
+	public void move() {
 		if (mState != STATE_DEAD) {
 			mPosX += mXv;
 			mPosY += mYv;
@@ -124,7 +64,7 @@ public class Particle extends Quad {
 		}
 	}
 	
-	public void update2() {		
+	public void update() {		
 		// Update with collision
 		if (isAlive()) {
 			if (mPosX <= State.getScreenLowerX() || mPosX >= State.getScreenHigherX() - getWidth()) {
@@ -135,7 +75,7 @@ public class Particle extends Quad {
 				mYv *= -1;
 			}
 		}
-		update();
+		move();
 	}
 
 }
