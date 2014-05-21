@@ -380,20 +380,20 @@ public class Game {
 		detectCollisionOfMobileBricks();
 		
 		// Detecting collision between ball and wall
-		if ((mBall.getRightX() >= State.getScreenHigherX())				//collided in the right wall
-				|| (mBall.getLeftX() <= State.getScreenLowerX()))		//collided in the left wall 
-		{	
-			return Collision.WALL_RIGHT_LEFT_SIDE;
-		} else if ((mBall.getTopY() >= State.getScreenHigherY())		//collided in the top wall
-				|| (mBall.getBottomY() <= State.getScreenLowerY())		//collided in the bottom wall...
-				&& Difficult.INVINCIBILITY[State.getDifficult()])		//and invincibility is on
-		{
-			return Collision.WALL_TOP_BOTTOM_SIDE;
-		} else if (mBall.getBottomY() <= State.getScreenLowerY()		//if invincibility is off and the ball
+		if (mBall.getBottomY() <= State.getScreenLowerY()				//if invincibility is off and the ball
 			&& !Difficult.INVINCIBILITY[State.getDifficult()])			//collided with bottom wall, user loses a life
 		{
 			return Collision.LIFE_LOST;
-		}
+		} else if ((mBall.getTopY() >= State.getScreenHigherY())		//collided in the top wall
+				|| (mBall.getBottomY() <= State.getScreenLowerY()		//collided in the bottom wall...
+				&& Difficult.INVINCIBILITY[State.getDifficult()]))		//...with invincibility mode on
+		{
+			return Collision.WALL_TOP_BOTTOM_SIDE;
+		} else if ((mBall.getRightX() >= State.getScreenHigherX())		//collided in the right wall
+				|| (mBall.getLeftX() <= State.getScreenLowerX()))		//collided in the left wall 
+		{	
+			return Collision.WALL_RIGHT_LEFT_SIDE;
+		} 
 		
 		//detecting collision between the ball and the paddle
 		if (mBall.getTopY() >= mPaddle.getBottomY() && mBall.getBottomY() <= mPaddle.getTopY() &&
