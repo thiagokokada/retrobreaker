@@ -221,19 +221,11 @@ public class Game {
 		if(mConsecutiveCollision.containsKey(aux)) {
 			int actualValue = mConsecutiveCollision.get(aux);
 			if(actualValue > 0) {
-				Log.e(TAG, "Detected consecutive collision of type " + aux.name() + ", skipping.");
+				Log.d(TAG, "Detected consecutive collision of type " + aux.name() + ", skipping.");
 				collisionType = Collision.NOT_AVAILABLE;
 			}
-			mConsecutiveCollision.put(aux, actualValue + Config.MS_PER_UPDATE);
+			mConsecutiveCollision.put(aux, actualValue + 2);
 		}
-	
-//		if(collisionType != Collision.NOT_AVAILABLE) {
-//			if(mConsecutiveCollision.get(collisionType) > 0) {
-//				Log.d(TAG, "Detected consecutive collision of type " + collisionType.name() + ", skipping.");
-//				collisionType = Collision.NOT_AVAILABLE;
-//			}
-//			mConsecutiveCollision.put(collisionType, Config.MS_PER_UPDATE);
-//		}
 
 		switch (collisionType) {
 		case WALL_RIGHT_LEFT_SIDE:
