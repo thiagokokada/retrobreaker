@@ -218,7 +218,7 @@ public class UI extends Activity {
 				}
 
 				mHighScoreTextView.setText(getString(R.string.high_score) + String.format("%08d", mHighScore));
-				mLivesTextView.setText(getString(R.string.lives) + State.getLifes());
+				mLivesTextView.setText(getString(R.string.lives) + State.getLives());
 					
 				if (State.getGameOver()) {
 					/* Show user score and ask if he wants to play again */

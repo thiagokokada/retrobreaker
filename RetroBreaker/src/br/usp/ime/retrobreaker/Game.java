@@ -14,12 +14,12 @@ import android.media.SoundPool;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import br.usp.ime.retrobreaker.Constants.Collision;
-import br.usp.ime.retrobreaker.Constants.Colors;
+import br.usp.ime.retrobreaker.Constants.Color;
 import br.usp.ime.retrobreaker.Constants.Config;
 import br.usp.ime.retrobreaker.Constants.Difficult;
 import br.usp.ime.retrobreaker.Constants.Hit;
 import br.usp.ime.retrobreaker.Constants.Lives;
-import br.usp.ime.retrobreaker.Constants.Scales;
+import br.usp.ime.retrobreaker.Constants.Scale;
 import br.usp.ime.retrobreaker.Constants.Score;
 import br.usp.ime.retrobreaker.Constants.ScoreMultiplier;
 import br.usp.ime.retrobreaker.effects.Explosion;
@@ -89,8 +89,8 @@ public class Game {
 		}
 		
 		// Initialize graphics
-		mPaddle = new Paddle(Colors.WHITE, Config.PADDLE_INITIAL_POS_X, Config.PADDLE_INITIAL_POS_Y,
-				Scales.PADDLE);
+		mPaddle = new Paddle(Color.WHITE, Config.PADDLE_INITIAL_POS_X, Config.PADDLE_INITIAL_POS_Y,
+				Scale.PADDLE);
 		Log.d(TAG, "Created paddle:" + 
 				" BottomY: " + mPaddle.getBottomY() +
 				" TopY: " + mPaddle.getTopY() +
@@ -98,8 +98,8 @@ public class Game {
 				" RightX: " + mPaddle.getRightX()
 				);
 		
-		mBall = new Ball(Colors.WHITE, Config.BALL_INITIAL_POS_X, Config.BALL_INITIAL_POS_Y,
-				Config.BALL_AFTER_POS_X, Config.BALL_AFTER_POS_Y, Scales.BALL,
+		mBall = new Ball(Color.WHITE, Config.BALL_INITIAL_POS_X, Config.BALL_INITIAL_POS_Y,
+				Config.BALL_AFTER_POS_X, Config.BALL_AFTER_POS_Y, Scale.BALL,
 				Difficult.BALL_SPEED[State.getDifficult()]);
 		Log.d(TAG, "Created ball:" + 
 				" BottomY: " + mBall.getBottomY() +
@@ -132,20 +132,20 @@ public class Game {
 						Difficult.GREY_BRICK_PROB[State.getDifficult()]))
 				{
 					if (prob <= Difficult.MOBILE_BRICK_PROB[State.getDifficult()]) {
-						MobileBrick brick = new MobileBrick(Colors.GREEN,
-								newPosX, newPosY, Scales.BRICK, Type.MOBILE, Config.MOBILE_BRICK_SKIP_FRAMES,
+						MobileBrick brick = new MobileBrick(Color.GREEN,
+								newPosX, newPosY, Scale.BRICK, Type.MOBILE, Config.MOBILE_BRICK_SKIP_FRAMES,
 								i, j, sign * Difficult.MOBILE_BRICK_SPEED[State.getDifficult()]);
 						mBricks[i][j] = brick;
 						mMobileBricks.add(brick);
 					} else if ((prob - Difficult.MOBILE_BRICK_PROB[State.getDifficult()]) <=
 							Difficult.EX_BRICK_PROB[State.getDifficult()])
 					{
-						mBricks[i][j] = new Brick(Colors.RED, newPosX, newPosY, Scales.BRICK, Type.EXPLOSIVE);
+						mBricks[i][j] = new Brick(Color.RED, newPosX, newPosY, Scale.BRICK, Type.EXPLOSIVE);
 					} else {
-						mBricks[i][j] = new Brick(Colors.GRAY, newPosX, newPosY, Scales.BRICK, Type.HARD);
+						mBricks[i][j] = new Brick(Color.GRAY, newPosX, newPosY, Scale.BRICK, Type.HARD);
 					}
 				} else {
-					mBricks[i][j] = new Brick(Colors.WHITE, newPosX, newPosY, Scales.BRICK, Type.NORMAL);
+					mBricks[i][j] = new Brick(Color.WHITE, newPosX, newPosY, Scale.BRICK, Type.NORMAL);
 				}
 				// The position of the next brick on the same line should be on the right side of the last brick
 				newPosX += mBricks[i][j].getSizeX() + Config.SPACE_BETWEEN_BRICKS;
@@ -231,18 +231,16 @@ public class Game {
 		case WALL_RIGHT_LEFT_SIDE:
 			/* Wall hit collision is almost the same, but the equation is different so we
 			 * need to differentiate here */
-			Log.d(TAG, "Right/Left side collision detected");
-			Log.d(TAG, "previous slope: " + mBall.getSlope());
+			Log.d(TAG, "Detected collision between ball and left/right wall");
 			mSoundPool.play(mSoundIds.get("wall_hit"), 100, 100, 1, 0, 1.0f);
 			mBall.turnToPerpendicularDirection(Hit.RIGHT_LEFT);
-			Log.d(TAG, "next slope: " + mBall.getSlope());
+			Log.d(TAG, "Next slope: " + mBall.getSlope());
 			break;
 		case WALL_TOP_BOTTOM_SIDE:
-			Log.d(TAG, "Top/Bottom side collision detected");
-			Log.d(TAG, "previous slope: " + mBall.getSlope());
+			Log.d(TAG, "Detected collision between ball and top/bottom wall");
 			mSoundPool.play(mSoundIds.get("wall_hit"), 100, 100, 1, 0, 1.0f);
 			mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
-			Log.d(TAG, "next slope: " + mBall.getSlope());
+			Log.d(TAG, "Next slope: " + mBall.getSlope());
 			break;
 		case BRICK_BALL:
 			// When the user hits a brick, increase the score and multiplier and play the sound effect
@@ -261,8 +259,7 @@ public class Game {
 			mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
 			break;
 		case PADDLE_BALL:
-			Log.d(TAG, "collided into the top left part of the paddle");
-			Log.d(TAG, "paddlePosX: " + mPaddle.getPosX());
+			Log.d(TAG, "Detected collision between ball and paddle on position X=" + mPaddle.getPosX());
 			State.setScoreMultiplier(ScoreMultiplier.PADDLE_HIT);
 			mSoundPool.play(mSoundIds.get("paddle_hit"), 100, 100, 1, 0, 1.0f);
 			/* 
@@ -285,11 +282,14 @@ public class Game {
 			mSoundPool.play(mSoundIds.get("lost_life"), 100, 100, 1, 0, 1.0f);
 			// If the user still has lives left, create a new ball and reset score multiplier
 			if (!State.getGameOver()) {
-				mBall = new Ball(Colors.WHITE, Config.BALL_INITIAL_POS_X, Config.BALL_INITIAL_POS_Y,
-						Config.BALL_AFTER_POS_X, Config.BALL_AFTER_POS_Y, Scales.BALL,
+				Log.i(TAG, "User lost a live, new live count: " + State.getLives());
+				mBall = new Ball(Color.WHITE, Config.BALL_INITIAL_POS_X, Config.BALL_INITIAL_POS_Y,
+						Config.BALL_AFTER_POS_X, Config.BALL_AFTER_POS_Y, Scale.BALL,
 						Difficult.BALL_SPEED[State.getDifficult()]);
 				State.setScoreMultiplier(ScoreMultiplier.LOST_LIFE);
 				State.setGamePaused(true);
+			} else {
+				Log.i(TAG, "No more lives, Game Over");
 			}
 			break;
 		case NOT_AVAILABLE:
@@ -309,8 +309,6 @@ public class Game {
 
 	private void moveMobileBricks() {
 		for (int a = 0; a < mMobileBricks.size(); a++) {
-			Log.d(TAG, "Going to call move, brick: " + 
-					"[" + mMobileBricks.get(a).getIndexI() + "][" + mMobileBricks.get(a).getIndexJ() + "]");
 			mMobileBricks.get(a).move();
 		}
 	}
@@ -335,7 +333,7 @@ public class Game {
 	private void decrementBrickLife(int i, int j) {
 		mBricks[i][j].decrementLives();
 		if (mBricks[i][j].getType() == Type.HARD) {
-			mBricks[i][j].setColor(Colors.WHITE);
+			mBricks[i][j].setColor(Color.WHITE);
 		}
 	}
 	
@@ -351,7 +349,7 @@ public class Game {
 				if (x != j) {
 					Brick brick = mBricks[i][x];
 					if ((brick != null) && (mBrick.detectCollisionWithBrick(brick))) {
-						Log.d(TAG, "going to call invert, brick: ["+i+"]["+j+"]");
+						Log.v(TAG, "Going to call invert, brick: ["+i+"]["+j+"]");
 						mBrick.invertDirection();
 						collided = true;
 						break;
@@ -432,7 +430,6 @@ public class Game {
 							 * state on the next frame. */
 							if (mBricks[i][j].getLives() == 0) {
 								if (mBricks[i][j].getType() == Type.EXPLOSIVE) {
-									Log.d(TAG, "inserted explosion");
 									mExplosions.add(new Explosion(Brick.GRAY_EXPLOSION_SIZE,
 											mBricks[i][j].getPosX(), mBricks[i][j].getPosY()));
 									// Explosive brick is a special type of collision, treat this case
@@ -578,7 +575,7 @@ public class Game {
 			return sScoreMultiplier;
 		}
 
-		public static int getLifes() {
+		public static int getLives() {
 			return sLives;
 		}
 	

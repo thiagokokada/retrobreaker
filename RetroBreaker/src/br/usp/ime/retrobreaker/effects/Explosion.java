@@ -3,8 +3,8 @@ package br.usp.ime.retrobreaker.effects;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.util.Log;
-import br.usp.ime.retrobreaker.Constants.Colors;
-import br.usp.ime.retrobreaker.Constants.Scales;
+import br.usp.ime.retrobreaker.Constants.Color;
+import br.usp.ime.retrobreaker.Constants.Scale;
 import br.usp.ime.retrobreaker.forms.Particle;
 
 /**
@@ -23,12 +23,12 @@ public class Explosion {
 	private int mState;						// whether it's still active or not
 	
 	public Explosion(int particleNr, float x, float y) {
-		Log.d(TAG, "Explosion created at " + x + "," + y);
+		Log.d(TAG, "Explosion created at X=" + x + ", Y=" + y);
 		mState = STATE_ALIVE;
 		mParticles = new Particle[particleNr];
 		
 	 	for (int i = 0; i < mParticles.length; i++) {
-			Particle p = new Particle(Colors.RED, x, y, Scales.PARTICLE);
+			Particle p = new Particle(Color.RED, x, y, Scale.PARTICLE);
 			mParticles[i] = p;
 		}
 	}
@@ -39,7 +39,6 @@ public class Explosion {
 	}
 	
 	public void update() {
-		Log.d(TAG, "updating explosion");
 		if (mState != STATE_DEAD) {
 			boolean isDead = true;
 			for (int i = 0; i < mParticles.length; i++) {

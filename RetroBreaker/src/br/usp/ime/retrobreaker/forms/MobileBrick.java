@@ -34,8 +34,7 @@ public class MobileBrick extends Brick {
 	public void move() {
 		if (mToWait == 0) {
 			if (mCollided) mSpeedX *= 2; //I want to get out very quickly from the collision area
-			Log.d(TAG, "move, mXVelocity of ["+mIndexI+"]["+mIndexJ+"] is "+mSpeedX);
-			Log.d(TAG, "move, mPosX of ["+mIndexI+"]["+mIndexJ+"] is "+mPosX);
+			Log.v(TAG, "Moving MobileBrick[" + mIndexI + "][" + mIndexJ + "], speed: " + mSpeedX + ", posX: " + mPosX);
 			mPosX += mSpeedX;
 			if (mCollided) {
 				mSpeedX /= 2; //restore the normal value
@@ -48,7 +47,7 @@ public class MobileBrick extends Brick {
 	
 	public void invertDirection() {
 		if (mToWait == 0) {
-			Log.d(TAG, "inverted brick["+mIndexI+"]["+mIndexJ+"]");
+			Log.v(TAG, "Inverted MobileBrick[" + mIndexI + "][" + mIndexJ + "]");
 			mSpeedX *= -1;
 		}
 	}
@@ -60,10 +59,10 @@ public class MobileBrick extends Brick {
 				this.getRightX() >= other.getLeftX() && this.getLeftX() <= other.getRightX()) {
 			if (this.getLeftX() < other.getLeftX()) {
 				if (mSpeedX < 0) mSpeedX *= -1;
-				Log.d(TAG, "collided in the right brick, brick: ["+mIndexI+"]["+mIndexJ+"]");
+				Log.v(TAG, "Collided in the right brick, MobileBrick[" + mIndexI + "][" + mIndexJ + "]");
 			} else {
 				if (mSpeedX > 0) mSpeedX *= -1;
-				Log.d(TAG, "collided in the left brick, brick: ["+mIndexI+"]["+mIndexJ+"]");
+				Log.v(TAG, "Collided in the left brick, MobileBrick[" + mIndexI + "][" + mIndexJ + "]");
 			}
 			mCollided = true;
 			return true;
@@ -77,10 +76,10 @@ public class MobileBrick extends Brick {
 				|| (this.getLeftX() <= State.getScreenLowerX())) {
 			if (this.getRightX() >= State.getScreenHigherX()) {
 				if (mSpeedX < 0) mSpeedX *= -1;
-				Log.d(TAG, "collided in the right wall, brick: ["+mIndexI+"]["+mIndexJ+"]");
+				Log.v(TAG, "Collided in the right wall, MobileBrick[" + mIndexI + "][" + mIndexJ + "]");
 			} else  {
 				if (mSpeedX > 0) mSpeedX *= -1;
-				Log.d(TAG, "collided in the left wall, brick: ["+mIndexI+"]["+mIndexJ+"]");
+				Log.v(TAG, "Collided in the left wall, MobileBrick[" + mIndexI + "][" + mIndexJ + "]");
 			}
 			mCollided = true;
 			return true;
@@ -88,8 +87,12 @@ public class MobileBrick extends Brick {
 	}
 	
 	public boolean equal(int i, int j) {
-		if ((mIndexI == i) && (mIndexJ == j)) return true;
-		else return false;
+		if ((mIndexI == i) && (mIndexJ == j)){
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 	
 	

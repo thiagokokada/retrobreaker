@@ -68,14 +68,14 @@ public class Constants {
 		public static final float[] MOBILE_BRICK_SPEED = { 0.002f, 0.0f, 0.0035f, 0.005f };
 	}
 	
-	public static final class Scales {
+	public static final class Scale {
 		public static final float BRICK = 0.1f;
 		public static final float PADDLE = 0.1f;
 		public static final float BALL = 0.1f;
 		public static final float PARTICLE = 0.03f;
 	}
 	
-	public static final class Colors {
+	public static final class Color {
 		static final float RGB_UPPER_BOUND = 255;
 		static final float[] GRAY_RGB = {128/RGB_UPPER_BOUND, 128/RGB_UPPER_BOUND, 128/RGB_UPPER_BOUND};
 		static final float[] WHITE_RGB = {255/RGB_UPPER_BOUND, 255/RGB_UPPER_BOUND, 255/RGB_UPPER_BOUND};

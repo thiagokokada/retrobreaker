@@ -130,8 +130,7 @@ public class Ball extends Quad {
 	}
 	
 	public void move() {
-		Log.v(TAG, "prevX: " + mPosX + ", prevY: " + mPosY);
-		
+
 		BallDirection dir = getDirection();
 		// Right upward/downward
 		if (((mPosX > mPrevPosX) && (mPosY > mPrevPosY)) || 
@@ -186,7 +185,7 @@ public class Ball extends Quad {
 			}
 		}
 
-		Log.v(TAG, "currentX: " + mPosX + ", currentY: " + mPosY);
+		Log.v(TAG, "Ball position: X=" + mPosX + ", Y=" + mPosY);
 	}
 
 }
