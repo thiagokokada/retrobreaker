@@ -15,12 +15,12 @@ public class Ball extends Quad {
 		0.25f,  0.25f, // top right
 	};
 	
-	private float mPrevPosX;
-	private float mPrevPosY;
+	private float mPrevPosX;			//previous X coordinate of ball
+	private float mPrevPosY;			//previous Y coordinate of ball
 	//for the trajectory equation
-	private float mSlope;
-	private boolean mUndefinedSlope;
-	private float mTrajectoryIncrement;
+	private float mSlope;				//slope of the trajectory of the ball
+	private boolean mUndefinedSlope;	//if the ball is moving along the Y axis, the slope is undefined
+	private float mTrajectoryIncrement;	//the increment of the trajectory in one of the axes
 
 	public Ball(float[] colors, float previousPosX, float previousPosY, float posX, float posY, float trajetoryInc) {
 		super(VERTICES, SCALE, colors, posX, posY);
@@ -38,10 +38,20 @@ public class Ball extends Quad {
 		mTrajectoryIncrement = trajetoryInc;
 	}
 	
+	/*
+	 * y2 - y1
+	 * -------- = mSlope => y2 = y1 + mSlope * (x2 - x1)
+	 * x2 - x1
+	 */
 	private float getY2InEquation(float x1, float y1, float x2) {
 		return y1 + mSlope * (x2 - x1);
 	}
 	
+	/*
+	 * y2 - y1
+	 * -------- = mSlope => x2 = (y2 - y1)/mSlope + x1
+	 * x2 - x1
+	 */
 	private float getX2InEquation(float x1, float y1, float y2) {
 		return  (y2 - y1)/mSlope + x1;
 	}
@@ -65,9 +75,18 @@ public class Ball extends Quad {
 			return BallDirection.LEFT_UPWARD;
 		else if ((mPosX < mPrevPosX) && (mPosY < mPrevPosY))
 			return BallDirection.LEFT_DOWNWARD;
+		else if ((mPosX == mPrevPosX) && (mPosY > mPrevPosY))
+			return BallDirection.UPWARD;
+		else if ((mPosX == mPrevPosX) && (mPosY < mPrevPosY))
+			return BallDirection.DOWNWARD;
 		return BallDirection.UNKNOWN_DIRECTION;
 	}
 	
+	/*
+	 * We make a reflection of the previous position point across the axis that is perpendicular to the surface of the object to which the 
+	 * ball collided. After the reflection, the previous position point will store the current position, and the current position will store 
+	 * the result of the reflection of previous position position.
+	 */
 	public void turnToPerpendicularDirection(Hit hitedSide) {
 		// The ball is moving along the Y axis.
 		if (mUndefinedSlope) {
@@ -130,57 +149,64 @@ public class Ball extends Quad {
 
 		BallDirection dir = getDirection();
 		// Right upward/downward
-		if (((mPosX > mPrevPosX) && (mPosY > mPrevPosY)) || 
-				((mPosX > mPrevPosX) && (mPosY < mPrevPosY)))
+		if (dir == BallDirection.RIGHT_UPWARD || dir == BallDirection.RIGHT_DOWNWARD)
+//		if (((mPosX > mPrevPosX) && (mPosY > mPrevPosY)) || 
+//				((mPosX > mPrevPosX) && (mPosY < mPrevPosY)))
 		{
 			mPrevPosX = mPosX;
 			mPrevPosY = mPosY;
-			if (Math.abs(mSlope) <= 1) {
+			if (Math.abs(mSlope) <= 1) {	//the ball is moving in the X axis faster than in the Y axis
 				float x2 = mPosX + mTrajectoryIncrement;
 				mPosY = getY2InEquation(mPosX, mPosY, x2);
 				mPosX = x2;
-			} else {
+			} else {						//the ball is moving in the Y axis faster than in the X axis
 				
 				float y2;
-				if (dir == BallDirection.RIGHT_UPWARD) {
-					y2 = mPosY + mTrajectoryIncrement;
-				}
-				else {
-					y2 = mPosY - mTrajectoryIncrement;
-				}
+				if (dir == BallDirection.RIGHT_UPWARD) y2 = mPosY + mTrajectoryIncrement;
+				else y2 = mPosY - mTrajectoryIncrement;
+				
 				mPosX = getX2InEquation(mPosX, mPosY, y2);
 				mPosY = y2;
 			}
 		} 
 		// Left upward/downward
-		else if (((mPosX < mPrevPosX) && (mPosY > mPrevPosY)) ||
-				((mPosX < mPrevPosX) && (mPosY < mPrevPosY)))
+		else if (dir == BallDirection.LEFT_UPWARD || dir == BallDirection.LEFT_DOWNWARD)
+//		else if (((mPosX < mPrevPosX) && (mPosY > mPrevPosY)) ||
+//				((mPosX < mPrevPosX) && (mPosY < mPrevPosY)))
 		{
 			mPrevPosX = mPosX;
 			mPrevPosY = mPosY;
-			if (Math.abs(mSlope) <= 1) {
+			if (Math.abs(mSlope) <= 1) {	//the ball is moving in the X axis faster than in the Y axis
 				float x2 = mPosX - mTrajectoryIncrement;
 				mPosY = getY2InEquation(mPosX, mPosY, x2);
 				mPosX = x2;	
-			} else {
+			} else {						//the ball is moving in the Y axis faster than in the X axis
 				float y2;
 				if (dir == BallDirection.LEFT_UPWARD) y2 = mPosY + mTrajectoryIncrement;
 				else y2 = mPosY - mTrajectoryIncrement;
+				
 				mPosX = getX2InEquation(mPosX, mPosY, y2);
 				mPosY = y2;
 			}
 		}
 		
 		// Moving along the Y axis
-		else if (mPosX == mPrevPosX) {
-			if (mPosY > mPrevPosY) {	//upward
-				mPrevPosY = mPosY;
-				mPosY = mPosY + mTrajectoryIncrement;
-			} else {					//downward
-				mPrevPosY = mPosY;
-				mPosY = mPosY - mTrajectoryIncrement;
-			}
+		else if (dir == BallDirection.UPWARD) {
+			mPrevPosY = mPosY;
+			mPosY = mPosY + mTrajectoryIncrement;			
+		} else if (dir == BallDirection.DOWNWARD) {
+			mPrevPosY = mPosY;
+			mPosY = mPosY - mTrajectoryIncrement;	
 		}
+//		else if (mPosX == mPrevPosX) {
+//			if (mPosY > mPrevPosY) {	//upward
+//				mPrevPosY = mPosY;
+//				mPosY = mPosY + mTrajectoryIncrement;
+//			} else {					//downward
+//				mPrevPosY = mPosY;
+//				mPosY = mPosY - mTrajectoryIncrement;
+//			}
+//		}
 
 		Log.v(TAG, "Ball position: X=" + mPosX + ", Y=" + mPosY);
 	}

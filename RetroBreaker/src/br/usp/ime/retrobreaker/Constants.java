@@ -13,7 +13,7 @@ public class Constants {
 	}
 
 	public static enum BallDirection {
-		RIGHT_UPWARD, LEFT_UPWARD, RIGHT_DOWNWARD, LEFT_DOWNWARD, UNKNOWN_DIRECTION
+		RIGHT_UPWARD, LEFT_UPWARD, RIGHT_DOWNWARD, LEFT_DOWNWARD, UPWARD, DOWNWARD, UNKNOWN_DIRECTION
 	}
 	
 	public static enum Score {
