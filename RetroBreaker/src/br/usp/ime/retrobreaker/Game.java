@@ -8,10 +8,8 @@ import java.util.Map;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.SoundPool;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import br.usp.ime.retrobreaker.Constants.Collision;
 import br.usp.ime.retrobreaker.Constants.Color;
@@ -72,10 +70,6 @@ public class Game {
 		 * so set to a sane default. */
 		State.setScreenMeasures(2.0f, 2.0f);
 		
-		// Load user difficult choice
-		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-		State.setDifficult(sharedPrefs.getInt("difficult_prefs", -1));
-		
 		// Initialize game state
 		State.setGamePaused(true);
 		State.setGameOver(false);
@@ -122,8 +116,7 @@ public class Game {
 			int sign = 1;
 			for (int j = 0; j < blocksY; j++) {
 				sign *= -1; // Consecutive bricks start moving to different directions
-				// Create special bricks (explosive and hard types) on a random probability
-				double prob = Math.random();
+				double prob = Math.random(); // Create special bricks with random probability
 				if (prob <= (Difficult.MOBILE_BRICK_PROB[State.getDifficult()] +
 						Difficult.EX_BRICK_PROB[State.getDifficult()] +
 						Difficult.GREY_BRICK_PROB[State.getDifficult()]))
@@ -170,7 +163,7 @@ public class Game {
 			}
 		}
 		
-		// draw explosions (little bricks)
+		// Draw explosions (little bricks)
 		for (int i = 0; i < mExplosions.size(); i++) {
 			mExplosions.get(i).draw(gl);
 		}
@@ -191,15 +184,13 @@ public class Game {
 		mPaddle.setPosX(x);
 	}
 	
-	/*
-	 * We see the paddle as a circumference. The paddle's width is proportional to (2 * ANGLE_OF_REFLECTION_BOUND). 
+	/* We see the paddle as a circumference. The paddle's width is proportional to (2 * ANGLE_OF_REFLECTION_BOUND). 
 	 * In other words, the half of the width of the paddle is proportional to Constants.ANGLE_OF_REFLECTION_BOUND
 	 * degrees.
 	 * 
 	 * x2 - x1			reflected angle
 	 * --------  = 	------------------------
-	 * width/2  	ANGLE_OF_REFLECTION_BOUND
-	 */
+	 * width/2  	ANGLE_OF_REFLECTION_BOUND */
 	private float calcReflectedAngle(float x2, float x1) {
 		return Constants.ANGLE_OF_REFLECTION_BOUND * (x2 - x1)/(mPaddle.getWidth()/2);
 	}
@@ -280,8 +271,10 @@ public class Game {
 			// If the user still has lives left, create a new ball and reset score multiplier
 			if (!State.getGameOver()) {
 				Log.i(TAG, "User lost a live, new live count: " + State.getLives());
-				mBall = new Ball(Color.WHITE, Config.BALL_INITIAL_PREVIOUS_POS_X, Config.BALL_INITIAL_PREVIOUS_POS_Y,
-						Config.BALL_INITIAL_POS_X, Config.BALL_INITIAL_POS_Y, Difficult.BALL_SPEED[State.getDifficult()]);
+				mBall = new Ball(Color.WHITE,
+						Config.BALL_INITIAL_PREVIOUS_POS_X, Config.BALL_INITIAL_PREVIOUS_POS_Y,
+						Config.BALL_INITIAL_POS_X, Config.BALL_INITIAL_POS_Y,
+						Difficult.BALL_SPEED[State.getDifficult()]);
 				State.setScoreMultiplier(ScoreMultiplier.LOST_LIFE);
 				State.setGamePaused(true);
 			} else {
@@ -374,17 +367,17 @@ public class Game {
 		detectCollisionOfMobileBricks();
 		
 		// Detecting collision between ball and wall
-		if (mBall.getBottomY() <= State.getScreenLowerY()				//if invincibility is off and the ball
-			&& !Difficult.INVINCIBILITY[State.getDifficult()])			//collided with bottom wall, user loses a life
+		if (mBall.getBottomY() <= State.getScreenLowerY()			//if invincibility is off and the ball
+			&& !Difficult.INVINCIBILITY[State.getDifficult()])		//collided with bottom wall, user loses a life
 		{
 			return Collision.LIFE_LOST;
-		} else if ((mBall.getTopY() >= State.getScreenHigherY())		//collided in the top wall
-				|| (mBall.getBottomY() <= State.getScreenLowerY()		//collided in the bottom wall...
-				&& Difficult.INVINCIBILITY[State.getDifficult()]))		//...with invincibility mode on
+		} else if ((mBall.getTopY() >= State.getScreenHigherY())	//collided in the top wall
+				|| (mBall.getBottomY() <= State.getScreenLowerY()	//collided in the bottom wall...
+				&& Difficult.INVINCIBILITY[State.getDifficult()]))	//...with invincibility mode on
 		{
 			return Collision.WALL_TOP_BOTTOM_SIDE;
-		} else if ((mBall.getRightX() >= State.getScreenHigherX())		//collided in the right wall
-				|| (mBall.getLeftX() <= State.getScreenLowerX()))		//collided in the left wall 
+		} else if ((mBall.getRightX() >= State.getScreenHigherX())	//collided in the right wall
+				|| (mBall.getLeftX() <= State.getScreenLowerX()))	//collided in the left wall 
 		{	
 			return Collision.WALL_RIGHT_LEFT_SIDE;
 		} 
@@ -400,11 +393,11 @@ public class Game {
 		boolean gameFinish = true;
 		
 		for (int i = 0; i<mBricks.length; i++) {
-			/* 
-			 * This should optimize the collision processing a little: once we have already checked the Y position for 
-			 * a brick in the line i, it's not necessary to check the Y position for the others bricks in the same line. 
-			 * The checkedLine flag do this for us.
-			 */
+			/* This should optimize the collision processing a little: once we have already checked the Y
+			 * position for a brick in the line i, it's not necessary to check the Y position for the others
+			 * bricks in the same line. The checkedLine flag do this for us. This optimization only works
+			 * because && is a short-circuit operator (so it doesn't evaluate the right condition if it is
+			 * not needed). */
 			boolean checkedLine =  false;
 			for (int j=0; j<mBricks[i].length; j++) {
 				// Check if the brick is not destroyed yet

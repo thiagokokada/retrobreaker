@@ -1,5 +1,6 @@
 package br.usp.ime.retrobreaker;
 
+import br.usp.ime.retrobreaker.Game.State;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -74,14 +75,15 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+		// Set difficult
+		State.setDifficult(pos);
 		SharedPreferences.Editor editor = mSharedPrefs.edit();
 		editor.putInt("difficult_prefs", pos);
 		editor.commit();
 	}
 
 	@Override
-	public void onNothingSelected(AdapterView<?> arg0) {
-		// TODO Auto-generated method stub
-		
+	public void onNothingSelected(AdapterView<?> parent) {
+		/* Nothing to do here */
 	}
 }
