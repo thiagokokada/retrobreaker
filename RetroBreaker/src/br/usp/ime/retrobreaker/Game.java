@@ -19,7 +19,6 @@ import br.usp.ime.retrobreaker.Constants.Config;
 import br.usp.ime.retrobreaker.Constants.Difficult;
 import br.usp.ime.retrobreaker.Constants.Hit;
 import br.usp.ime.retrobreaker.Constants.Lives;
-import br.usp.ime.retrobreaker.Constants.Scale;
 import br.usp.ime.retrobreaker.Constants.Score;
 import br.usp.ime.retrobreaker.Constants.ScoreMultiplier;
 import br.usp.ime.retrobreaker.effects.Explosion;
@@ -89,8 +88,7 @@ public class Game {
 		}
 		
 		// Initialize graphics
-		mPaddle = new Paddle(Color.WHITE, Config.PADDLE_INITIAL_POS_X, Config.PADDLE_INITIAL_POS_Y,
-				Scale.PADDLE);
+		mPaddle = new Paddle(Color.WHITE, Config.PADDLE_INITIAL_POS_X, Config.PADDLE_INITIAL_POS_Y);
 		Log.d(TAG, "Created paddle:" + 
 				" BottomY: " + mPaddle.getBottomY() +
 				" TopY: " + mPaddle.getTopY() +
@@ -99,8 +97,7 @@ public class Game {
 				);
 		
 		mBall = new Ball(Color.WHITE, Config.BALL_INITIAL_POS_X, Config.BALL_INITIAL_POS_Y,
-				Config.BALL_AFTER_POS_X, Config.BALL_AFTER_POS_Y, Scale.BALL,
-				Difficult.BALL_SPEED[State.getDifficult()]);
+				Config.BALL_AFTER_POS_X, Config.BALL_AFTER_POS_Y, Difficult.BALL_SPEED[State.getDifficult()]);
 		Log.d(TAG, "Created ball:" + 
 				" BottomY: " + mBall.getBottomY() +
 				" TopY: " + mBall.getTopY() +
@@ -133,19 +130,19 @@ public class Game {
 				{
 					if (prob <= Difficult.MOBILE_BRICK_PROB[State.getDifficult()]) {
 						MobileBrick brick = new MobileBrick(Color.GREEN,
-								newPosX, newPosY, Scale.BRICK, Type.MOBILE, Config.MOBILE_BRICK_SKIP_FRAMES,
+								newPosX, newPosY, Type.MOBILE, Config.MOBILE_BRICK_SKIP_FRAMES,
 								i, j, sign * Difficult.MOBILE_BRICK_SPEED[State.getDifficult()]);
 						mBricks[i][j] = brick;
 						mMobileBricks.add(brick);
 					} else if ((prob - Difficult.MOBILE_BRICK_PROB[State.getDifficult()]) <=
 							Difficult.EX_BRICK_PROB[State.getDifficult()])
 					{
-						mBricks[i][j] = new Brick(Color.RED, newPosX, newPosY, Scale.BRICK, Type.EXPLOSIVE);
+						mBricks[i][j] = new Brick(Color.RED, newPosX, newPosY, Type.EXPLOSIVE);
 					} else {
-						mBricks[i][j] = new Brick(Color.GRAY, newPosX, newPosY, Scale.BRICK, Type.HARD);
+						mBricks[i][j] = new Brick(Color.GRAY, newPosX, newPosY, Type.HARD);
 					}
 				} else {
-					mBricks[i][j] = new Brick(Color.WHITE, newPosX, newPosY, Scale.BRICK, Type.NORMAL);
+					mBricks[i][j] = new Brick(Color.WHITE, newPosX, newPosY, Type.NORMAL);
 				}
 				// The position of the next brick on the same line should be on the right side of the last brick
 				newPosX += mBricks[i][j].getSizeX() + Config.SPACE_BETWEEN_BRICKS;
@@ -284,8 +281,7 @@ public class Game {
 			if (!State.getGameOver()) {
 				Log.i(TAG, "User lost a live, new live count: " + State.getLives());
 				mBall = new Ball(Color.WHITE, Config.BALL_INITIAL_POS_X, Config.BALL_INITIAL_POS_Y,
-						Config.BALL_AFTER_POS_X, Config.BALL_AFTER_POS_Y, Scale.BALL,
-						Difficult.BALL_SPEED[State.getDifficult()]);
+						Config.BALL_AFTER_POS_X, Config.BALL_AFTER_POS_Y, Difficult.BALL_SPEED[State.getDifficult()]);
 				State.setScoreMultiplier(ScoreMultiplier.LOST_LIFE);
 				State.setGamePaused(true);
 			} else {

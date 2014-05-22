@@ -1,6 +1,5 @@
 package br.usp.ime.retrobreaker.forms;
 
-import br.usp.ime.retrobreaker.Constants.Scale;
 import br.usp.ime.retrobreaker.Game.State;
 
 /**
@@ -10,7 +9,8 @@ import br.usp.ime.retrobreaker.Game.State;
  */
 public class Particle extends Quad {
 	
-	public static final float[] VERTICES = {
+	private static final float SCALE = 0.03f;
+	private static final float[] VERTICES = {
 		-0.25f, -0.25f, // bottom left
 		-0.25f,  0.25f, // top left
 		0.25f, -0.25f, // bottom right
@@ -22,15 +22,15 @@ public class Particle extends Quad {
 	
 	public static final int DEFAULT_LIFETIME 	= 30;	// play with this
 	public static final int MAX_DIMENSION		= 5;	// the maximum width or height
-	public static final float MAX_SPEED			= ((VERTICES[3] - VERTICES[1])*Scale.PARTICLE)*3; // maximum speed (per update)
+	public static final float MAX_SPEED			= ((VERTICES[3] - VERTICES[1]) * SCALE) * 3; // per update
 	
 	private int mState;			// particle is alive or dead
 	private double mXv, mYv;	// vertical and horizontal velocity
 	private int mAge;			// current age of the particle
 	private int mLifetime;		// particle dies when it reaches this value
 
-	public Particle(float[] colors, float posX, float posY, float scale) {
-		super(VERTICES, colors, posX, posY, scale);
+	public Particle(float[] colors, float posX, float posY) {
+		super(VERTICES, SCALE, colors, posX, posY);
 		mState = Particle.STATE_ALIVE;
 		mLifetime = DEFAULT_LIFETIME;
 		mAge = 0;

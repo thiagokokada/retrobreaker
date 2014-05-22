@@ -7,14 +7,13 @@ import br.usp.ime.retrobreaker.Constants.Hit;
 
 public class Ball extends Quad {
 	
-	public static final float[] VERTICES = {
+	private static final float SCALE = 0.1f;
+	private static final float[] VERTICES = {
 		-0.25f, -0.25f, // bottom left
 		-0.25f,  0.25f, // top left
 		0.25f, -0.25f, // bottom right
 		0.25f,  0.25f, // top right
 	};
-	
-	private static final String TAG = Ball.class.getSimpleName();
 	
 	private float mPrevPosX;
 	private float mPrevPosY;
@@ -23,10 +22,8 @@ public class Ball extends Quad {
 	private boolean mUndefinedSlope;
 	private float mTrajectoryIncrement;
 
-	public Ball(float[] colors, float initialX, float initialY, float afterX, float afterY,
-			float scale, float trajetoryInc)
-	{
-		super(VERTICES, colors, afterX, afterY, scale);
+	public Ball(float[] colors, float initialX, float initialY, float afterX, float afterY, float trajetoryInc) {
+		super(VERTICES, SCALE, colors, afterX, afterY);
 		
 		mPrevPosX = initialX;
 		mPrevPosY = initialY;

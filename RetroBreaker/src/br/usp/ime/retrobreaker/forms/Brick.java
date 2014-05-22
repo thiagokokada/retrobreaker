@@ -11,7 +11,8 @@ public class Brick extends Quad {
 		NORMAL, EXPLOSIVE, HARD, MOBILE
 	}
 
-	public static final float[] VERTICES = {
+	private static final float SCALE = 0.1f;
+	private static final float[] VERTICES = {
 		-0.5f, -0.2f, // bottom left
 		-0.5f,  0.2f, // top left
 		0.5f, -0.2f, // bottom right
@@ -21,8 +22,8 @@ public class Brick extends Quad {
 	private int mLives;
 	private Type mType;
 
-	public Brick(float[] colors, float posX, float posY, float scale, Type type) {
-		super(VERTICES, colors, posX, posY, scale);
+	public Brick(float[] colors, float posX, float posY, Type type) {
+		super(VERTICES, SCALE, colors, posX, posY);
 		mType = type;
 		switch (type) {
 		case NORMAL:

@@ -10,18 +10,21 @@ import br.usp.ime.retrobreaker.Game.State;
 
 public abstract class Quad {
 	
+	// Each class that extend Quad automatically get a proper TAG for logging
+	protected final String TAG = getClass().getSimpleName();
+	
 	protected float mPosX;
 	protected float mPosY;
-	private float mScale;
-	private float[] mVertices;
-	private float[] mColors;
+	protected float mScale;
+	protected float[] mVertices;
+	protected float[] mColors;
 
 	private FloatBuffer mVertexBuffer;
 	private FloatBuffer mColorBuffer;
 
 	private static final int FLOAT_SIZE_BYTES = Float.SIZE / 8;
 
-	public Quad(float[] vertices, float[] colors, float posX, float posY, float scale) {
+	public Quad(float[] vertices, float scale, float[] colors, float posX, float posY) {
 		mVertices = vertices;
 		mColors = colors;
 		mScale = scale;

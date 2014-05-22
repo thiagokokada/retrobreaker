@@ -4,7 +4,6 @@ import android.util.Log;
 import br.usp.ime.retrobreaker.Game.State;
 
 public class MobileBrick extends Brick {
-	private static final String TAG = MobileBrick.class.getSimpleName();
 	
 	private int mFramesToWait;	//number of frames update to wait until the brick move again.
 	private int mToWait;		//countdown (which starts with mFramesToWait) that says when the the mobile brick can move (mToWait == 0)
@@ -14,9 +13,8 @@ public class MobileBrick extends Brick {
 	//used to index the global vector of bricks (mBricks) in Game
 	private int mIndexI, mIndexJ;
 	
-	public MobileBrick(float[] colors, float posX, float posY, float scale,
-			Type type, int wait, int i, int j, float speedX) {
-		super(colors, posX, posY, scale, type);
+	public MobileBrick(float[] colors, float posX, float posY, Type type, int wait, int i, int j, float speedX) {
+		super(colors, posX, posY, type);
 		
 		mCollided = false;
 		mIndexI = i;
