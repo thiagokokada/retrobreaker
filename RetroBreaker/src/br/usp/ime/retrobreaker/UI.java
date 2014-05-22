@@ -58,7 +58,7 @@ public class UI extends Activity {
 		mSharedPrefsEditor = mSharedPrefs.edit();
 		mHighScore = mSharedPrefs.getLong("high_score", 0);
 
-		/* Initialize TextViews to show user game state (both high and actual
+		/* Initialize TextViews to show user game state (both high and current
 		 * score, current score multiplier and number of lives remaining) and change
 		 * color of them to give that retro style ;). */
 		mScoreTextView = (TextView) findViewById(R.id.score);

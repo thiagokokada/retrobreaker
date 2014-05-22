@@ -216,12 +216,12 @@ public class Game {
 		 * during some frames. */
 		Collision aux = collisionType;
 		if(mConsecutiveCollision.containsKey(aux)) {
-			int actualValue = mConsecutiveCollision.get(aux);
-			if(actualValue > 0) {
+			int currentValue = mConsecutiveCollision.get(aux);
+			if(currentValue > 0) {
 				Log.d(TAG, "Detected consecutive collision of type " + aux.name() + ", skipping.");
 				collisionType = Collision.NOT_AVAILABLE;
 			}
-			mConsecutiveCollision.put(aux, actualValue + 2);
+			mConsecutiveCollision.put(aux, currentValue + 2);
 		}
 
 		switch (collisionType) {
