@@ -206,19 +206,36 @@ public class Game {
 		 * we detect a collision, so we can just skip this type of collision detection
 		 * during next frame. */
 		for(Map.Entry<Collision, Integer> entry : mConsecutiveCollision.entrySet()) {
+			
 			Collision currentType = entry.getKey();
 			int currentValue = entry.getValue();
-			if (currentType == collisionType && currentValue > 0) {
+			
+			if(currentValue > 100) {
+				/* Houston, we have a problem. Infinite collision detected, the only way out is to restart
+				 * the round. */
+				Log.e(TAG, "Detected infinite consecutive collision of type " + currentType.name() +
+						", restarting round.");
+				mBall = new Ball(Color.WHITE,
+						Config.BALL_INITIAL_PREVIOUS_POS_X, Config.BALL_INITIAL_PREVIOUS_POS_Y,
+						Config.BALL_INITIAL_POS_X, Config.BALL_INITIAL_POS_Y,
+						Difficult.BALL_SPEED[State.getDifficult()]);
+				entry.setValue(0);
+				State.setGamePaused(true);
+			} else if(currentType == collisionType && currentValue > 0) {
 				/* Current collision value is higher than 0, current collision type is the same as the detect
-				   collision. It means that two collisions of the same type happened on two consecutive frames.
-				   So skip this collision or we can enter on a invalid state (infinite collision for example). */
-				Log.e(TAG, "Detected consecutive collision of type " + currentType.name() + ", skipping.");
+				 * collision. It means that two collisions of the same type happened on two consecutive frames.
+				 * So skip this collision or we can enter on a invalid state (infinite collision for example).
+				 * 
+				 * Increase collision current value too, since the current frame isn't sufficient escape the
+				 * consecutive collision loop, maybe more frames will do it. */
+				Log.d(TAG, "Detected consecutive collision of type " + currentType.name() + ", skipping.");
+				entry.setValue(++currentValue);
 				collisionType = Collision.NOT_AVAILABLE;
-			} else if (currentType == collisionType) {
+			} else if(currentType == collisionType) {
 				/* To detect if we are on a consecutive (probably infinite) collision state, increase value for the
 				 * current collision type. */
 				entry.setValue(++currentValue);
-			} else if (currentValue > 0) {
+			} else if(currentValue > 0) {
 				/* Current collision value is greater than 0, but current collision type is different from detect
 				 * collision type. In this case, the detected collision is not the same as the old one, so we can
 				 * safely decrease current Value for this type of collision. */
@@ -226,7 +243,7 @@ public class Game {
 			}
 		}
 
-		switch (collisionType) {
+		switch(collisionType) {
 		case WALL_RIGHT_LEFT_SIDE:
 			/* Wall hit collision is almost the same, but the equation is different so we
 			 * need to differentiate here */
@@ -265,7 +282,7 @@ public class Game {
 			 * The angle of the slope (of the ball trajectory) is the complement of the angle of reflection.
 			 * Take a look at http://www.mathopenref.com/coordslope.html to get an idea of the angle of the slope.
 			 */
-			if (mPaddle.getPosX() >= mBall.getPosX()) {	//the ball hit the paddle in the right half-part.
+			if(mPaddle.getPosX() >= mBall.getPosX()) {	//the ball hit the paddle in the right half-part.
 				reflectedAngle = calcReflectedAngle(mBall.getPosX(), mPaddle.getPosX());
 				angleOfBallSlope = (Constants.RIGHT_ANGLE - reflectedAngle);
 			} else {									//the ball hit the paddle in the left half-part.
@@ -280,7 +297,7 @@ public class Game {
 			State.setLives(Lives.LOST_LIFE);
 			mSoundPool.play(mSoundIds.get("lost_life"), 100, 100, 1, 0, 1.0f);
 			// If the user still has lives left, create a new ball and reset score multiplier
-			if (!State.getGameOver()) {
+			if(!State.getGameOver()) {
 				Log.i(TAG, "User lost a live, new live count: " + State.getLives());
 				mBall = new Ball(Color.WHITE,
 						Config.BALL_INITIAL_PREVIOUS_POS_X, Config.BALL_INITIAL_PREVIOUS_POS_Y,
