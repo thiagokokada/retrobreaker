@@ -170,8 +170,11 @@ public class UI extends Activity {
 		
 		/* To guarantee that the game will not FC, check if we can show (i.e. the
 		 * UI Activity is still on a valid state) the dialog before showing it.
-		 * Better be safe than sorry. */
-		if(!isFinishing()) builder.show();
+		 * Better be safe than sorry.
+		 * 
+		 * And don't allow the user to just dismiss the dialog by clicking outside
+		 * of it. */
+		if(!isFinishing()) builder.show().setCanceledOnTouchOutside(false);
 	}
 	
 	/* recreate() method appeared on API 11 (Honeycomb), before this version we
