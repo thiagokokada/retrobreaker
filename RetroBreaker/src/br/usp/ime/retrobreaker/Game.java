@@ -194,12 +194,8 @@ public class Game {
 	private float calcReflectedAngle(float x2, float x1) {
 		return Constants.ANGLE_OF_REFLECTION_BOUND * (x2 - x1)/(mPaddle.getWidth()/2);
 	}
-
-	public void updateState() {
-		float reflectedAngle = 0.0f, angleOfBallSlope = 0.0f;
-
-		Collision collisionType = detectCollision();
-
+	
+	private Collision detectConsecutiveCollision(Collision collisionType) {
 		/* Sometimes the ball can enter a state where it would detect various hits between ball
 		 * and something (when the ball get a position that would detect both a top hit and a
 		 * bottom hit for example). Since this is physically impossible, add a delay every time
@@ -221,6 +217,7 @@ public class Game {
 						Difficult.BALL_SPEED[State.getDifficult()]);
 				entry.setValue(0);
 				State.setGamePaused(true);
+				return Collision.NOT_AVAILABLE;
 			} else if(currentType == collisionType && currentValue > 0) {
 				/* Current collision value is higher than 0, current collision type is the same as the detect
 				 * collision. It means that two collisions of the same type happened on two consecutive frames.
@@ -230,7 +227,7 @@ public class Game {
 				 * consecutive collision loop, maybe more frames will do it. */
 				Log.d(TAG, "Detected consecutive collision of type " + currentType.name() + ", skipping.");
 				entry.setValue(++currentValue);
-				collisionType = Collision.NOT_AVAILABLE;
+				return Collision.NOT_AVAILABLE;
 			} else if(currentType == collisionType) {
 				/* To detect if we are on a consecutive (probably infinite) collision state, increase value for the
 				 * current collision type. */
@@ -242,6 +239,14 @@ public class Game {
 				entry.setValue(--currentValue);
 			}
 		}
+		return collisionType;
+
+	}
+
+	public void updateState() {
+		float reflectedAngle = 0.0f, angleOfBallSlope = 0.0f;
+
+		Collision collisionType = detectConsecutiveCollision(detectCollision());
 
 		switch(collisionType) {
 		case WALL_RIGHT_LEFT_SIDE:
