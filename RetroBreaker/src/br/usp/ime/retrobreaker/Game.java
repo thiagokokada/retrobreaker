@@ -198,24 +198,32 @@ public class Game {
 	public void updateState() {
 		float reflectedAngle = 0.0f, angleOfBallSlope = 0.0f;
 
-		Collision collisionType = detectCollision();	
+		Collision collisionType = detectCollision();
 
 		/* Sometimes the ball can enter a state where it would detect various hits between ball
 		 * and something (when the ball get a position that would detect both a top hit and a
 		 * bottom hit for example). Since this is physically impossible, add a delay every time
 		 * we detect a collision, so we can just skip this type of collision detection
-		 * during some frames. */
-		Collision aux = collisionType;
-		if(mConsecutiveCollision.containsKey(aux)) {
-			int currentValue = mConsecutiveCollision.get(aux);
-			if(currentValue > 0) {
-				Log.d(TAG, "Detected consecutive collision of type " + aux.name() + ", skipping.");
+		 * during next frame. */
+		for(Map.Entry<Collision, Integer> entry : mConsecutiveCollision.entrySet()) {
+			Collision currentType = entry.getKey();
+			int currentValue = entry.getValue();
+			if (currentType == collisionType && currentValue > 0) {
+				/* Current collision value is higher than 0, current collision type is the same as the detect
+				   collision. It means that two collisions of the same type happened on two consecutive frames.
+				   So skip this collision or we can enter on a invalid state (infinite collision for example). */
+				Log.e(TAG, "Detected consecutive collision of type " + currentType.name() + ", skipping.");
 				collisionType = Collision.NOT_AVAILABLE;
+			} else if (currentType == collisionType) {
+				/* To detect if we are on a consecutive (probably infinite) collision state, increase value for the
+				 * current collision type. */
+				entry.setValue(++currentValue);
+			} else if (currentValue > 0) {
+				/* Current collision value is greater than 0, but current collision type is different from detect
+				 * collision type. In this case, the detected collision is not the same as the old one, so we can
+				 * safely decrease current Value for this type of collision. */
+				entry.setValue(--currentValue);
 			}
-			/*since I have already decremented the number of consecutive collision inside detectCollision(), 
-			 * I have to increment by 2 in order to save the information that one more consecutive collision happened (2 - 1 = 1).  
-			 */
-			mConsecutiveCollision.put(aux, currentValue + 2);
 		}
 
 		switch (collisionType) {
@@ -356,16 +364,6 @@ public class Game {
 	}
 
 	private Collision detectCollision() {
-		
-		/* Reduce the number of consecutive collisions by one on every new frame. Without this, after
-		 * a successful collision detection we would never get that type of collision detection again,
-		 * but on the same time we can reduce the number of false positive collision detection too. */
-		for (Map.Entry<Collision, Integer> entry : mConsecutiveCollision.entrySet()) {
-			int consecutiveCollisions = entry.getValue();
-			if (consecutiveCollisions > 0) {
-				entry.setValue(--consecutiveCollisions);
-			}
-		}
 		
 		detectCollisionOfMobileBricks();
 		
