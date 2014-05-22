@@ -212,6 +212,9 @@ public class Game {
 				Log.d(TAG, "Detected consecutive collision of type " + aux.name() + ", skipping.");
 				collisionType = Collision.NOT_AVAILABLE;
 			}
+			/*since I have already decremented the number of consecutive collision inside detectCollision(), 
+			 * I have to increment by 2 in order to save the information that one a consecutive collision happened (2 - 1 = 1).  
+			 */
 			mConsecutiveCollision.put(aux, currentValue + 2);
 		}
 
