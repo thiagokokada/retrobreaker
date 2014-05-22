@@ -77,9 +77,9 @@ public class UI extends Activity {
 		mSoundIds = new HashMap<String, Integer>(1);
 		mSoundIds.put("victory_fanfare", mSoundPool.load(this, R.raw.victory_fanfare, 1));
 		
-		/* We can't update the UI from the GL thread, so we set a timer for a determined number
-		 * of frames (in this case, 4 updates each second if you count a 60FPS run) and get
-		 * the actual game state from Game.State methods */
+		/* We can't update the UI from the GL thread, so we set a timer and update it on
+		 * approximately each 10 updates from game state. Don't put this value too low since
+		 * UI update is slow. */
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
 			@Override
@@ -90,7 +90,7 @@ public class UI extends Activity {
 					return;
 				}
 			}
-		}, 0, Config.MS_PER_UPDATE * 15);
+		}, 0, Config.MS_PER_UPDATE * 10);
 	}
 
 	@Override
