@@ -67,11 +67,11 @@ public class Particle extends Quad {
 	public void update() {		
 		// Update with collision
 		if (isAlive()) {
-			if (mPosX <= State.getScreenLowerX() || mPosX >= State.getScreenHigherX() - getWidth()) {
+			if ((mPosX - (getWidth()/2) <= State.getScreenLowerX()) || (mPosX >= State.getScreenHigherX() - (getWidth()/2))) {
 				mXv *= -1;
 			}
-			// Bottom is 480 and top is 0 !!!
-			if (mPosY <= State.getScreenHigherY() || mPosY >= State.getScreenLowerY() - getHeight()) {
+
+			if ((mPosY - (getHeight()/2) <= State.getScreenHigherY()) || (mPosY >= State.getScreenLowerY() - (getHeight()/2))) {
 				mYv *= -1;
 			}
 		}
