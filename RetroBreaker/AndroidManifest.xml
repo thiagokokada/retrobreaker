@@ -17,13 +17,13 @@
             android:name="br.usp.ime.retrobreaker.UI"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait"
+            android:screenOrientation="sensorPortrait"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
         </activity>
         <activity
             android:name="br.usp.ime.retrobreaker.MainActivity"
             android:label="@string/title_activity_main"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="sensorPortrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
