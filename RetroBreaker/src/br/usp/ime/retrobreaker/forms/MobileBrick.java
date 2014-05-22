@@ -8,9 +8,11 @@ public class MobileBrick extends Brick {
 	
 	private int mFramesToWait;
 	private int mToWait;
-	private int mIndexI, mIndexJ;
 	private float mSpeedX;
 	private boolean mCollided;
+	
+	//used to index the global vector of bricks (mBricks) in Game
+	private int mIndexI, mIndexJ;
 	
 	public MobileBrick(float[] colors, float posX, float posY, float scale,
 			Type type, int wait, int i, int j, float speedX) {
@@ -55,13 +57,13 @@ public class MobileBrick extends Brick {
 	public boolean detectCollisionWithBrick(Brick other) {
 		if (mToWait > 0) return false;
 		
-		if (this.getTopY() >= other.getBottomY() && this.getBottomY() <= other.getTopY() &&
+		if (this.getTopY() >= other.getBottomY() && this.getBottomY() <= other.getTopY() &&	//this isn't necessary, but we keep it to make compatible with other detection codes.
 				this.getRightX() >= other.getLeftX() && this.getLeftX() <= other.getRightX()) {
-			if (this.getLeftX() < other.getLeftX()) {
-				if (mSpeedX < 0) mSpeedX *= -1;
+			if (this.getLeftX() < other.getLeftX()) {	//collided with the right brick
+				if (mSpeedX < 0) mSpeedX *= -1;			//hack: the brick should be moving to the right as it collided with the right brick
 				Log.v(TAG, "Collided in the right brick, MobileBrick[" + mIndexI + "][" + mIndexJ + "]");
-			} else {
-				if (mSpeedX > 0) mSpeedX *= -1;
+			} else {									//collided with the left brick
+				if (mSpeedX > 0) mSpeedX *= -1;			//hack: the brick should be moving to the left as it collided with the left brick
 				Log.v(TAG, "Collided in the left brick, MobileBrick[" + mIndexI + "][" + mIndexJ + "]");
 			}
 			mCollided = true;
@@ -72,13 +74,13 @@ public class MobileBrick extends Brick {
 	public boolean detectCollisionWithWall() {
 		if (mToWait > 0) return false;
 		
-		if ((this.getRightX() >= State.getScreenHigherX())        //collided in the right wall
-				|| (this.getLeftX() <= State.getScreenLowerX())) {
-			if (this.getRightX() >= State.getScreenHigherX()) {
-				if (mSpeedX < 0) mSpeedX *= -1;
+		if ((this.getRightX() >= State.getScreenHigherX())        	// collided with the right wall
+				|| (this.getLeftX() <= State.getScreenLowerX())) {	// collided with the left wall
+			if (this.getRightX() >= State.getScreenHigherX()) {		// collided with the right wall
+				if (mSpeedX < 0) mSpeedX *= -1;						//hack: the brick should be moving to the right as it collided with the right wall
 				Log.v(TAG, "Collided in the right wall, MobileBrick[" + mIndexI + "][" + mIndexJ + "]");
-			} else  {
-				if (mSpeedX > 0) mSpeedX *= -1;
+			} else  {												//collided with the left wall
+				if (mSpeedX > 0) mSpeedX *= -1;						//hack: the brick should be moving to the left as it collided with the left wall
 				Log.v(TAG, "Collided in the left wall, MobileBrick[" + mIndexI + "][" + mIndexJ + "]");
 			}
 			mCollided = true;
