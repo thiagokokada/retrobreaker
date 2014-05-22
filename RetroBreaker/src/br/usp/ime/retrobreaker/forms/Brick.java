@@ -5,7 +5,7 @@ public class Brick extends Quad {
 	public static final int GRAY_LIVES = 1;
 	public static final int NORMAL_LIVES = 0;
 	
-	public static final int GRAY_EXPLOSION_SIZE = 8;
+	public static final int BRICK_EXPLOSION_SIZE = 8;
 	
 	public static enum Type {
 		NORMAL, EXPLOSIVE, HARD, MOBILE

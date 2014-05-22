@@ -420,7 +420,7 @@ public class Game {
 							 * state on the next frame. */
 							if (mBricks[i][j].getLives() == 0) {
 								if (mBricks[i][j].getType() == Type.EXPLOSIVE) {
-									mExplosions.add(new Explosion(Brick.GRAY_EXPLOSION_SIZE,
+									mExplosions.add(new Explosion(Brick.BRICK_EXPLOSION_SIZE,
 											mBricks[i][j].getPosX(), mBricks[i][j].getPosY()));
 									// Explosive brick is a special type of collision, treat this case
 									brickExploded(i, j);
