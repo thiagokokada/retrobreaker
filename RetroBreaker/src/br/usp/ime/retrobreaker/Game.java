@@ -213,7 +213,7 @@ public class Game {
 				collisionType = Collision.NOT_AVAILABLE;
 			}
 			/*since I have already decremented the number of consecutive collision inside detectCollision(), 
-			 * I have to increment by 2 in order to save the information that one a consecutive collision happened (2 - 1 = 1).  
+			 * I have to increment by 2 in order to save the information that one more consecutive collision happened (2 - 1 = 1).  
 			 */
 			mConsecutiveCollision.put(aux, currentValue + 2);
 		}
