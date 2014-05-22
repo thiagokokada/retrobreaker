@@ -25,7 +25,7 @@ Select the desired difficult on main activity (this selected difficult is stored
 
 When the game is over you have a option to return to the previous screen (in this case, the main activity) or to start a new game.
 
-If you're exit the application the game is paused automatically. You don't need to press anything.
+If you exit the application the game is paused automatically. You don't need to press anything.
 
 ## Use the source, Luke!
 
@@ -53,15 +53,13 @@ This application should work on any Android device from version 2.2 up to the mo
 - LG G Pad 8.3'' (running CyanogenMod 11M6, Android 4.4.2);
 - [Genymotion](http://www.genymotion.com/) Custom Phone 7 (running Android 4.4.2);
 - AOC Breeze 7'' 7Y2241 (running Android 4.1.1);
-- Android emulator (tested on both 2.2, 2.3.3 and 4.4.2 versions).
+- Android emulator (tested on 2.2, 2.3.3 and 4.4.2 versions).
 
 But the game should work better if your device has a screen ratio of 16:9 (or 9:16 if you're couting portrait mode), since this is the internal resolution assumed by the code. Any other screen ratio of screen may distorce the image.
 
 ## Known bugs
 
-Sometimes, the ball will reflect infinitely on paddle or on the wall. In the paddle case just keep moving the paddle until the ball starts moving again. In the wall case there is no hope, the ball would just keep reflecting until going out of the stage. Both bugs should be fixed on the most commons cases but this code still need more test.
-
-The *Game Over dialog* may not show on some conditions. This is thanks to strange bugs caused between the OpenGL rendering thread (```TouchSurfaceView.java```) and UI thread (```UI.java```), since we use both on the same view (OpenGL thread to draw the game graphics/calculate the game physics and UI thread to draw user information like Score/number of lives/Score multiplier/etc.). Before this bug would throws a exception causing a Force Close on the application. Now we check if there is a a valid context before trying to show the dialog. This may make the dialog not show in some cases, but it's better than a Force Close in your face.
+Sometimes, the ball will reflect infinitely on paddle or on the wall. In the paddle case just keep moving the paddle until the ball starts moving again. In the wall case the user will probably lose a life, or the ball will keep reflecting infinitely on limbo. Both bugs should be fixed on the most commons cases but this code still need more test.
 
 ## License
 
