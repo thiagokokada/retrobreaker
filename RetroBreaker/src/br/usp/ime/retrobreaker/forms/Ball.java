@@ -22,11 +22,11 @@ public class Ball extends Quad {
 	private boolean mUndefinedSlope;
 	private float mTrajectoryIncrement;
 
-	public Ball(float[] colors, float initialX, float initialY, float afterX, float afterY, float trajetoryInc) {
-		super(VERTICES, SCALE, colors, afterX, afterY);
+	public Ball(float[] colors, float previousPosX, float previousPosY, float posX, float posY, float trajetoryInc) {
+		super(VERTICES, SCALE, colors, posX, posY);
 		
-		mPrevPosX = initialX;
-		mPrevPosY = initialY;
+		mPrevPosX = previousPosX;
+		mPrevPosY = previousPosY;
 		
 		if (mPosX == mPrevPosX) {
 			mUndefinedSlope = true;

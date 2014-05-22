@@ -96,8 +96,8 @@ public class Game {
 				" RightX: " + mPaddle.getRightX()
 				);
 		
-		mBall = new Ball(Color.WHITE, Config.BALL_INITIAL_POS_X, Config.BALL_INITIAL_POS_Y,
-				Config.BALL_AFTER_POS_X, Config.BALL_AFTER_POS_Y, Difficult.BALL_SPEED[State.getDifficult()]);
+		mBall = new Ball(Color.WHITE, Config.BALL_INITIAL_PREVIOUS_POS_X, Config.BALL_INITIAL_PREVIOUS_POS_Y,
+				Config.BALL_INITIAL_POS_X, Config.BALL_INITIAL_POS_Y, Difficult.BALL_SPEED[State.getDifficult()]);
 		Log.d(TAG, "Created ball:" + 
 				" BottomY: " + mBall.getBottomY() +
 				" TopY: " + mBall.getTopY() +
@@ -280,8 +280,8 @@ public class Game {
 			// If the user still has lives left, create a new ball and reset score multiplier
 			if (!State.getGameOver()) {
 				Log.i(TAG, "User lost a live, new live count: " + State.getLives());
-				mBall = new Ball(Color.WHITE, Config.BALL_INITIAL_POS_X, Config.BALL_INITIAL_POS_Y,
-						Config.BALL_AFTER_POS_X, Config.BALL_AFTER_POS_Y, Difficult.BALL_SPEED[State.getDifficult()]);
+				mBall = new Ball(Color.WHITE, Config.BALL_INITIAL_PREVIOUS_POS_X, Config.BALL_INITIAL_PREVIOUS_POS_Y,
+						Config.BALL_INITIAL_POS_X, Config.BALL_INITIAL_POS_Y, Difficult.BALL_SPEED[State.getDifficult()]);
 				State.setScoreMultiplier(ScoreMultiplier.LOST_LIFE);
 				State.setGamePaused(true);
 			} else {
