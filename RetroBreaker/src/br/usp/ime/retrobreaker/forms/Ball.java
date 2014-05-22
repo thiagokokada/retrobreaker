@@ -148,11 +148,8 @@ public class Ball extends Quad {
 	public void move() {
 
 		BallDirection dir = getDirection();
-		// Right upward/downward
-		if (dir == BallDirection.RIGHT_UPWARD || dir == BallDirection.RIGHT_DOWNWARD)
-//		if (((mPosX > mPrevPosX) && (mPosY > mPrevPosY)) || 
-//				((mPosX > mPrevPosX) && (mPosY < mPrevPosY)))
-		{
+		
+		if (dir == BallDirection.RIGHT_UPWARD || dir == BallDirection.RIGHT_DOWNWARD) {
 			mPrevPosX = mPosX;
 			mPrevPosY = mPosY;
 			if (Math.abs(mSlope) <= 1) {	//the ball is moving in the X axis faster than in the Y axis
@@ -169,11 +166,8 @@ public class Ball extends Quad {
 				mPosY = y2;
 			}
 		} 
-		// Left upward/downward
-		else if (dir == BallDirection.LEFT_UPWARD || dir == BallDirection.LEFT_DOWNWARD)
-//		else if (((mPosX < mPrevPosX) && (mPosY > mPrevPosY)) ||
-//				((mPosX < mPrevPosX) && (mPosY < mPrevPosY)))
-		{
+
+		else if (dir == BallDirection.LEFT_UPWARD || dir == BallDirection.LEFT_DOWNWARD) {
 			mPrevPosX = mPosX;
 			mPrevPosY = mPosY;
 			if (Math.abs(mSlope) <= 1) {	//the ball is moving in the X axis faster than in the Y axis
@@ -198,15 +192,6 @@ public class Ball extends Quad {
 			mPrevPosY = mPosY;
 			mPosY = mPosY - mTrajectoryIncrement;	
 		}
-//		else if (mPosX == mPrevPosX) {
-//			if (mPosY > mPrevPosY) {	//upward
-//				mPrevPosY = mPosY;
-//				mPosY = mPosY + mTrajectoryIncrement;
-//			} else {					//downward
-//				mPrevPosY = mPosY;
-//				mPosY = mPosY - mTrajectoryIncrement;
-//			}
-//		}
 
 		Log.v(TAG, "Ball position: X=" + mPosX + ", Y=" + mPosY);
 	}
