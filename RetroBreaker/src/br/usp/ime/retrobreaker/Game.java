@@ -170,7 +170,7 @@ public class Game {
 			}
 		}
 		
-		// Initialize explosives
+		// draw explosions (little bricks)
 		for (int i = 0; i < mExplosions.size(); i++) {
 			mExplosions.get(i).draw(gl);
 		}
@@ -309,7 +309,7 @@ public class Game {
 		}
 	}
 	
-	private void explosiveBrick(int i, int j) {
+	private void brickExploded(int i, int j) {
 		// Deleting surrounding bricks
 		for (int a=Math.max(i-1, 0); a< Math.min(i+2, mBricks.length); a++) {
 			for (int b=Math.max(j-1, 0); b<Math.min(j+2, mBricks[i].length); b++) {
@@ -400,10 +400,11 @@ public class Game {
 		boolean gameFinish = true;
 		
 		for (int i = 0; i<mBricks.length; i++) {
-			/* This should optimize the collision processing a little: on the first time Y position is the same
-			 * between brick/ball, we know the collision will happen (if it happen) on the same row (even if not
-			 * on the same block). Since && is a short-circuit operator, using this variable here will optimize
-			 * things by not evaluating again the position Y from both Ball and Bricks*/
+			/* 
+			 * This should optimize the collision processing a little: once we have already checked the Y position for 
+			 * a brick in the line i, it's not necessary to check the Y position for the others bricks in the same line. 
+			 * The checkedLine flag do this for us.
+			 */
 			boolean checkedLine =  false;
 			for (int j=0; j<mBricks[i].length; j++) {
 				// Check if the brick is not destroyed yet
@@ -411,7 +412,7 @@ public class Game {
 					// If there are still bricks, the game is not over yet
 					gameFinish = false;
 
-					// Check if the ball is in the same Y position than ball
+					// Check if the ball is in the same Y position as the brick
 					if (checkedLine
 							|| (mBall.getTopY() >= mBricks[i][j].getBottomY()
 							&& mBall.getBottomY() <= mBricks[i][j].getTopY()))
@@ -429,7 +430,7 @@ public class Game {
 									mExplosions.add(new Explosion(Brick.GRAY_EXPLOSION_SIZE,
 											mBricks[i][j].getPosX(), mBricks[i][j].getPosY()));
 									// Explosive brick is a special type of collision, treat this case
-									explosiveBrick(i, j);
+									brickExploded(i, j);
 									return Collision.EX_BRICK_BALL;
 								} else if (mBricks[i][j].getType() == Type.MOBILE){
 									deleteMobileBrick(i, j);
@@ -466,7 +467,7 @@ public class Game {
 	 * if the game is over or not.
 	 * 
 	 * This class should be static since we need to access these informations outside the game object,
-	 * like on UI activity. 
+	 * like in the UI activity class. 
 	 */
 	public static class State {
 		private static long sScore;
