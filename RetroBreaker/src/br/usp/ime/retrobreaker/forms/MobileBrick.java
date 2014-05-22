@@ -6,10 +6,10 @@ import br.usp.ime.retrobreaker.Game.State;
 public class MobileBrick extends Brick {
 	private static final String TAG = MobileBrick.class.getSimpleName();
 	
-	private int mFramesToWait;
-	private int mToWait;
-	private float mSpeedX;
-	private boolean mCollided;
+	private int mFramesToWait;	//number of frames update to wait until the brick move again.
+	private int mToWait;		//countdown (which starts with mFramesToWait) that says when the the mobile brick can move (mToWait == 0)
+	private float mSpeedX;		//the mobile brick only moves in the X axis. It stores the increment in the movement.
+	private boolean mCollided;	//flat to say when the brick hit the wall or another brick.
 	
 	//used to index the global vector of bricks (mBricks) in Game
 	private int mIndexI, mIndexJ;
@@ -18,10 +18,12 @@ public class MobileBrick extends Brick {
 			Type type, int wait, int i, int j, float speedX) {
 		super(colors, posX, posY, scale, type);
 		
-		mToWait = mFramesToWait = wait;
 		mCollided = false;
 		mIndexI = i;
 		mIndexJ = j;
+		
+		//Basically, we have two ways to set brick's speed: the number of frames without moving the ball and the increment in the movement.
+		mToWait = mFramesToWait = wait;
 		mSpeedX = speedX;
 	}
 	
@@ -47,6 +49,10 @@ public class MobileBrick extends Brick {
 		mToWait--;
 	}
 	
+	/*
+	 * I only invert the direction when the ball is ready to move. This is necessary because a lot of frame updates can happen between two movements 
+	 * of the brick, so the brick could change its direction a lot of times which could lead the brick to get the wrong direction.
+	 */
 	public void invertDirection() {
 		if (mToWait == 0) {
 			Log.v(TAG, "Inverted MobileBrick[" + mIndexI + "][" + mIndexJ + "]");
@@ -54,6 +60,10 @@ public class MobileBrick extends Brick {
 		}
 	}
 	
+	/*
+	 * I only detect collision between the bricks when this brick is ready to move. 
+	 * See the comments above the invertDirection() function.
+	 */
 	public boolean detectCollisionWithBrick(Brick other) {
 		if (mToWait > 0) return false;
 		
@@ -71,6 +81,10 @@ public class MobileBrick extends Brick {
 		} else return false;
 	}
 	
+	/*
+	 * I only detect collision between the brick and wall when the brick is ready to move. 
+	 * See the comments above the invertDirection() function.
+	 */
 	public boolean detectCollisionWithWall() {
 		if (mToWait > 0) return false;
 		
