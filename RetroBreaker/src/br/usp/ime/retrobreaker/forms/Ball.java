@@ -1,9 +1,9 @@
 package br.usp.ime.retrobreaker.forms;
 
 import android.util.Log;
-import br.usp.ime.retrobreaker.Constants;
-import br.usp.ime.retrobreaker.Constants.BallDirection;
-import br.usp.ime.retrobreaker.Constants.Hit;
+import br.usp.ime.retrobreaker.game.Constants;
+import br.usp.ime.retrobreaker.game.Constants.BallDirection;
+import br.usp.ime.retrobreaker.game.Constants.Hit;
 
 public class Ball extends Quad {
 	

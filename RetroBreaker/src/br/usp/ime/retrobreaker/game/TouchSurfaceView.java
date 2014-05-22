@@ -1,4 +1,4 @@
-package br.usp.ime.retrobreaker;
+package br.usp.ime.retrobreaker.game;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -10,10 +10,10 @@ import android.opengl.Matrix;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
-import br.usp.ime.retrobreaker.Constants.Config;
-import br.usp.ime.retrobreaker.Game.State;
+import br.usp.ime.retrobreaker.game.Constants.Config;
+import br.usp.ime.retrobreaker.game.Game.State;
 
-class TouchSurfaceView extends GLSurfaceView {
+public class TouchSurfaceView extends GLSurfaceView {
 	
 	private static final String TAG = TouchSurfaceView.class.getSimpleName();
 

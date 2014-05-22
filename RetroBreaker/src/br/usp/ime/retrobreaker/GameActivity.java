@@ -20,10 +20,11 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.TextView;
-import br.usp.ime.retrobreaker.Constants.Config;
-import br.usp.ime.retrobreaker.Game.State;
+import br.usp.ime.retrobreaker.game.TouchSurfaceView;
+import br.usp.ime.retrobreaker.game.Constants.Config;
+import br.usp.ime.retrobreaker.game.Game.State;
 
-public class UI extends Activity {
+public class GameActivity extends Activity {
 
 	private TouchSurfaceView mTouchSurfaceView;
 	private Handler mHandler;
@@ -45,7 +46,7 @@ public class UI extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		setContentView(R.layout.activity_ui);
+		setContentView(R.layout.activity_game);
 
 		mHandler = new Handler();
 		mNewHighScore = false;

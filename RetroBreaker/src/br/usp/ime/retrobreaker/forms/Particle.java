@@ -1,6 +1,6 @@
 package br.usp.ime.retrobreaker.forms;
 
-import br.usp.ime.retrobreaker.Game.State;
+import br.usp.ime.retrobreaker.game.Game.State;
 
 /**
  * @author impaler

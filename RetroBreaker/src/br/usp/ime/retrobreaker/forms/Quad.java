@@ -6,7 +6,7 @@ import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import br.usp.ime.retrobreaker.Game.State;
+import br.usp.ime.retrobreaker.game.Game.State;
 
 public abstract class Quad {
 	

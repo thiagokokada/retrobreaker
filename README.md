@@ -33,12 +33,13 @@ This game was made on [Android Developer Tools](https://developer.android.com/to
 
 The code is organized in the following way:
 
-- ```br.usp.ime.retrobreaker```: the main game code:
+- ```br.usp.ime.retrobreaker```: activity related code:
+	+ *MainActivity*: the first activity that appears when you open the app; not related with the game *per se*, but include options that change the game in some way;
+	+ *GameActivity*: renders the OpenGL view and the user interface on screen (including actual/high score, score multiplier, number of lives and "Ready?" text).
+- ```br.usp.ime.retrobreaker.game```: the main game code:
 	+ *Constants*: all game constants in one place so we can easily change them;
 	+ *Game*: the main game logic, including drawing methods, game physics, game state methods, etc.;
-	+ *MainActivity*: the first activity that appears when you open the app; not related with the game *per se*, but include options that change the game in some way;
 	+ *TouchSurfaceView*: include OpenGL logic and methods to get the user finger position on screen;
-	+ *UI*: renders the user interface on screen (including actual/high score, score multiplier, number of lives and "Ready?" text).
 - ```br.usp.ime.retrobreaker.forms```: the various objects rendered on screen:
 	+ *Quad*: the base class of all forms. This is a abstract class, so you need to extend it first before using it;
 	+ *Ball/Brick/MobileBrick/Paddle/Particle*: extend classes of Quad that represents the diverse objects of the screen.

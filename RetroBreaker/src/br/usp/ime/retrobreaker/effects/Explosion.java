@@ -3,8 +3,8 @@ package br.usp.ime.retrobreaker.effects;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.util.Log;
-import br.usp.ime.retrobreaker.Constants.Color;
 import br.usp.ime.retrobreaker.forms.Particle;
+import br.usp.ime.retrobreaker.game.Constants.Color;
 
 /**
  * @author impaler

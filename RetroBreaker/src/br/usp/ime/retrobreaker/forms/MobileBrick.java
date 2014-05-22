@@ -1,7 +1,7 @@
 package br.usp.ime.retrobreaker.forms;
 
 import android.util.Log;
-import br.usp.ime.retrobreaker.Game.State;
+import br.usp.ime.retrobreaker.game.Game.State;
 
 public class MobileBrick extends Brick {
 	

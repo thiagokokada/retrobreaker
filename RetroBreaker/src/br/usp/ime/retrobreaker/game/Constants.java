@@ -1,4 +1,4 @@
-package br.usp.ime.retrobreaker;
+package br.usp.ime.retrobreaker.game;
 
 public class Constants {
 

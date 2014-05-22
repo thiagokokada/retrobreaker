@@ -1,6 +1,6 @@
 package br.usp.ime.retrobreaker;
 
-import br.usp.ime.retrobreaker.Game.State;
+import br.usp.ime.retrobreaker.game.Game.State;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -44,7 +44,7 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 		mNewGameButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(getBaseContext(), UI.class);
+				Intent intent = new Intent(getBaseContext(), GameActivity.class);
 				startActivity(intent);
 			}
 		});
