@@ -19,10 +19,10 @@
     <string name="explosive_brick_explanation">Bloco explosivo (quebra todos os blocos ao redor)</string>
     <string name="moveable_brick_explanation">Bloco móvel (fica se movendo de um lado para o outro)</string>
     <string name="hard_brick_explanation">Bloco duro (precisa de 2 toques para quebrar)</string>
-    <string name="gray_brick">Bloco cinza</string>
     <string name="special_bricks">Blocos especiais:</string>
-    <string name="red_brick">Bloco vermelho</string>
-    <string name="green_brick">Bloco verde</string>
     <string name="ready">Pronto?</string>
+    <string name="psss_just_between_you_and_me">Psiu&#8230; Só entre eu e você</string>
+    <string name="do_you_want_to_get_the_maximum_score_for_free">Você quer a pontuação máxima de graça?</string>
+    
 
 </resources>

@@ -19,10 +19,9 @@
     <string name="explosive_brick_explanation">Explosive brick (break all bricks around it)</string>
     <string name="moveable_brick_explanation">Moveable brick (keep moving from one side to another)</string>
     <string name="hard_brick_explanation">Hard brick (need 2 hits to break it)</string>
-    <string name="gray_brick">Gray brick</string>
     <string name="special_bricks">Special bricks:</string>
-    <string name="red_brick">Red brick</string>
-    <string name="green_brick">Green brick</string>
     <string name="ready">Ready?</string>
+    <string name="psss_just_between_you_and_me">Psss&#8230; Just between you and me</string>
+    <string name="do_you_want_to_get_the_maximum_score_for_free">Do you want to get the maximum score for free?</string>
 
 </resources>
