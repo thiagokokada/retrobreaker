@@ -36,12 +36,15 @@ public class Particle extends Quad {
 		mAge = 0;
 		/*
 		 * (rndDbl(0, MAX_SPEED * 2) gives us a number between 0 and MAX_SPEED*2. After, we decrement by MAX_SPEED.
-		 * We do this in order to have the possibility to move with the maximum speed but at the same time be able to 
+		 * We do this in order to have the possibility to move with the maximum speed (along each axis) but at the same time be able to 
 		 * move in both directions, both positive and negative.
 		 */
 		mXv = (rndDbl(0, MAX_SPEED * 2) - MAX_SPEED);
 		mYv = (rndDbl(0, MAX_SPEED * 2) - MAX_SPEED);
-		// Smoothing out the diagonal speed
+		/*
+		 * Smoothing out the diagonal speed.
+		 * By the Pythagorean theorem, x^2 + y^2 = d^2.
+		 */
 		if (mXv * mXv + mYv * mYv > MAX_SPEED * MAX_SPEED) {
 			mXv *= 0.7;
 			mYv *= 0.7;
