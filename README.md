@@ -13,9 +13,9 @@ Retro Breaker is a simple brick breaker game with an old, retro appearance. This
 	+ *Gray bricks*: this is almost the same as the White brick, but needs two hits instead of one to break;
 	+ *Green bricks*: this bricks moves horizontally if there isn't any obstacle. Try to break this brick before breaking his neighborhood, this will make things easier.
 - **Random generated levels with different difficult settings**: there are three different difficult settings (*Easy*, *Normal* and *Hard*; except for *Can't die* that exist mostly for debugging purposes, since you can't score); each difficult has a different number of stock lives, hit score, max score multiplier, ball speed and generates a random level with the number of special bricks according to a probability:
-	+ *Easy*: the player starts with 3 stock lives, each hit has a base score of 50, the maximum score multiplier is 4x, the ball speed is slow, there is 15% of probability to appears both grey and red bricks and no probability to appear green bricks;
-	+ *Normal*: the player starts with 2 stock lives, each hit has a base score of 100, the maximum score multiplier is 8x, the ball speed is normal (or 1.5x faster than on *Easy* difficult), there is 25% of probability to appear grey bricks, 10% to red bricks and 5% probability to appear green bricks;
-	+ *Hard*: the player starts with 1 stock lives, each hit has a base score of 150, the maximum score multiplier is 16x, the ball speed is fast (or 2x faster than on *Easy* difficult), there is 35% of probability to appear grey bricks, 5% to red bricks and 10% probability to appear green bricks.
+	+ *Easy*: the player starts with 3 stock lives, when you finish the game each extra live gives you 2500 bonus points, each hit has a base score of 50, the maximum score multiplier is 4x, the ball speed is slow, there is 15% of probability to appears both grey and red bricks and no probability to appear green bricks;
+	+ *Normal*: the player starts with 2 stock lives, when you finish the game each extra live gives you 5000 bonus points, each hit has a base score of 100, the maximum score multiplier is 8x, the ball speed is normal (or 1.5x faster than on *Easy* difficult), there is 25% of probability to appear grey bricks, 10% to red bricks and 5% probability to appear green bricks;
+	+ *Hard*: the player starts with 1 stock lives, when you finish the game each extra live gives you 15000 bonus points, each hit has a base score of 150, the maximum score multiplier is 16x, the ball speed is fast (or 2x faster than on *Easy* difficult), there is 35% of probability to appear grey bricks, 5% to red bricks and 10% probability to appear green bricks, while the green bricks itself moves faster.
 
 This game has pretty simple mechanics, like the original game. If you feel even a little bit of nostalgia, our objective was completed.
 
@@ -23,13 +23,13 @@ This game has pretty simple mechanics, like the original game. If you feel even 
 
 Select the desired difficult on main activity (this selected difficult is stored so you don't need to change again on the next time you play) and press "New Game" button to start a new game. Pressing any part of the screen start moving the ball. The paddle is controlled by moving your finger on screen (on any place, you don't need to actually press the paddle).
 
-When the game is over you have a option to return to the previous screen (in this case, the main activity) or to start a new game.
+When the game is over you have the option to return to the previous screen (in this case, the main activity) or to start a new game.
 
 If you exit the application the game is paused automatically. You don't need to press anything.
 
 ## Use the source, Luke!
 
-This game was made on [Android Developer Tools](https://developer.android.com/tools/index.html), so it's easier to simple import this code on your Eclipse workspace. Just go to ```File->Import->Android->Existing Android Code Into Workspace``` or, if the EGit plug-in installed, ```File->Import->Git->Projects from Git``` and point the URI from this Git repository. You need Android SDK 4.4.2, since the application does use newer funcionality when it makes sense (like [Holo theme](https://developer.android.com/design/style/themes.html) and [immersive mode](https://developer.android.com/training/system-ui/immersive.html)).
+This game was made on [Android Developer Tools](https://developer.android.com/tools/index.html), so it's easier to simple import this code on your Eclipse workspace. Just go to ```File->Import->Android->Existing Android Code Into Workspace``` or, if the EGit plug-in installed, ```File->Import->Git->Projects from Git``` and point the URI from this Git repository. You need Android SDK 4.4.2, since the application does use newer funcionality when it makes sense (like [Holo theme](https://developer.android.com/design/style/themes.html) and [Immersive mode](https://developer.android.com/training/system-ui/immersive.html)).
 
 The code is organized in the following way:
 
@@ -56,7 +56,7 @@ This application should work on any Android device from version 2.2 up to the mo
 - AOC Breeze 7'' 7Y2241 (running Android 4.1.1);
 - Android emulator (tested on 2.2, 2.3.3 and 4.4.2 versions).
 
-But the game should work better if your device has a screen ratio of 16:9 (or 9:16 if you're couting portrait mode), since this is the internal resolution assumed by the code. Any other screen ratio of screen may distorce the image.
+The game should work better if your device has a screen ratio of 16:9 (or 9:16 if you're couting portrait mode), since this is the internal resolution assumed by the code. Any other screen ratio will add borders to the game.
 
 ## Known bugs
 
