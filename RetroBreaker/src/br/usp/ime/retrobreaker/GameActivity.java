@@ -138,11 +138,8 @@ public class GameActivity extends Activity {
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void showGameOverDialog(long finalScore, boolean newHighScore) {
 		AlertDialog.Builder builder = null;
-	    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-	        builder = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK);
-	    } else {
-	    	builder = new AlertDialog.Builder(this);
-	    }
+		builder = new AlertDialog.Builder(this);
+
 		builder.setTitle(R.string.game_over);
 		// Show a different message if the player beats the high score or not
 		if(newHighScore){

@@ -1,6 +1,5 @@
 package br.usp.ime.retrobreaker;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -9,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
@@ -88,15 +86,10 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 	}
 	
 
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void easterEggRickRoll() {
 		/* Never gonna give you up */
 		AlertDialog.Builder builder = null;
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			builder = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK);
-		} else {
-			builder = new AlertDialog.Builder(this);
-		}
+		builder = new AlertDialog.Builder(this);
 		
 		builder.setTitle(R.string.psss_just_between_you_and_me);
 		builder.setMessage(R.string.do_you_want_to_get_the_maximum_score_for_free);

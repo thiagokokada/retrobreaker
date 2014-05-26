@@ -17,4 +17,8 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
+    <style name="GameTheme" parent="android:Theme.Black.NoTitleBar.Fullscreen">
+        <!-- Using fullscreen Activity on API <11, and old style elements -->
+    </style>
+
 </resources>

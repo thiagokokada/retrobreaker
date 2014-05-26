@@ -18,7 +18,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
             android:screenOrientation="sensorPortrait"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
+            android:theme="@style/GameTheme" >
         </activity>
         <activity
             android:name="br.usp.ime.retrobreaker.MainActivity"

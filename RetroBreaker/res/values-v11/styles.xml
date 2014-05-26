@@ -7,5 +7,9 @@
     <style name="AppBaseTheme" parent="android:Theme.Holo">
         <!-- API 11 theme customizations can go here. -->
     </style>
+    
+    <style name="GameTheme" parent="android:Theme.Holo.NoActionBar.Fullscreen">
+        <!-- Still using fullscreen, but Holo elements on API >11 -->
+    </style>
 
 </resources>
