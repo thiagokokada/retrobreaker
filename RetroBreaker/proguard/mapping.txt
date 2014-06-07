@@ -55,10 +55,12 @@ br.usp.ime.retrobreaker.MainActivity -> br.usp.ime.retrobreaker.MainActivity:
     android.widget.Button mNewGameButton -> b
     android.widget.Button mResetScoreButton -> c
     android.widget.Spinner mLevelSpinner -> d
-    android.content.SharedPreferences mSharedPrefs -> e
-    int mRickRoll -> f
+    android.widget.CheckBox mSoundEffectsCheckBox -> e
+    android.content.SharedPreferences mSharedPrefs -> f
+    int mRickRoll -> g
     void onCreate(android.os.Bundle) -> onCreate
     void onResume() -> onResume
+    void onCheckBoxClicked(android.view.View) -> onCheckBoxClicked
     void updateScoreTextView() -> a
     void easterEggRickRoll() -> b
     void onItemSelected(android.widget.AdapterView,android.view.View,int,long) -> onItemSelected
@@ -283,29 +285,33 @@ br.usp.ime.retrobreaker.game.Game$State -> br.usp.ime.retrobreaker.game.l:
     float sScreenLowerX -> h
     boolean sGamePaused -> i
     int sDifficult -> j
-    int[] $SWITCH_TABLE$br$usp$ime$retrobreaker$game$Constants$Score -> k
-    int[] $SWITCH_TABLE$br$usp$ime$retrobreaker$game$Constants$ScoreMultiplier -> l
-    int[] $SWITCH_TABLE$br$usp$ime$retrobreaker$game$Constants$Lives -> m
+    float sVolume -> k
+    int[] $SWITCH_TABLE$br$usp$ime$retrobreaker$game$Constants$Score -> l
+    int[] $SWITCH_TABLE$br$usp$ime$retrobreaker$game$Constants$ScoreMultiplier -> m
+    int[] $SWITCH_TABLE$br$usp$ime$retrobreaker$game$Constants$Lives -> n
     void setScore(br.usp.ime.retrobreaker.game.Constants$Score) -> a
     void setScoreMultiplier(br.usp.ime.retrobreaker.game.Constants$ScoreMultiplier) -> a
     void setLives(br.usp.ime.retrobreaker.game.Constants$Lives) -> a
     void setDifficult(int) -> a
-    int getDifficult() -> a
     void setGameOver(boolean) -> a
     void setGamePaused(boolean) -> b
-    boolean getGameOver() -> b
-    boolean getGamePaused() -> c
-    long getScore() -> d
-    int getScoreMultiplier() -> e
-    int getLives() -> f
-    float getScreenLowerX() -> g
-    float getScreenHigherX() -> h
-    float getScreenLowerY() -> i
-    float getScreenHigherY() -> j
+    void setVolume(float) -> a
+    void enableSoundEffects(boolean) -> c
+    boolean getGameOver() -> a
+    boolean getGamePaused() -> b
+    long getScore() -> c
+    int getScoreMultiplier() -> d
+    int getLives() -> e
+    float getScreenLowerX() -> f
+    float getScreenHigherX() -> g
+    float getScreenLowerY() -> h
+    float getScreenHigherY() -> i
     void setScreenMeasures(float,float) -> a
-    int[] $SWITCH_TABLE$br$usp$ime$retrobreaker$game$Constants$Score() -> k
-    int[] $SWITCH_TABLE$br$usp$ime$retrobreaker$game$Constants$ScoreMultiplier() -> l
-    int[] $SWITCH_TABLE$br$usp$ime$retrobreaker$game$Constants$Lives() -> m
+    int getDifficult() -> j
+    float getVolume() -> k
+    int[] $SWITCH_TABLE$br$usp$ime$retrobreaker$game$Constants$Score() -> l
+    int[] $SWITCH_TABLE$br$usp$ime$retrobreaker$game$Constants$ScoreMultiplier() -> m
+    int[] $SWITCH_TABLE$br$usp$ime$retrobreaker$game$Constants$Lives() -> n
 br.usp.ime.retrobreaker.game.TouchSurfaceView -> br.usp.ime.retrobreaker.game.TouchSurfaceView:
     java.lang.String TAG -> a
     long mPrevFrameTime -> b
