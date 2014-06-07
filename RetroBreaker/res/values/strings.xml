@@ -15,9 +15,9 @@
     <string name="new_high_score">"New high score: "</string>
     <string name="do_you_want_to_restart_the_game">Do you want to restart the game?</string>
     <string name="final_score">"Final score: "</string>
-    <string name="difficult">"Difficult:"</string>
-    <string name="explosive_brick_explanation">Explosive brick (break all bricks around it)</string>
-    <string name="moveable_brick_explanation">Moveable brick (keep moving from one side to another)</string>
+    <string name="difficult">"Difficulty:"</string>
+    <string name="explosive_brick_explanation">Explosive brick (breaks all bricks around it)</string>
+    <string name="moveable_brick_explanation">Moveable brick (keeps moving from one side to another)</string>
     <string name="hard_brick_explanation">Hard brick (need 2 hits to break it)</string>
     <string name="special_bricks">Special bricks:</string>
     <string name="ready">Ready?</string>
