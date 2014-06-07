@@ -229,7 +229,7 @@ public class GameActivity extends Activity {
 					if(mNewHighScore) {
 						mSharedPrefsEditor.putLong("high_score", mHighScore);
 						mSharedPrefsEditor.commit();
-						mSoundPool.play(mSoundIds.get("victory_fanfare"), 100, 100, 0, 0, 1.0f);
+						mSoundPool.play(mSoundIds.get("victory_fanfare"), State.getVolume(), State.getVolume(), 0, 0, 1.0f);
 					}
 					/* We can't use State.getGameOver() as a condition to Timer since we need to pass
 					 * at least one time more on updateUI() to show the Game Over dialog. We can't

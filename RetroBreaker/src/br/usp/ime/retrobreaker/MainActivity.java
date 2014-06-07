@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
 import br.usp.ime.retrobreaker.game.Game.State;
@@ -25,6 +26,7 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 	private Button mNewGameButton;
 	private Button mResetScoreButton;
 	private Spinner mLevelSpinner;
+	private CheckBox mSoundEffectsCheckBox;
 	private SharedPreferences mSharedPrefs;
 	private int mRickRoll;
 
@@ -37,6 +39,7 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 		mNewGameButton = (Button) findViewById(R.id.newGameButton);
 		mResetScoreButton = (Button) findViewById(R.id.resetScoreButton);
 		mLevelSpinner = (Spinner) findViewById(R.id.levelSpinner);
+		mSoundEffectsCheckBox = (CheckBox) findViewById(R.id.soundEffectsCheckBox);
 		mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -45,6 +48,8 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 		mLevelSpinner.setAdapter(adapter);
 		mLevelSpinner.setOnItemSelectedListener(this);
 		mLevelSpinner.setSelection(mSharedPrefs.getInt("difficult_prefs", 2)); // Default to difficult "normal"
+		mSoundEffectsCheckBox.setChecked(mSharedPrefs.getBoolean("sound_effects", true)); // Sound effects prefs
+		State.enableSoundEffects(mSoundEffectsCheckBox.isChecked());
 		
 		mNewGameButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -80,11 +85,18 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 		mRickRoll = 0;
 	}
 	
+	public void onCheckBoxClicked(View view) {
+	    boolean checked = ((CheckBox) view).isChecked();
+	    State.enableSoundEffects(checked);
+		SharedPreferences.Editor editor = mSharedPrefs.edit();
+		editor.putBoolean("sound_effects", checked);
+		editor.commit();
+	}
+	
 	private void updateScoreTextView() {
 		long highScore = mSharedPrefs.getLong("high_score", 0);
 		mHighScoreTextView.setText(getString(R.string.high_score) +	 String.format("%08d", highScore));
 	}
-	
 
 	private void easterEggRickRoll() {
 		/* Never gonna give you up */

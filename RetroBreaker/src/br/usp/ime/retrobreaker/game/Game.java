@@ -254,13 +254,13 @@ public class Game {
 			/* Wall hit collision is almost the same, but the equation is different so we
 			 * need to differentiate here */
 			Log.d(TAG, "Detected collision between ball and left/right wall");
-			mSoundPool.play(mSoundIds.get("wall_hit"), 100, 100, 1, 0, 1.0f);
+			mSoundPool.play(mSoundIds.get("wall_hit"), State.getVolume(), State.getVolume(), 1, 0, 1.0f);
 			mBall.turnToPerpendicularDirection(Hit.RIGHT_LEFT);
 			Log.d(TAG, "Next slope: " + mBall.getSlope());
 			break;
 		case WALL_TOP_BOTTOM_SIDE:
 			Log.d(TAG, "Detected collision between ball and top/bottom wall");
-			mSoundPool.play(mSoundIds.get("wall_hit"), 100, 100, 1, 0, 1.0f);
+			mSoundPool.play(mSoundIds.get("wall_hit"), State.getVolume(), State.getVolume(), 1, 0, 1.0f);
 			mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
 			Log.d(TAG, "Next slope: " + mBall.getSlope());
 			break;
@@ -269,7 +269,7 @@ public class Game {
 			State.setScore(Score.BRICK_HIT);
 			Log.i(TAG, "Score multiplier: " + State.getScoreMultiplier() + " Score: " + State.getScore());
 			State.setScoreMultiplier(ScoreMultiplier.BRICK_HIT); // Update multiplier for the next brick hit
-			mSoundPool.play(mSoundIds.get("brick_hit"), 100, 100, 1, 0, 1.0f);
+			mSoundPool.play(mSoundIds.get("brick_hit"), State.getVolume(), State.getVolume(), 1, 0, 1.0f);
 			mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
 			break;
 		case EX_BRICK_BALL:
@@ -277,13 +277,13 @@ public class Game {
 			State.setScore(Score.EX_BRICK_HIT);
 			Log.i(TAG, "Score multiplier: " + State.getScoreMultiplier() + " Score: " + State.getScore());
 			State.setScoreMultiplier(ScoreMultiplier.BRICK_HIT);
-			mSoundPool.play(mSoundIds.get("explosive_brick"), 100, 100, 1, 0, 1.0f);
+			mSoundPool.play(mSoundIds.get("explosive_brick"), State.getVolume(), State.getVolume(), 1, 0, 1.0f);
 			mBall.turnToPerpendicularDirection(Hit.TOP_BOTTOM);
 			break;
 		case PADDLE_BALL:
 			Log.d(TAG, "Detected collision between ball and paddle on position X=" + mPaddle.getPosX());
 			State.setScoreMultiplier(ScoreMultiplier.PADDLE_HIT);
-			mSoundPool.play(mSoundIds.get("paddle_hit"), 100, 100, 1, 0, 1.0f);
+			mSoundPool.play(mSoundIds.get("paddle_hit"), State.getVolume(), State.getVolume(), 1, 0, 1.0f);
 			/* 
 			 * The angle of the slope (of the ball trajectory) is the complement of the angle of reflection.
 			 * Take a look at http://www.mathopenref.com/coordslope.html to get an idea of the angle of the slope.
@@ -301,7 +301,7 @@ public class Game {
 			break;
 		case LIFE_LOST:
 			State.setLives(Lives.LOST_LIFE);
-			mSoundPool.play(mSoundIds.get("lost_life"), 100, 100, 1, 0, 1.0f);
+			mSoundPool.play(mSoundIds.get("lost_life"), State.getVolume(), State.getVolume(), 1, 0, 1.0f);
 			// If the user still has lives left, create a new ball and reset score multiplier
 			if(!State.getGameOver()) {
 				Log.i(TAG, "User lost a live, new live count: " + State.getLives());
@@ -497,6 +497,7 @@ public class Game {
 		private static float sScreenLowerX;
 		private static boolean sGamePaused;
 		private static int sDifficult;
+		private static float sVolume;
 
 		public static void setScore (Score event) {
 			switch(event) {
@@ -557,10 +558,6 @@ public class Game {
 			}
 		}
 		
-		public static int getDifficult() {
-			return sDifficult;
-		}
-		
 		public static void setGameOver(boolean gameIsOver) {
 			// Add bonus points for each extra life the user has
 			if (gameIsOver) {
@@ -571,6 +568,23 @@ public class Game {
 		
 		public static void setGamePaused(boolean gamePaused) {
 			sGamePaused = gamePaused;
+		}
+		
+		public static void setVolume(float volume) {
+			if (volume >= 0.0f || volume <= 1.0f) {
+				sVolume = volume;
+			} else {
+				Log.e(TAG, "Invalid sound effect volume: " + volume);
+				sVolume = 0.0f;
+			}
+		}
+
+		public static void enableSoundEffects(boolean enable) {
+			if (enable) {
+				setVolume(1.0f);
+			} else {
+				setVolume(0.0f);
+			}
 		}
 		
 		public static boolean getGameOver() {
@@ -616,6 +630,14 @@ public class Game {
 			sScreenHigherX = SCREEN_INITIAL_X + screenWidth/2;
 			sScreenLowerY = SCREEN_INITIAL_Y - screenHeight/2;
 			sScreenHigherY = SCREEN_INITIAL_Y + screenHeight/2;
+		}
+
+		public static int getDifficult() {
+			return sDifficult;
+		}
+		
+		public static float getVolume() {
+			return sVolume;
 		}
 	}
 }

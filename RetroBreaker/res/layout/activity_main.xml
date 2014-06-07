@@ -41,6 +41,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp" />
 
+    <CheckBox
+        android:id="@+id/soundEffectsCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/enable_sound_effects"
+        android:layout_marginTop="8dp"
+        android:onClick="onCheckBoxClicked" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
