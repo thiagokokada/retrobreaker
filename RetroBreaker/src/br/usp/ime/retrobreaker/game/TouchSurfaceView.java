@@ -56,6 +56,7 @@ public class TouchSurfaceView extends GLSurfaceView {
 			 * don't try to compensate the rendering lag with it. Nonetheless,
 			 * this allows the game to run with the same "real" speed independently
 			 * of the FPS. */
+			int frame_counter = 0;
 			while (mLag >= Config.MS_PER_UPDATE) {
 				
 				/* If the game is over or paused, stop updating state (so we don't have
@@ -65,6 +66,13 @@ public class TouchSurfaceView extends GLSurfaceView {
 					mGame.updateState();
 				}
 				mLag -= Config.MS_PER_UPDATE;
+				
+				/* If the device is so slow that it can't maintain a nice frame rate, skip
+				 * game processing so the game runs slower on that device. */
+				if (frame_counter >= Config.FRAME_SKIP) {
+					break;
+				}
+				frame_counter++;
 			}
 			
 			gl.glClear(GL10.GL_COLOR_BUFFER_BIT);

@@ -3,13 +3,13 @@
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v2
 
-iQEcBAABAgAGBQJTmi+DAAoJEIcmJqtS6lABMOgH/1fakKuC2BcMvBDISVKYIUs8
-bKEKBby8yInb9O6BsofgVKomC+4mvgT+MI68SvTjr3PSuDRpl+OxrPEalkv7GdHU
-YAjZhUbdfcGFPoyX8E7HCipiLDXfcpPAXZE5dHqAvV4puYD5pfqeHV2+CCbMqrq7
-8IfEcjMC/beFpe0jT7Emwr0sx5jeQ6uwGlJV0qebFmC6lvc7ghZl5o4rK/b80GuU
-1q3uzlfaOgBfu2bWLyK495i8TQfwT6gR1IGDM3powy1w5cd3KsEtMUrWKjH29a1S
-bZ4b3F5diM0fL2qFmdul65bLyIs2OXPyRQ5wWkpRiAA1cMR4q6tj2zjMLauv47o=
-=MBCN
+iQEcBAABAgAGBQJTxrFKAAoJEIcmJqtS6lAB6uUIALxhbKPpuIuXSzudmUONy3uO
+IDl+U9FCuYUzEpn/6kIUJo9MPmpdMWZuW3CR8KFY5/5Ty5vN604A2BhGjl2YDuVn
+xTzvy7wgxp5+c9hqoY56NVNaO83hp+hYIsY4UVd6yKcawky9WQWpX2/yRNWriVg8
+GnRHW+uuN7tK9NWsiY95cr59BQWR6CptEjqhmy4VMwlTs9NNgQ9TB73AxwM/TxWn
+SH9C5zzUlEilXnY9fEic5J554ixw/6mBY13BJ5/f77MNvoDczzKyO86xt00B5Re9
+6sYiUSG72Gvqa709QVCCW2SkdQHqgpB+Mp82Z+YRXkzHO9WrZuQW1kTbpJtCjhE=
+=qDHj
 -----END PGP SIGNATURE-----
 
 ```
@@ -90,9 +90,9 @@ size   exec  file                                   contents
 2639                         Particle.java          ca0442c6cfaf3f9ef918446e6a1282c381e5018ec32df409165e8abaa140b831                                                                 
 3656                         Quad.java              8a3f5cb85872de4a731d074618b5e94daf62775eba295cc19c69e01117e04ba9                                                                 
                            game/                                                                                                                                                     
-4621                         Constants.java         4df4b8d343eab602526a191713abd1d932adc95f1f7020d79cb42f0bd37ff823                                                                 
+4663                         Constants.java         23e40ee4f81dd9e8b6291bafb878ef8edd0b51cbbc22fd912e582f7b143591a1                                                                 
 22626                        Game.java              6fed6906e5a633442a8209db707d6b9e49bace93df51e94e8a32c0aad9a0663a                                                                 
-5883                         TouchSurfaceView.java  523fdf436528717525c0d8915faf4c912c37c8bad92f96677afbe9e1322390d5                                                                 
+6144                         TouchSurfaceView.java  c2c32e7c3daed427cd65606956295df3f5792c195492448e338df7c3cbdcdfd9                                                                 
 21827          screenshot.png                       04debfb767b780884868e0ffea4e6dbef1e8fa00bd6854a3883ee44aef3a5c47|e0220cd1161a4e54c8abd97f486cd04ff7df4b73b05b6f21321ba7fc107c0c0f
 ```
 
@@ -105,10 +105,12 @@ size   exec  file                                   contents
 #### Presets
 
 ```
-git  # ignore .git and anything as described by .gitignore files
+git      # ignore .git and anything as described by .gitignore files
+dropbox  # ignore .dropbox-cache and other Dropbox-related files    
+kb       # ignore anything as described by .kbignore files          
 ```
 
-<!-- summarize version = 0.0.8 -->
+<!-- summarize version = 0.0.9 -->
 
 ### End signed statement
 

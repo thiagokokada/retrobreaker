@@ -35,6 +35,7 @@ public class Constants {
 	public static final class Config {
 		public static final int MS_PER_UPDATE = 15 /* milliseconds */;
 		public static final int FPS_LIMIT = 0; // Set to 0 to disable it
+		public static final int FRAME_SKIP = 5;
 		public static final int NUMBER_OF_LINES_OF_BRICKS = 8;
 		public static final int NUMBER_OF_COLUMNS_OF_BRICKS = 10;
 		public static final int MOBILE_BRICK_SKIP_FRAMES = 3;
