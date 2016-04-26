@@ -29,21 +29,21 @@ If you exit the application the game is paused automatically. You don't need to 
 
 ## Use the source, Luke!
 
-This game was made on [Android Developer Tools](https://developer.android.com/tools/index.html), so it's easier to simple import this code on your Eclipse workspace. Just go to ```File->Import->Android->Existing Android Code Into Workspace``` or, if the EGit plug-in installed, ```File->Import->Git->Projects from Git``` and point the URI from this Git repository. You need Android SDK 4.4.2, since the application does use newer funcionality when it makes sense (like [Holo theme](https://developer.android.com/design/style/themes.html) and [Immersive mode](https://developer.android.com/training/system-ui/immersive.html)).
+This game was build using [Android Studio](http://developer.android.com/intl/en-us/sdk/index.html), so just click in `File->Open` and select `RetroBreaker` subfolder. You need Android SDK 4.4.2, since the application does use newer funcionality when it makes sense (like [Holo theme](https://developer.android.com/design/style/themes.html) and [Immersive mode](https://developer.android.com/training/system-ui/immersive.html)).
 
 The code is organized in the following way:
 
-- ```br.usp.ime.retrobreaker```: activity related code:
+- `br.usp.ime.retrobreaker`: activity related code:
 	+ *MainActivity*: the first activity that appears when you open the app; not related with the game *per se*, but include options that change the game in some way;
 	+ *GameActivity*: renders the OpenGL view and the user interface on screen (including actual/high score, score multiplier, number of lives and "Ready?" text).
-- ```br.usp.ime.retrobreaker.game```: the main game code:
+- `br.usp.ime.retrobreaker.game`: the main game code:
 	+ *Constants*: all game constants in one place so we can easily change them;
 	+ *Game*: the main game logic, including drawing methods, game physics, game state methods, etc.;
 	+ *TouchSurfaceView*: include OpenGL logic and methods to get the user finger position on screen;
-- ```br.usp.ime.retrobreaker.forms```: the various objects rendered on screen:
+- `br.usp.ime.retrobreaker.forms`: the various objects rendered on screen:
 	+ *Quad*: the base class of all forms. This is a abstract class, so you need to extend it first before using it;
 	+ *Ball/Brick/MobileBrick/Paddle/Particle*: extend classes of Quad that represents the diverse objects of the screen.
-- ```br.usp.ime.retrobreaker.effects```: create special effects on screen:
+- `br.usp.ime.retrobreaker.effects`: create special effects on screen:
 	+ *Explosion*: generates a explosion effect on ball hit.
 
 ## Compatibility
@@ -64,7 +64,7 @@ Sometimes, the ball will reflect infinitely on paddle or on the wall. In the pad
 
 ## License
 
-This code is licensed on MIT license (see ```LICENSE``` file for details) except if the file itself says otherwise. The exception is the audio files, that we are using either on a [fair use](https://en.wikipedia.org/wiki/Fair_use) basis or we are using royalty free music. But do understand that even when the music files are royalty free, you can't resell them (there was a clause on any site that I downloaded the music files saying that I could not sell them).
+This code is licensed on MIT license (see `LICENSE` file for details) except if the file itself says otherwise. The exception is the audio files, that we are using either on a [fair use](https://en.wikipedia.org/wiki/Fair_use) basis or we are using royalty free music. But do understand that even when the music files are royalty free, you can't resell them (there was a clause on any site that I downloaded the music files saying that I could not sell them).
 
 ## Credits
 
