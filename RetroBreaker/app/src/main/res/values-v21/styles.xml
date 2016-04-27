@@ -1,0 +1,15 @@
+<resources>
+
+    <!--
+        Base application theme for API 21+. This theme completely replaces
+        AppBaseTheme from res/values/styles.xml on API 11+ devices.
+    -->
+    <style name="AppBaseTheme" parent="android:Theme.Material">
+        <!-- API 21 theme customizations can go here. -->
+    </style>
+    
+    <style name="GameTheme" parent="android:Theme.Material.NoActionBar.Fullscreen">
+        <!-- Still using fullscreen, but Material elements on API >21 -->
+    </style>
+
+</resources>
