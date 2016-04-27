@@ -29,3 +29,10 @@ proguard/
 *.bak
 *.swp
 .settings/
+
+Android Studio / IntelliJ IDEA 
+*.iws
+.idea/libraries
+.idea/tasks.xml
+.idea/vcs.xml
+.idea/workspace.xml
