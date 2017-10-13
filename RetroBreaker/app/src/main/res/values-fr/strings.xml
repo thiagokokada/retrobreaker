@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Retro Breaker</string>
+    <string name="title_activity_main">Retro Breaker</string>
+    <string name="high_score">"Meilleur score : "</string>
+    <string name="new_game">Nouvelle partie</string>
+    <string name="reset_high_score">Réinitialiser le meilleur score</string>
+    <string name="score">"Score : "</string>
+    <string name="multiplier">"Multiplicateur : "</string>
+    <string name="lives">"Vies : "</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
+    <string name="game_over">Partie terminée</string>
+    <string name="new_high_score">"Nouveau meilleur score : "</string>
+    <string name="do_you_want_to_restart_the_game">Voulez-vous recommencer une partie ?</string>
+    <string name="final_score">"Score final : "</string>
+    <string name="difficult">"Difficulté :"</string>
+    <string name="explosive_brick_explanation">Brique explosive (casse toutes les briques autour d'elle)</string>
+    <string name="moveable_brick_explanation">Brique mouvante (se déplace en permanence d'un côté à l'autre)</string>
+    <string name="hard_brick_explanation">Brique dure (nécessite 2 coups pour être cassé)</string>
+    <string name="special_bricks">Briques spéciales :</string>
+    <string name="ready">Prêt ?</string>
+    <string name="psss_just_between_you_and_me">Psss&#8230; Juste entre vous et moi</string>
+    <string name="do_you_want_to_get_the_maximum_score_for_free">Voulez-vous obtenir le score maximum gratuitement ?</string>
+    <string name="enable_sound_effects">Activer les effets sonores</string>
+
+</resources>
