@@ -16,13 +16,14 @@
     <string name="do_you_want_to_restart_the_game">Voulez-vous recommencer une partie ?</string>
     <string name="final_score">"Score final : "</string>
     <string name="difficult">"Difficulté :"</string>
-    <string name="explosive_brick_explanation">Brique explosive (casse toutes les briques autour d'elle)</string>
-    <string name="moveable_brick_explanation">Brique mouvante (se déplace en permanence d'un côté à l'autre)</string>
+    <string name="explosive_brick_explanation">Brique explosive (casse toutes les briques autour d\'elle)</string>
+    <string name="moveable_brick_explanation">Brique mouvante (se déplace en permanence d\'un côté à l\'autre)</string>
     <string name="hard_brick_explanation">Brique dure (nécessite 2 coups pour être cassé)</string>
     <string name="special_bricks">Briques spéciales :</string>
     <string name="ready">Prêt ?</string>
     <string name="psss_just_between_you_and_me">Psss&#8230; Juste entre vous et moi</string>
     <string name="do_you_want_to_get_the_maximum_score_for_free">Voulez-vous obtenir le score maximum gratuitement ?</string>
+    <string name="do_you_want_to_reset_the_high_score_to_zero">Voulez-vous remettre le score élevé à zéro?</string>
     <string name="enable_sound_effects">Activer les effets sonores</string>
 
 </resources>
