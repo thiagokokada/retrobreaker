@@ -44,7 +44,7 @@ public class TouchSurfaceView extends GLSurfaceView {
 		public void onDrawFrame(GL10 gl) {
 			mCurrentTime = System.nanoTime();
 			mElapsedTime = (mCurrentTime - mPrevFrameTime)/Constants.NANOS_PER_SECONDS;
-			mLag += mElapsedTime;
+            if (!State.getGamePaused()) mLag += mElapsedTime;
 			/* You can set Config.FPS_LIMIT parameter on Constants.java file to limit
 			 * frame rendering for debugging purposes (but with game loop this shouldn't
 			 * be a problem anymore. */
@@ -66,7 +66,7 @@ public class TouchSurfaceView extends GLSurfaceView {
 					mGame.updateState();
 				}
 				mLag -= Config.MS_PER_UPDATE;
-				
+
 				/* If the device is so slow that it can't maintain a nice frame rate, skip
 				 * game processing so the game runs slower on that device. */
 				if (frame_counter >= Config.FRAME_SKIP) {
