@@ -29,6 +29,7 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 	private CheckBox mSoundEffectsCheckBox;
 	private SharedPreferences mSharedPrefs;
 	private int mRickRoll;
+	private long mHighScore;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,7 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 		mLevelSpinner = (Spinner) findViewById(R.id.levelSpinner);
 		mSoundEffectsCheckBox = (CheckBox) findViewById(R.id.soundEffectsCheckBox);
 		mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		mHighScore = mSharedPrefs.getLong("high_score", 0);
 		
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
 		        R.array.levels, android.R.layout.simple_spinner_item);
@@ -62,13 +64,13 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 		mResetScoreButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				SharedPreferences.Editor editor = mSharedPrefs.edit();
-				editor.remove("high_score");
-				editor.commit();
-				updateScoreTextView();
-				mRickRoll++;
+				if (mHighScore > 0) {
+					resetHighScore();
+				} else {
+					mRickRoll++;
+				}
 
-				if(mRickRoll == 5) {
+				if (mRickRoll == 5) {
 					easterEggRickRoll();
 					mRickRoll = 0;
 				}
@@ -96,6 +98,29 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 	private void updateScoreTextView() {
 		long highScore = mSharedPrefs.getLong("high_score", 0);
 		mHighScoreTextView.setText(getString(R.string.high_score) +	 String.format("%08d", highScore));
+	}
+
+	private void resetHighScore() {
+		AlertDialog.Builder builder = null;
+		builder = new AlertDialog.Builder(MainActivity.this);
+
+		builder.setTitle(R.string.reset_high_score);
+		builder.setMessage(R.string.do_you_want_to_reset_the_high_score_to_zero);
+
+		builder.setPositiveButton(R.string.yes, new Dialog.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				SharedPreferences.Editor editor = mSharedPrefs.edit();
+				editor.remove("high_score");
+				editor.commit();
+				updateScoreTextView();
+			}
+		});
+
+		builder.setNegativeButton(R.string.no, null);
+
+		if(!isFinishing()) builder.show();
 	}
 
 	private void easterEggRickRoll() {
