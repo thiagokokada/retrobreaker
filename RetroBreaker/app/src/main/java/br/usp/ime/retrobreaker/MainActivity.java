@@ -96,8 +96,8 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 	}
 	
 	private void updateScoreTextView() {
-		long highScore = mSharedPrefs.getLong("high_score", 0);
-		mHighScoreTextView.setText(getString(R.string.high_score) +	 String.format("%08d", highScore));
+		mHighScore = mSharedPrefs.getLong("high_score", 0);
+		mHighScoreTextView.setText(getString(R.string.high_score) +	 String.format("%08d", mHighScore));
 	}
 
 	private void resetHighScore() {
