@@ -23,6 +23,7 @@
     <string name="ready">Ready?</string>
     <string name="psss_just_between_you_and_me">Psss&#8230; Just between you and me</string>
     <string name="do_you_want_to_get_the_maximum_score_for_free">Do you want to get the maximum score for free?</string>
+    <string name="do_you_want_to_reset_the_high_score_to_zero">Do you want to reset the high score to zero?</string>
     <string name="enable_sound_effects">Enable sound effects</string>
 
 </resources>
