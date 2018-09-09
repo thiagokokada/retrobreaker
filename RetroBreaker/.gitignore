@@ -105,3 +105,6 @@ fabric.properties
 
 # Sonarlint plugin
 .idea/sonarlint
+
+# Ignore release files
+app/release
