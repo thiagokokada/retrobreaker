@@ -5,13 +5,14 @@ import br.usp.ime.retrobreaker.game.Game.State;
 
 public class MobileBrick extends Brick {
 	
-	private int mFramesToWait;	//number of frames update to wait until the brick move again.
+	private final int mFramesToWait;	//number of frames update to wait until the brick move again.
 	private int mToWait;		//countdown (which starts with mFramesToWait) that says when the the mobile brick can move (mToWait == 0)
 	private float mSpeedX;		//the mobile brick only moves in the X axis. It stores the increment in the movement.
 	private boolean mCollided;	//flat to say when the brick hit the wall or another brick.
 	
 	//used to index the global vector of bricks (mBricks) in Game
-	private int mIndexI, mIndexJ;
+	private final int mIndexI;
+	private final int mIndexJ;
 	
 	public MobileBrick(float[] colors, float posX, float posY, Type type, int wait, int i, int j, float speedX) {
 		super(colors, posX, posY, type);
@@ -101,12 +102,7 @@ public class MobileBrick extends Brick {
 	}
 	
 	public boolean equal(int i, int j) {
-		if ((mIndexI == i) && (mIndexJ == j)){
-			return true;
-		}
-		else {
-			return false;
-		}
+		return (mIndexI == i) && (mIndexJ == j);
 	}
 	
 	

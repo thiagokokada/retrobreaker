@@ -1,6 +1,5 @@
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="br.usp.ime.retrobreaker.MainActivity"
@@ -29,7 +28,6 @@
         android:text="@string/reset_high_score" />
 
     <TextView
-        android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -62,7 +60,9 @@
         android:layout_marginLeft="8dp"
         android:drawablePadding="8dp"
         android:drawableLeft="@drawable/explosive_brick"
-        android:text="@string/explosive_brick_explanation" />
+        android:text="@string/explosive_brick_explanation"
+        android:layout_marginStart="8dp"
+        android:drawableStart="@drawable/explosive_brick" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -70,7 +70,9 @@
         android:layout_marginLeft="8dp"
         android:drawablePadding="8dp"
         android:drawableLeft="@drawable/moveable_brick"
-        android:text="@string/moveable_brick_explanation" />
+        android:text="@string/moveable_brick_explanation"
+        android:layout_marginStart="8dp"
+        android:drawableStart="@drawable/moveable_brick" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -78,5 +80,7 @@
         android:layout_marginLeft="8dp"
         android:drawablePadding="8dp"
         android:drawableLeft="@drawable/hard_brick"
-        android:text="@string/hard_brick_explanation" />
+        android:text="@string/hard_brick_explanation"
+        android:layout_marginStart="8dp"
+        android:drawableStart="@drawable/hard_brick" />
 </TableLayout>

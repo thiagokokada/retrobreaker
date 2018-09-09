@@ -36,11 +36,11 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		mHighScoreTextView = (TextView) findViewById(R.id.mainHighScore);
-		mNewGameButton = (Button) findViewById(R.id.newGameButton);
-		mResetScoreButton = (Button) findViewById(R.id.resetScoreButton);
-		mLevelSpinner = (Spinner) findViewById(R.id.levelSpinner);
-		mSoundEffectsCheckBox = (CheckBox) findViewById(R.id.soundEffectsCheckBox);
+		mHighScoreTextView = findViewById(R.id.mainHighScore);
+		mNewGameButton = findViewById(R.id.newGameButton);
+		mResetScoreButton = findViewById(R.id.resetScoreButton);
+		mLevelSpinner = findViewById(R.id.levelSpinner);
+		mSoundEffectsCheckBox = findViewById(R.id.soundEffectsCheckBox);
 		mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		mHighScore = mSharedPrefs.getLong("high_score", 0);
 		
@@ -92,7 +92,7 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 	    State.enableSoundEffects(checked);
 		SharedPreferences.Editor editor = mSharedPrefs.edit();
 		editor.putBoolean("sound_effects", checked);
-		editor.commit();
+		editor.apply();
 	}
 	
 	private void updateScoreTextView() {
@@ -101,8 +101,7 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 	}
 
 	private void resetHighScore() {
-		AlertDialog.Builder builder = null;
-		builder = new AlertDialog.Builder(MainActivity.this);
+		AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
 		builder.setTitle(R.string.reset_high_score);
 		builder.setMessage(R.string.do_you_want_to_reset_the_high_score_to_zero);
@@ -113,7 +112,7 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 			public void onClick(DialogInterface dialog, int which) {
 				SharedPreferences.Editor editor = mSharedPrefs.edit();
 				editor.remove("high_score");
-				editor.commit();
+				editor.apply();
 				updateScoreTextView();
 			}
 		});
@@ -125,9 +124,8 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 
 	private void easterEggRickRoll() {
 		/* Never gonna give you up */
-		AlertDialog.Builder builder = null;
-		builder = new AlertDialog.Builder(this);
-		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
 		builder.setTitle(R.string.psss_just_between_you_and_me);
 		builder.setMessage(R.string.do_you_want_to_get_the_maximum_score_for_free);
 		
@@ -159,7 +157,7 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 		State.setDifficult(pos);
 		SharedPreferences.Editor editor = mSharedPrefs.edit();
 		editor.putInt("difficult_prefs", pos);
-		editor.commit();
+		editor.apply();
 	}
 
 	@Override

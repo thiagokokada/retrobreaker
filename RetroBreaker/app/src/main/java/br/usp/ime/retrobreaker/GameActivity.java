@@ -9,7 +9,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.AudioManager;
@@ -53,7 +52,7 @@ public class GameActivity extends Activity {
 		mFinish = false;
 		mDecorView = getWindow().getDecorView();
 		
-		mTouchSurfaceView = (TouchSurfaceView) findViewById(R.id.opengl);
+		mTouchSurfaceView = findViewById(R.id.opengl);
 		// Initialize SharedPreferences, so we can save the user High Score
 		mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		mSharedPrefsEditor = mSharedPrefs.edit();
@@ -62,20 +61,20 @@ public class GameActivity extends Activity {
 		/* Initialize TextViews to show user game state (both high and current
 		 * score, current score multiplier and number of lives remaining) and change
 		 * color of them to give that retro style ;). */
-		mScoreTextView = (TextView) findViewById(R.id.score);
+		mScoreTextView = findViewById(R.id.score);
 		mScoreTextView.setTextColor(Color.WHITE);
-		mScoreMultiplierTextView = (TextView) findViewById(R.id.scoreMultiplier);
+		mScoreMultiplierTextView = findViewById(R.id.scoreMultiplier);
 		mScoreMultiplierTextView.setTextColor(Color.WHITE);
-		mLivesTextView = (TextView) findViewById(R.id.lives);
+		mLivesTextView = findViewById(R.id.lives);
 		mLivesTextView.setTextColor(Color.WHITE);
-		mHighScoreTextView = (TextView) findViewById(R.id.highScore);
+		mHighScoreTextView = findViewById(R.id.highScore);
 		mHighScoreTextView.setTextColor(Color.GRAY);
-		mReadyTextView = (TextView) findViewById(R.id.ready);
+		mReadyTextView = findViewById(R.id.ready);
 		mReadyTextView.setTextColor(Color.RED);
 
 		// Initialize SoundPool to play a music if the user beats his high score
 		mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
-		mSoundIds = new HashMap<String, Integer>(1);
+		mSoundIds = new HashMap<>(1);
 		mSoundIds.put("victory_fanfare", mSoundPool.load(this, R.raw.victory_fanfare, 1));
 		
 		/* We can't update the UI from the GL thread, so we set a timer and update it on
@@ -85,11 +84,7 @@ public class GameActivity extends Activity {
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				if(!mFinish){
-					updateUI();				
-				} else {
-					return;
-				}
+				if(!mFinish) updateUI();
 			}
 		}, 0, Config.MS_PER_UPDATE * 10);
 	}
@@ -139,8 +134,7 @@ public class GameActivity extends Activity {
 	
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void showGameOverDialog(long finalScore, boolean newHighScore) {
-		AlertDialog.Builder builder = null;
-		builder = new AlertDialog.Builder(this);
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
 		builder.setTitle(R.string.game_over);
 		// Show a different message if the player beats the high score or not
@@ -176,25 +170,10 @@ public class GameActivity extends Activity {
 		 * of it. */
 		if(!isFinishing()) builder.show().setCanceledOnTouchOutside(false);
 	}
-	
-	/* recreate() method appeared on API 11 (Honeycomb), before this version we
-	 * have to make a ugly hack to restart the Activity (and we need to recreate
-	 * the Activity to create a valid game state).
-	 * Original idea: http://stackoverflow.com/a/16467733/2751730 */
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	private void restartGame() {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-		    recreate();
-		} else {
-		    Intent intent = getIntent();
-		    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-		    finish();
-		    overridePendingTransition(0, 0);
 
-		    startActivity(intent);
-		    overridePendingTransition(0, 0);
-		}
-	}
+	private void restartGame() {
+        recreate();
+    }
 	
 	private void updateUI() {
 		mHandler.post(new Runnable() {

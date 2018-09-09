@@ -38,9 +38,9 @@ public class Game {
 	private Paddle mPaddle;
 	private Ball mBall;
 	private Brick[][] mBricks;
-	private SoundPool mSoundPool;
-	private HashMap<String, Integer> mSoundIds;
-	private Context mContext;
+	private final SoundPool mSoundPool;
+	private final HashMap<String, Integer> mSoundIds;
+	private final Context mContext;
 	private List<Explosion> mExplosions;
 	private List<MobileBrick> mMobileBricks;
 	private HashMap<Collision, Integer> mConsecutiveCollision;
@@ -52,7 +52,7 @@ public class Game {
 
 		// Load sound pool, audio shouldn't change between levels
 		mSoundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
-		mSoundIds = new HashMap<String, Integer>(4);
+		mSoundIds = new HashMap<>(4);
 		mSoundIds.put("lost_life", mSoundPool.load(mContext, R.raw.lost_life, 1));
 		mSoundIds.put("wall_hit", mSoundPool.load(mContext, R.raw.wall_hit, 1));
 		mSoundIds.put("paddle_hit", mSoundPool.load(mContext, R.raw.paddle_hit, 1));
@@ -63,9 +63,9 @@ public class Game {
 		resetElements();
 	}
 	
-	public void resetElements() {
-		mExplosions = new ArrayList<Explosion>();
-		mMobileBricks = new ArrayList<MobileBrick>();
+	private void resetElements() {
+		mExplosions = new ArrayList<>();
+		mMobileBricks = new ArrayList<>();
 		
 		/* We don't have the screen measures on the first call of this function,
 		 * so set to a sane default. */
@@ -77,7 +77,7 @@ public class Game {
 		State.setLives(Lives.RESTART_LEVEL);
 		State.setScore(Score.RESTART_LEVEL);
 		State.setScoreMultiplier(ScoreMultiplier.RESTART_LEVEL);
-		mConsecutiveCollision = new HashMap<Collision, Integer>();
+		mConsecutiveCollision = new HashMap<>();
 		for (Collision type : Config.CONSECUTIVE_COLLISION_DETECTION) {
 			mConsecutiveCollision.put(type, 0);
 		}
@@ -103,7 +103,7 @@ public class Game {
 		createLevel(Config.NUMBER_OF_LINES_OF_BRICKS, Config.NUMBER_OF_COLUMNS_OF_BRICKS,
 				Config.BRICKS_INITIAL_POS_X, Config.BRICKS_INITIAL_POS_Y);
 
-		mExplosions = new ArrayList<Explosion>();
+		mExplosions = new ArrayList<>();
 	}
 	
 	private void createLevel (int blocksX, int blocksY, float initialX, float initialY) {
@@ -155,28 +155,26 @@ public class Game {
 		mBall.draw(gl);
 		
 		// Need to draw each block on surface
-		for (int i=0; i<mBricks.length; i++) {
-			for (int j=0; j<mBricks[i].length; j++) {
-				// Checking if the brick is not destroyed
-				if (mBricks[i][j] != null) {
-					mBricks[i][j].draw(gl);
+		for (Brick[] bricks : mBricks) {
+			for (Brick brick : bricks) {
+				if (brick != null) {
+					brick.draw(gl);
 				}
 			}
 		}
-		
-		// Draw explosions (little bricks)
-		for (int i = 0; i < mExplosions.size(); i++) {
-			mExplosions.get(i).draw(gl);
-		}
+
+        // Draw explosions (little bricks)
+        for (Explosion explosion : mExplosions) {
+            explosion.draw(gl);
+        }
 	}
 	
 	private void updateBrickExplosion() {
-		for (int i = 0; i < mExplosions.size(); i++) {
-			Explosion explosion = mExplosions.get(i);
-			if (explosion.isAlive()) {
-				explosion.update();
-			}
-		}
+	    for (Explosion explosion : mExplosions) {
+	        if (explosion.isAlive()) {
+	            explosion.update();
+            }
+        }
 	}
 	
 	public void updatePaddlePosX(float x) {
@@ -245,7 +243,7 @@ public class Game {
 	}
 
 	public void updateState() {
-		float reflectedAngle = 0.0f, angleOfBallSlope = 0.0f;
+		float reflectedAngle, angleOfBallSlope;
 
 		Collision collisionType = detectConsecutiveCollision(detectCollision());
 
@@ -470,7 +468,7 @@ public class Game {
 		return Collision.NOT_AVAILABLE;
 	}	
 	
-	public void deleteMobileBrick(int i, int j) {
+	private void deleteMobileBrick(int i, int j) {
 		for (int a = 0; a < mMobileBricks.size(); a++) {
 			if (mMobileBricks.get(a).equal(i, j)) {
 				mMobileBricks.remove(a);
@@ -499,7 +497,7 @@ public class Game {
 		private static int sDifficult;
 		private static float sVolume;
 
-		public static void setScore (Score event) {
+		static void setScore(Score event) {
 			switch(event) {
 			case BRICK_HIT:
 				sScore += Difficult.HIT_SCORE[sDifficult] * getScoreMultiplier();
@@ -513,7 +511,7 @@ public class Game {
 			}
 		}
 
-		public static void setScoreMultiplier(ScoreMultiplier event) {
+		static void setScoreMultiplier(ScoreMultiplier event) {
 			switch(event) {
 			case RESTART_LEVEL:
 			case LOST_LIFE:
@@ -532,7 +530,7 @@ public class Game {
 			}
 		}
 		
-		public static void setLives(Lives event) {
+		static void setLives(Lives event) {
 			switch(event) {
 			case RESTART_LEVEL:
 				sGameOver = false;
@@ -558,7 +556,7 @@ public class Game {
 			}
 		}
 		
-		public static void setGameOver(boolean gameIsOver) {
+		static void setGameOver(boolean gameIsOver) {
 			// Add bonus points for each extra life the user has
 			if (gameIsOver) {
 				sScore += sLives * Difficult.LIFE_SCORE_BONUS[sDifficult];
@@ -570,7 +568,7 @@ public class Game {
 			sGamePaused = gamePaused;
 		}
 		
-		public static void setVolume(float volume) {
+		static void setVolume(float volume) {
 			if (volume >= 0.0f || volume <= 1.0f) {
 				sVolume = volume;
 			} else {
@@ -632,7 +630,7 @@ public class Game {
 			sScreenHigherY = SCREEN_INITIAL_Y + screenHeight/2;
 		}
 
-		public static int getDifficult() {
+		static int getDifficult() {
 			return sDifficult;
 		}
 		

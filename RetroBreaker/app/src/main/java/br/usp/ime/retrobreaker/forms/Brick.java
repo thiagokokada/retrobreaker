@@ -1,13 +1,10 @@
 package br.usp.ime.retrobreaker.forms;
 
 public class Brick extends Quad {
-	
-	public static final int GRAY_LIVES = 1;
-	public static final int NORMAL_LIVES = 0;
-	
+
 	public static final int BRICK_EXPLOSION_SIZE = 8;
 	
-	public static enum Type {
+	public enum Type {
 		NORMAL, EXPLOSIVE, HARD, MOBILE
 	}
 
@@ -20,7 +17,7 @@ public class Brick extends Quad {
 	};
 	
 	private int mLives;
-	private Type mType;
+	private final Type mType;
 
 	public Brick(float[] colors, float posX, float posY, Type type) {
 		super(VERTICES, SCALE, colors, posX, posY);

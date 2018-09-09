@@ -22,19 +22,19 @@ public class TouchSurfaceView extends GLSurfaceView {
 	private long mElapsedTime;
 	private long mLag;
 
-	private Renderer mRenderer;
+	private final Renderer mRenderer;
 
 	private int mScreenWidth;
 	private int mScreenHeight;
 
-	private float[] mUnprojectViewMatrix = new float[16];
-	private float[] mUnprojectProjMatrix = new float[16];
+	private final float[] mUnprojectViewMatrix = new float[16];
+	private final float[] mUnprojectProjMatrix = new float[16];
 
 	private class Renderer implements GLSurfaceView.Renderer {
 
-		private Game mGame;
+		private final Game mGame;
 
-		public Renderer(Context context) {
+		Renderer(Context context) {
 			mGame = new Game(context);
 			mPrevFrameTime = System.nanoTime();
 		}
@@ -48,7 +48,7 @@ public class TouchSurfaceView extends GLSurfaceView {
 			/* You can set Config.FPS_LIMIT parameter on Constants.java file to limit
 			 * frame rendering for debugging purposes (but with game loop this shouldn't
 			 * be a problem anymore. */
-			mPrevFrameTime = mCurrentTime + (Config.FPS_LIMIT > 0 ? limitFps(Config.FPS_LIMIT) : 0);
+			mPrevFrameTime = mCurrentTime + limitFps(Config.FPS_LIMIT);
 			Log.v(TAG, "FPS: " + Constants.MS_PER_SECONDS/mElapsedTime);
 			
 			/* Using game loop: http://gameprogrammingpatterns.com/game-loop.html
@@ -114,7 +114,7 @@ public class TouchSurfaceView extends GLSurfaceView {
 			gl.glDisable(GL10.GL_DEPTH_TEST);
 		}
 
-		public void updatePaddlePosition(final float x, final float y) {
+		void updatePaddlePosition(final float x) {
 			/* Don't allow the user to update paddle position
 			 * until he unpause the game (i.e. clicks on screen
 			 * again) */
@@ -137,6 +137,8 @@ public class TouchSurfaceView extends GLSurfaceView {
 		 * proper update previous time)
 		 */
 		private long limitFps(int maxFps) {
+			if (maxFps == 0) return 0;
+
 			long framesPerSec = Constants.MS_PER_SECONDS / maxFps;
 			if (mElapsedTime < framesPerSec){
 				long sleepTime = framesPerSec - mElapsedTime;
@@ -182,7 +184,7 @@ public class TouchSurfaceView extends GLSurfaceView {
 			resultWorldPos[2] /= resultWorldPos[3];
 			resultWorldPos[3] = 1.0f;
 
-			mRenderer.updatePaddlePosition(resultWorldPos[0], resultWorldPos[1]);
+			mRenderer.updatePaddlePosition(resultWorldPos[0]);
 			break;
 		
 		case MotionEvent.ACTION_DOWN:

@@ -5,11 +5,7 @@
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
     <style name="AppBaseTheme" parent="android:Theme.Black">
-        <!--
-            Theme customizations available in newer API levels can go in
-            res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
-        -->
+
     </style>
 
     <!-- Application theme. -->
@@ -18,7 +14,7 @@
     </style>
 
     <style name="GameTheme" parent="android:Theme.Black.NoTitleBar.Fullscreen">
-        <!-- Using fullscreen Activity on API <11, and old style elements -->
+
     </style>
 
 </resources>

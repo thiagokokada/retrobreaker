@@ -11,20 +11,20 @@ import br.usp.ime.retrobreaker.game.Game.State;
 public abstract class Quad {
 	
 	// Each class that extend Quad automatically get a proper TAG for logging
-	protected final String TAG = getClass().getSimpleName();
+	final String TAG = getClass().getSimpleName();
 	
-	protected float mPosX;
-	protected float mPosY;
-	protected float mScale;
-	protected float[] mVertices;
-	protected float[] mColors;
+	float mPosX;
+	float mPosY;
+	private final float mScale;
+	private final float[] mVertices;
+	private float[] mColors;
 
-	private FloatBuffer mVertexBuffer;
+	private final FloatBuffer mVertexBuffer;
 	private FloatBuffer mColorBuffer;
 
 	private static final int FLOAT_SIZE_BYTES = Float.SIZE / 8;
 
-	public Quad(float[] vertices, float scale, float[] colors, float posX, float posY) {
+	Quad(float[] vertices, float scale, float[] colors, float posX, float posY) {
 		mVertices = vertices;
 		mColors = colors;
 		mScale = scale;
@@ -90,7 +90,7 @@ public abstract class Quad {
 		return (mVertices[4] - mVertices[0])*mScale;
 	}
 	
-	public float getHeight() {
+	float getHeight() {
 		return (mVertices[3] - mVertices[1])*mScale;
 	}
 	
@@ -112,7 +112,7 @@ public abstract class Quad {
 		}
 	}
 
-	public void setPosY(float y) {
+	private void setPosY(float y) {
 		if (y >= State.getScreenLowerY() && y <= State.getScreenHigherY()) {
 			mPosY = y;
 		} else if (y < State.getScreenLowerY()) {

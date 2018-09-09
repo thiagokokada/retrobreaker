@@ -8,27 +8,27 @@ public class Constants {
 	public static final long MS_PER_SECONDS = 1000 /* milliseconds */;
 	public static final long NANOS_PER_SECONDS = 1000 /* nanoseconds */ * MS_PER_SECONDS;
 
-	public static enum Collision {
+	public enum Collision {
 		NOT_AVAILABLE, WALL_RIGHT_LEFT_SIDE, WALL_TOP_BOTTOM_SIDE, PADDLE_BALL, BRICK_BALL, EX_BRICK_BALL, LIFE_LOST
 	}
 
-	public static enum BallDirection {
+	public enum BallDirection {
 		RIGHT_UPWARD, LEFT_UPWARD, RIGHT_DOWNWARD, LEFT_DOWNWARD, UPWARD, DOWNWARD, UNKNOWN_DIRECTION
 	}
 	
-	public static enum Score {
+	public enum Score {
 		RESTART_LEVEL, BRICK_HIT, EX_BRICK_HIT
 	}
 
-	public static enum ScoreMultiplier {
+	public enum ScoreMultiplier {
 		RESTART_LEVEL, LOST_LIFE, PADDLE_HIT, BRICK_HIT
 	}
 
-	public static enum Lives {
-		RESTART_LEVEL, LOST_LIFE;
+	public enum Lives {
+		RESTART_LEVEL, LOST_LIFE
 	}
 
-	public static enum Hit {
+	public enum Hit {
 		RIGHT_LEFT, TOP_BOTTOM
 	}
 
@@ -73,9 +73,7 @@ public class Constants {
 		static final float RGB_UPPER_BOUND = 255;
 		static final float[] GRAY_RGB = {128/RGB_UPPER_BOUND, 128/RGB_UPPER_BOUND, 128/RGB_UPPER_BOUND};
 		static final float[] WHITE_RGB = {255/RGB_UPPER_BOUND, 255/RGB_UPPER_BOUND, 255/RGB_UPPER_BOUND};
-		static final float[] BLACK_RGB = {0/RGB_UPPER_BOUND, 0/RGB_UPPER_BOUND, 0/RGB_UPPER_BOUND};
 		static final float[] RED_RGB = {255/RGB_UPPER_BOUND, 0/RGB_UPPER_BOUND, 0/RGB_UPPER_BOUND};
-		static final float[] BLUE_RGB = {0/RGB_UPPER_BOUND, 0/RGB_UPPER_BOUND, 255/RGB_UPPER_BOUND};
 		static final float[] GREEN_RGB = {0/RGB_UPPER_BOUND, 255/RGB_UPPER_BOUND, 0/RGB_UPPER_BOUND};
 
 		public static final float[] WHITE = {

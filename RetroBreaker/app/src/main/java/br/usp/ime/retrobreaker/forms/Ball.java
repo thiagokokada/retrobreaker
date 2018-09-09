@@ -20,7 +20,7 @@ public class Ball extends Quad {
 	//for the trajectory equation
 	private float mSlope;				//slope of the trajectory of the ball
 	private boolean mUndefinedSlope;	//if the ball is moving along the Y axis, the slope is undefined
-	private float mTrajectoryIncrement;	//the increment of the trajectory in one of the axes
+	private final float mTrajectoryIncrement;	//the increment of the trajectory in one of the axes
 
 	public Ball(float[] colors, float previousPosX, float previousPosY, float posX, float posY, float trajetoryInc) {
 		super(VERTICES, SCALE, colors, posX, posY);
@@ -66,7 +66,7 @@ public class Ball extends Quad {
 	}
 	
 	// Calculate in which direction the ball is moving
-	public BallDirection getDirection() {
+	private BallDirection getDirection() {
 		if ((mPosX > mPrevPosX) && (mPosY > mPrevPosY))
 			return BallDirection.RIGHT_UPWARD;
 		else if ((mPosX > mPrevPosX) && (mPosY < mPrevPosY))
@@ -148,49 +148,53 @@ public class Ball extends Quad {
 	public void move() {
 
 		BallDirection dir = getDirection();
-		
-		if (dir == BallDirection.RIGHT_UPWARD || dir == BallDirection.RIGHT_DOWNWARD) {
-			mPrevPosX = mPosX;
-			mPrevPosY = mPosY;
-			if (Math.abs(mSlope) <= 1) {	//the ball is moving in the X axis faster than in the Y axis
-				float x2 = mPosX + mTrajectoryIncrement;
-				mPosY = getY2InEquation(mPosX, mPosY, x2);
-				mPosX = x2;
-			} else {						//the ball is moving in the Y axis faster than in the X axis
-				
-				float y2;
-				if (dir == BallDirection.RIGHT_UPWARD) y2 = mPosY + mTrajectoryIncrement;
-				else y2 = mPosY - mTrajectoryIncrement;
-				
-				mPosX = getX2InEquation(mPosX, mPosY, y2);
-				mPosY = y2;
-			}
-		} 
 
-		else if (dir == BallDirection.LEFT_UPWARD || dir == BallDirection.LEFT_DOWNWARD) {
-			mPrevPosX = mPosX;
-			mPrevPosY = mPosY;
-			if (Math.abs(mSlope) <= 1) {	//the ball is moving in the X axis faster than in the Y axis
-				float x2 = mPosX - mTrajectoryIncrement;
-				mPosY = getY2InEquation(mPosX, mPosY, x2);
-				mPosX = x2;	
-			} else {						//the ball is moving in the Y axis faster than in the X axis
-				float y2;
-				if (dir == BallDirection.LEFT_UPWARD) y2 = mPosY + mTrajectoryIncrement;
-				else y2 = mPosY - mTrajectoryIncrement;
-				
-				mPosX = getX2InEquation(mPosX, mPosY, y2);
-				mPosY = y2;
-			}
-		}
-		
-		// Moving along the Y axis
-		else if (dir == BallDirection.UPWARD) {
-			mPrevPosY = mPosY;
-			mPosY = mPosY + mTrajectoryIncrement;			
-		} else if (dir == BallDirection.DOWNWARD) {
-			mPrevPosY = mPosY;
-			mPosY = mPosY - mTrajectoryIncrement;	
+		switch (dir) {
+			case RIGHT_UPWARD:
+			case RIGHT_DOWNWARD:
+				mPrevPosX = mPosX;
+				mPrevPosY = mPosY;
+				if (Math.abs(mSlope) <= 1) {    //the ball is moving in the X axis faster than in the Y axis
+					float x2 = mPosX + mTrajectoryIncrement;
+					mPosY = getY2InEquation(mPosX, mPosY, x2);
+					mPosX = x2;
+				} else {                        //the ball is moving in the Y axis faster than in the X axis
+
+					float y2;
+					if (dir == BallDirection.RIGHT_UPWARD) y2 = mPosY + mTrajectoryIncrement;
+					else y2 = mPosY - mTrajectoryIncrement;
+
+					mPosX = getX2InEquation(mPosX, mPosY, y2);
+					mPosY = y2;
+				}
+				break;
+			case LEFT_UPWARD:
+			case LEFT_DOWNWARD:
+				mPrevPosX = mPosX;
+				mPrevPosY = mPosY;
+				if (Math.abs(mSlope) <= 1) {    //the ball is moving in the X axis faster than in the Y axis
+					float x2 = mPosX - mTrajectoryIncrement;
+					mPosY = getY2InEquation(mPosX, mPosY, x2);
+					mPosX = x2;
+				} else {                        //the ball is moving in the Y axis faster than in the X axis
+					float y2;
+					if (dir == BallDirection.LEFT_UPWARD) y2 = mPosY + mTrajectoryIncrement;
+					else y2 = mPosY - mTrajectoryIncrement;
+
+					mPosX = getX2InEquation(mPosX, mPosY, y2);
+					mPosY = y2;
+				}
+				break;
+
+			// Moving along the Y axis
+			case UPWARD:
+				mPrevPosY = mPosY;
+				mPosY = mPosY + mTrajectoryIncrement;
+				break;
+			case DOWNWARD:
+				mPrevPosY = mPosY;
+				mPosY = mPosY - mTrajectoryIncrement;
+				break;
 		}
 
 		Log.v(TAG, "Ball position: X=" + mPosX + ", Y=" + mPosY);

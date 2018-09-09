@@ -17,17 +17,16 @@ public class Particle extends Quad {
 		0.25f,  0.25f, // top right
 	};
 	
-	public static final int STATE_ALIVE = 0;	// particle is alive
-	public static final int STATE_DEAD = 1;		// particle is dead
+	private static final int STATE_ALIVE = 0;	// particle is alive
+	private static final int STATE_DEAD = 1;		// particle is dead
 	
-	public static final int DEFAULT_LIFETIME 	= 30;	// play with this
-	public static final int MAX_DIMENSION		= 5;	// the maximum width or height
-	public static final float MAX_SPEED			= ((VERTICES[3] - VERTICES[1]) * SCALE) * 3; // per update
+	private static final int DEFAULT_LIFETIME 	= 30;	// play with this
+	private static final float MAX_SPEED			= ((VERTICES[3] - VERTICES[1]) * SCALE) * 3; // per update
 	
 	private int mState;			// particle is alive or dead
 	private double mXv, mYv;	// vertical and horizontal velocity
 	private int mAge;			// current age of the particle
-	private int mLifetime;		// particle dies when it reaches this value
+	private final int mLifetime;		// particle dies when it reaches this value
 
 	public Particle(float[] colors, float posX, float posY) {
 		super(VERTICES, SCALE, colors, posX, posY);
@@ -56,11 +55,11 @@ public class Particle extends Quad {
 		return mState == STATE_ALIVE;
 	}
 
-	static double rndDbl(double min, double max) {
+	private static double rndDbl(double min, double max) {
 		return min + (max - min) * Math.random();
 	}
 	
-	public void move() {
+	private void move() {
 		if (mState != STATE_DEAD) {
 			mPosX += mXv;
 			mPosY += mYv;
