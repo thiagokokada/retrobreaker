@@ -18,6 +18,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.View;
+
+//PROVISIONAL BELOW
+import android.widget.Button;
+import android.widget.ImageButton;
+//PROVISIONAL ABOVE
+
 import android.widget.TextView;
 import br.usp.ime.retrobreaker.game.TouchSurfaceView;
 import br.usp.ime.retrobreaker.game.Constants.Config;
@@ -27,6 +33,11 @@ public class GameActivity extends Activity {
 
 	private TouchSurfaceView mTouchSurfaceView;
 	private Handler mHandler;
+
+	//PROVISIONAL BELOW
+	//private ImageButton mPauseButton;
+	//PROVISIONAL ABOVE
+
 	private TextView mScoreTextView;
 	private TextView mScoreMultiplierTextView;
 	private TextView mLivesTextView;
@@ -40,6 +51,7 @@ public class GameActivity extends Activity {
 	private SoundPool mSoundPool;
 	private HashMap<String, Integer> mSoundIds;
 	private View mDecorView;
+	private Button mPauseGameButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -71,12 +83,26 @@ public class GameActivity extends Activity {
 		mHighScoreTextView.setTextColor(Color.GRAY);
 		mReadyTextView = findViewById(R.id.ready);
 		mReadyTextView.setTextColor(Color.RED);
+		mPauseGameButton = findViewById(R.id.pause);
+		mPauseGameButton.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				State.setGamePaused(!State.getGamePaused());
+			}
+		});
+		//PROVISIONAL BELOW
+		/* Initialize ImageButtons to show current game state. Currently only
+		 * applicable for the pause button.
+		 */
+		//mPauseButton = (ImageButton) findViewById(R.id.pauseButton);
+		//PROVISIONAL ABOVE
 
 		// Initialize SoundPool to play a music if the user beats his high score
 		mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
 		mSoundIds = new HashMap<>(1);
 		mSoundIds.put("victory_fanfare", mSoundPool.load(this, R.raw.victory_fanfare, 1));
-		
+
 		/* We can't update the UI from the GL thread, so we set a timer and update it on
 		 * approximately each 10 updates from game state. Don't put this value too low since
 		 * UI update is slow. */
@@ -182,11 +208,28 @@ public class GameActivity extends Activity {
 				
 				/* Show a "Ready?" text in red for the user to know when the game is
 				 * paused and ready waiting for the user input */
+				//PROVISIONAL BELOW
+				/*
+				if(State.getGamePaused()) {
+					if(State.getGameOver()){
+						mReadyTextView.setVisibility(View.VISIBLE);
+					}else{//the game is paused internally
+						//CODE HERE
+
+					}
+				} else {
+					mReadyTextView.setVisibility(View.INVISIBLE);
+				}
+				*/
+				//PROVISIONAL ABOVE
+
+				//ORIGINAL BELOW
 				if(State.getGamePaused()) {
 					mReadyTextView.setVisibility(View.VISIBLE);
 				} else {
 					mReadyTextView.setVisibility(View.INVISIBLE);
 				}
+
 
 				mScoreTextView.setText(getString(R.string.score) + String.format("%08d", State.getScore()));
 				mScoreMultiplierTextView.setText(getString(R.string.multiplier) + State.getScoreMultiplier() + "x");

@@ -24,6 +24,7 @@ public class MainActivity extends Activity implements OnItemSelectedListener {
 	
 	private TextView mHighScoreTextView;
 	private Button mNewGameButton;
+
 	private Button mResetScoreButton;
 	private Spinner mLevelSpinner;
 	private CheckBox mSoundEffectsCheckBox;
