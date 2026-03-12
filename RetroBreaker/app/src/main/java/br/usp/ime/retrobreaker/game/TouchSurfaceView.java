@@ -47,7 +47,7 @@ public class TouchSurfaceView extends GLSurfaceView {
             if (!State.getGamePaused()) mLag += mElapsedTime;
 			/* You can set Config.FPS_LIMIT parameter on Constants.java file to limit
 			 * frame rendering for debugging purposes (but with game loop this shouldn't
-			 * be a problem anymore. */
+			 * be a problem anymore.) */
 			mPrevFrameTime = mCurrentTime + limitFps(Config.FPS_LIMIT);
 			Log.v(TAG, "FPS: " + Constants.MS_PER_SECONDS/mElapsedTime);
 			
@@ -116,15 +116,10 @@ public class TouchSurfaceView extends GLSurfaceView {
 
 		void updatePaddlePosition(final float x) {
 			/* Don't allow the user to update paddle position
-			 * until he unpause the game (i.e. clicks on screen
+			 * until he unpauses the game (i.e. clicks on screen
 			 * again) */
 			if(!State.getGamePaused() && !State.getGameOver()) {
-				queueEvent(new Runnable() {
-					@Override
-					public void run() {
-						mGame.updatePaddlePosX(x);
-					}
-				} );
+				queueEvent(() -> mGame.updatePaddlePosX(x));
 			}
 		}
 
@@ -200,11 +195,6 @@ public class TouchSurfaceView extends GLSurfaceView {
 	}
 
 	public void release() {
-		queueEvent(new Runnable() {
-			@Override
-			public void run() {
-				mRenderer.release();
-			}
-		});
+		queueEvent(mRenderer::release);
 	}
 }

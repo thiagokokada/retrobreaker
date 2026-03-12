@@ -1,14 +1,13 @@
 package br.usp.ime.retrobreaker;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.SharedPreferences;
 import android.media.AudioAttributes;
 import android.graphics.Color;
@@ -20,7 +19,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.view.View;
-import android.view.WindowInsets;
 import android.widget.TextView;
 import br.usp.ime.retrobreaker.game.TouchSurfaceView;
 import br.usp.ime.retrobreaker.game.Constants.Config;
@@ -107,7 +105,7 @@ public class GameActivity extends Activity {
 		super.onPause();
 		/* The user can exit the app and even press back button to go back to the
 		 * MainActivity. In both cases, the user can lose it's high score (if
-		 * Android's OOM killer closes the app or the user press "New Game" on MainActivity.
+		 * Android's OOM killer closes the app or the user press "New Game" on MainActivity).
 		 * So save the score on pause */
 		if(mNewHighScore) {
 			mSharedPrefsEditor.putLong("high_score", mHighScore);
@@ -140,22 +138,19 @@ public class GameActivity extends Activity {
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
-	    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-	    	if (hasFocus) {
-	    		mDecorView.setSystemUiVisibility(
-	    				View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-	    				| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-	    				| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-	    				| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-	    				| View.SYSTEM_UI_FLAG_FULLSCREEN
-	    				| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-	    	} else {
-				State.setGamePaused(true);
-			}
-	    }
-	}
+        if (hasFocus) {
+            mDecorView.setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        } else {
+            State.setGamePaused(true);
+        }
+    }
 	
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void showGameOverDialog(long finalScore, boolean newHighScore) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -170,20 +165,10 @@ public class GameActivity extends Activity {
 		}
 		
 		// If the user click Yes, restart this Activity so the user can play again
-		builder.setPositiveButton(R.string.yes, new OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				restartGame();
-			}
-		});
+		builder.setPositiveButton(R.string.yes, (dialog, which) -> restartGame());
 		
 		// If the user click No, go back to the MainActivity
-		builder.setNegativeButton(R.string.no, new OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				finish();
-			}
-		});
+		builder.setNegativeButton(R.string.no, (dialog, which) -> finish());
 		
 		/* To guarantee that the game will not FC, check if we can show (i.e. the
 		 * UI Activity is still on a valid state) the dialog before showing it.
@@ -221,68 +206,71 @@ public class GameActivity extends Activity {
 		final int initialPaddingRight = mHudView.getPaddingRight();
 		final int initialPaddingBottom = mHudView.getPaddingBottom();
 
-		mHudView.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
-			@Override
-			public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
-				int topInset = 0;
-				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && insets.getDisplayCutout() != null) {
-					topInset = insets.getDisplayCutout().getSafeInsetTop();
-				}
-				topInset = Math.max(topInset, insets.getSystemWindowInsetTop());
-				v.setPadding(initialPaddingLeft, initialPaddingTop + topInset,
-						initialPaddingRight, initialPaddingBottom);
-				return insets;
-			}
-		});
+		mHudView.setOnApplyWindowInsetsListener((v, insets) -> {
+            int topInset = 0;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && insets.getDisplayCutout() != null) {
+                topInset = insets.getDisplayCutout().getSafeInsetTop();
+            }
+            topInset = Math.max(topInset, insets.getSystemWindowInsetTop());
+            v.setPadding(initialPaddingLeft, initialPaddingTop + topInset,
+                    initialPaddingRight, initialPaddingBottom);
+            return insets;
+        });
 		mHudView.requestApplyInsets();
 	}
 	
 	private void updateUI() {
-		mHandler.post(new Runnable() {
-			@Override
-			public void run() {
-				
-				/* Show a "Ready?" text in red for the user to know when the game is
-				 * paused and ready waiting for the user input */
-				if(State.getGamePaused()) {
-					mReadyTextView.setVisibility(View.VISIBLE);
-				} else {
-					mReadyTextView.setVisibility(View.INVISIBLE);
-				}
+		mHandler.post(() -> {
 
-				mScoreTextView.setText(getString(R.string.score) + String.format("%08d", State.getScore()));
-				mScoreMultiplierTextView.setText(getString(R.string.multiplier) + State.getScoreMultiplier() + "x");
+            /* Show a "Ready?" text in red for the user to know when the game is
+             * paused and ready waiting for the user input */
+            if(State.getGamePaused()) {
+                mReadyTextView.setVisibility(View.VISIBLE);
+            } else {
+                mReadyTextView.setVisibility(View.INVISIBLE);
+            }
 
-				/* If the user beats the high score, keep updating the High Score text on the fly
-				 * with green text to caught user attention. */
-				if(State.getScore() > mHighScore) {
-					mHighScore = State.getScore();
-					mNewHighScore = true;
-					mHighScoreTextView.setTextColor(Color.GREEN);
-				}
+            mScoreTextView.setText(
+					String.format(Locale.getDefault(), "%s%08d", getString(R.string.score), State.getScore())
+			);
+            mScoreMultiplierTextView.setText(
+					String.format(Locale.getDefault(), "%s%dx", getString(R.string.multiplier), State.getScoreMultiplier())
+			);
 
-				mHighScoreTextView.setText(getString(R.string.high_score) + String.format("%08d", mHighScore));
-				mLivesTextView.setText(getString(R.string.lives) + State.getLives());
-					
-				if (State.getGameOver()) {
-					/* Show user score and ask if he wants to play again */
-					showGameOverDialog(State.getScore(), mNewHighScore);
-					/* If the user beats his High Score, save his new high score on SharedPreferences
-					 * and play a music as a way to congratulate him ;) */
-					if(mNewHighScore) {
-						mSharedPrefsEditor.putLong("high_score", mHighScore);
-						mSharedPrefsEditor.commit();
-						mSoundPool.play(mSoundIds.get("victory_fanfare"), State.getVolume(), State.getVolume(), 0, 0, 1.0f);
-					}
-					/* We can't use State.getGameOver() as a condition to Timer since we need to pass
-					 * at least one time more on updateUI() to show the Game Over dialog. We can't
-					 * put showGameOverDialog() on the else condition of the Timer either, because
-					 * Timer is not running on UI thread and even if it was, we would enter on a infinite
-					 * loop and get a really annoying succession of dialogs and maybe victory fanfares ;). */ 
-					mFinish = true;
-				}
-			}
-		});
+            /* If the user beats the high score, keep updating the High Score text on the fly
+             * with green text to caught user attention. */
+            if(State.getScore() > mHighScore) {
+                mHighScore = State.getScore();
+                mNewHighScore = true;
+                mHighScoreTextView.setTextColor(Color.GREEN);
+            }
+
+            mHighScoreTextView.setText(
+					String.format(Locale.getDefault(), "%s%08d", getString(R.string.high_score), mHighScore)
+			);
+            mLivesTextView.setText(
+					String.format(Locale.getDefault(), "%s%d", getString(R.string.lives), State.getLives())
+			);
+
+            if (State.getGameOver()) {
+                /* Show user score and ask if he wants to play again */
+                showGameOverDialog(State.getScore(), mNewHighScore);
+                /* If the user beats his High Score, save his new high score on SharedPreferences
+                 * and play a music as a way to congratulate him ;) */
+                if(mNewHighScore) {
+                    mSharedPrefsEditor.putLong("high_score", mHighScore);
+                    mSharedPrefsEditor.commit();
+                    //noinspection DataFlowIssue
+                    mSoundPool.play(mSoundIds.get("victory_fanfare"), State.getVolume(), State.getVolume(), 0, 0, 1.0f);
+                }
+                /* We can't use State.getGameOver() as a condition to Timer since we need to pass
+                 * at least one time more on updateUI() to show the Game Over dialog. We can't
+                 * put showGameOverDialog() on the else condition of the Timer either, because
+                 * Timer is not running on UI thread and even if it was, we would enter on a infinite
+                 * loop and get a really annoying succession of dialogs and maybe victory fanfares ;). */
+                mFinish = true;
+            }
+        });
 	}
 	
 }

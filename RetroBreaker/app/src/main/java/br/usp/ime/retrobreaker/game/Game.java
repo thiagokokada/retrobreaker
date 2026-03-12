@@ -143,7 +143,7 @@ public class Game {
 				// The position of the next brick on the same line should be on the right side of the last brick
 				newPosX += mBricks[i][j].getSizeX() + Config.SPACE_BETWEEN_BRICKS;
 			}
-			// Finished filling a line of bricks, resetting to initial X position to fill the next line
+			// Finished filling a line with bricks, resetting to initial X position to fill the next line
 			newPosX = initialX;
 			// Same as the X position, put the next line of bricks on bottom of the last one
 			newPosY += mBricks[i][0].getSizeY() + Config.SPACE_BETWEEN_BRICKS;
@@ -222,7 +222,7 @@ public class Game {
 			} else if(currentType == collisionType && currentValue > 0) {
 				/* Current collision value is higher than 0, current collision type is the same as the detect
 				 * collision. It means that two collisions of the same type happened on two consecutive frames.
-				 * So skip this collision or we can enter on a invalid state (infinite collision for example).
+				 * So skip this collision, or we can enter on an invalid state (infinite collision for example).
 				 * 
 				 * Increase collision current value too, since the current frame isn't sufficient escape the
 				 * consecutive collision loop, maybe more frames will do it. */
@@ -244,7 +244,8 @@ public class Game {
 
 	}
 
-	public void updateState() {
+	@SuppressWarnings("DataFlowIssue")
+    public void updateState() {
 		float reflectedAngle, angleOfBallSlope;
 
 		Collision collisionType = detectConsecutiveCollision(detectCollision());
@@ -499,14 +500,14 @@ public class Game {
 	/**
 	 * Represents the game state, like the actual game score and multiplier, number of lives and
 	 * if the game is over or not.
-	 * 
-	 * This class should be static since we need to access these informations outside the game object,
+	 * \n
+	 * This class should be static since we need to access these information outside the game object,
 	 * like in the UI activity class. 
 	 */
 	public static class State {
 		private static long sScore;
-		private static int sScoreMultiplier;
-		private static int sLives;
+		private static long sScoreMultiplier;
+		private static long sLives;
 		private static boolean sGameOver;
 		private static float sScreenHigherY;
 		private static float sScreenLowerY;
@@ -616,11 +617,11 @@ public class Game {
 			return sScore;
 		}
 
-		public static int getScoreMultiplier() {
+		public static long getScoreMultiplier() {
 			return sScoreMultiplier;
 		}
 
-		public static int getLives() {
+		public static long getLives() {
 			return sLives;
 		}
 	

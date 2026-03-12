@@ -4,7 +4,7 @@ import br.usp.ime.retrobreaker.game.Game.State;
 
 /**
  * @author impaler
- * http://obviam.net/index.php/particle-explosion-with-android/
+ * <a href="http://obviam.net/index.php/particle-explosion-with-android/">...</a>
  *
  */
 public class Particle extends Quad {
@@ -61,8 +61,8 @@ public class Particle extends Quad {
 	
 	private void move() {
 		if (mState != STATE_DEAD) {
-			mPosX += mXv;
-			mPosY += mYv;
+			mPosX += (float) mXv;
+			mPosY += (float) mYv;
 			mAge++;	// Increase the age of the particle
 			
 			if (mAge >= mLifetime) { // reached the end if its life

@@ -8,7 +8,7 @@ import br.usp.ime.retrobreaker.game.Constants.Color;
 
 /**
  * @author impaler
- * http://obviam.net/index.php/particle-explosion-with-android/
+ * <a href="http://obviam.net/index.php/particle-explosion-with-android/">...</a>
  *
  */
 public class Explosion {
