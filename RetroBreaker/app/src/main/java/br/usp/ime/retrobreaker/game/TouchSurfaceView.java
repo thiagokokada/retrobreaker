@@ -153,6 +153,10 @@ public class TouchSurfaceView extends GLSurfaceView {
 			}
 			return 0;
 		}
+
+		void release() {
+			mGame.release();
+		}
 	}
 
 	public TouchSurfaceView(Context context, AttributeSet attrs) {
@@ -193,5 +197,14 @@ public class TouchSurfaceView extends GLSurfaceView {
 			break;
 		}
 		return true;
+	}
+
+	public void release() {
+		queueEvent(new Runnable() {
+			@Override
+			public void run() {
+				mRenderer.release();
+			}
+		});
 	}
 }

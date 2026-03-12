@@ -1,0 +1,11 @@
+<resources>
+
+    <style name="AppBaseTheme" parent="android:Theme.Material">
+        <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
+    </style>
+
+    <style name="GameTheme" parent="android:Theme.Material.NoActionBar.Fullscreen">
+        <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
+    </style>
+
+</resources>

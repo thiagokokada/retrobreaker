@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion '28.0.2'
+    namespace 'br.usp.ime.retrobreaker'
+    compileSdk 36
 
     defaultConfig {
         applicationId "br.usp.ime.retrobreaker"
-        minSdkVersion 14
-        targetSdkVersion 28
+        minSdk 14
+        targetSdk 36
         versionCode 7
         versionName "1.3"
     }
@@ -17,5 +17,10 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-project.txt'
         }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }

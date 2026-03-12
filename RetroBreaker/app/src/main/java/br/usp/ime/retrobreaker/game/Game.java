@@ -8,8 +8,10 @@ import java.util.Map;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.Build;
 import android.util.Log;
 import br.usp.ime.retrobreaker.R;
 import br.usp.ime.retrobreaker.effects.Explosion;
@@ -51,7 +53,7 @@ public class Game {
 		mContext = context;
 
 		// Load sound pool, audio shouldn't change between levels
-		mSoundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
+		mSoundPool = createSoundPool(4);
 		mSoundIds = new HashMap<>(4);
 		mSoundIds.put("lost_life", mSoundPool.load(mContext, R.raw.lost_life, 1));
 		mSoundIds.put("wall_hit", mSoundPool.load(mContext, R.raw.wall_hit, 1));
@@ -326,6 +328,23 @@ public class Game {
 		moveMobileBricks();
 
 		mBall.move();
+	}
+
+	public void release() {
+		mSoundPool.release();
+	}
+
+	private SoundPool createSoundPool(int maxStreams) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			AudioAttributes audioAttributes = new AudioAttributes.Builder()
+					.setLegacyStreamType(AudioManager.STREAM_MUSIC)
+					.build();
+			return new SoundPool.Builder()
+					.setAudioAttributes(audioAttributes)
+					.setMaxStreams(maxStreams)
+					.build();
+		}
+		return new SoundPool(maxStreams, AudioManager.STREAM_MUSIC, 0);
 	}
 
 	private void moveMobileBricks() {

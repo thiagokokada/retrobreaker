@@ -10,14 +10,17 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.SharedPreferences;
+import android.media.AudioAttributes;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.view.View;
+import android.view.WindowInsets;
 import android.widget.TextView;
 import br.usp.ime.retrobreaker.game.TouchSurfaceView;
 import br.usp.ime.retrobreaker.game.Constants.Config;
@@ -32,11 +35,13 @@ public class GameActivity extends Activity {
 	private TextView mLivesTextView;
 	private TextView mHighScoreTextView;
 	private TextView mReadyTextView;
+	private View mHudView;
 	private SharedPreferences mSharedPrefs;
 	private SharedPreferences.Editor mSharedPrefsEditor;
 	private long mHighScore;
 	private boolean mNewHighScore;
 	private boolean mFinish;
+	private Timer mUiTimer;
 	private SoundPool mSoundPool;
 	private HashMap<String, Integer> mSoundIds;
 	private View mDecorView;
@@ -47,7 +52,7 @@ public class GameActivity extends Activity {
 		
 		setContentView(R.layout.activity_game);
 
-		mHandler = new Handler();
+		mHandler = new Handler(Looper.getMainLooper());
 		mNewHighScore = false;
 		mFinish = false;
 		mDecorView = getWindow().getDecorView();
@@ -67,21 +72,23 @@ public class GameActivity extends Activity {
 		mScoreMultiplierTextView.setTextColor(Color.WHITE);
 		mLivesTextView = findViewById(R.id.lives);
 		mLivesTextView.setTextColor(Color.WHITE);
+		mHudView = findViewById(R.id.hud);
 		mHighScoreTextView = findViewById(R.id.highScore);
 		mHighScoreTextView.setTextColor(Color.GRAY);
 		mReadyTextView = findViewById(R.id.ready);
 		mReadyTextView.setTextColor(Color.RED);
+		applyHudWindowInsets();
 
 		// Initialize SoundPool to play a music if the user beats his high score
-		mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+		mSoundPool = createSoundPool(1);
 		mSoundIds = new HashMap<>(1);
 		mSoundIds.put("victory_fanfare", mSoundPool.load(this, R.raw.victory_fanfare, 1));
 		
 		/* We can't update the UI from the GL thread, so we set a timer and update it on
 		 * approximately each 10 updates from game state. Don't put this value too low since
 		 * UI update is slow. */
-		Timer timer = new Timer();
-		timer.schedule(new TimerTask() {
+		mUiTimer = new Timer();
+		mUiTimer.schedule(new TimerTask() {
 			@Override
 			public void run() {
 				if(!mFinish) updateUI();
@@ -109,6 +116,22 @@ public class GameActivity extends Activity {
 		// Pause the game if the user exits the app
 		State.setGamePaused(true);
 		mTouchSurfaceView.onPause();
+	}
+
+	@Override
+	protected void onDestroy() {
+		if (mUiTimer != null) {
+			mUiTimer.cancel();
+			mUiTimer = null;
+		}
+		if (mSoundPool != null) {
+			mSoundPool.release();
+			mSoundPool = null;
+		}
+		if (mTouchSurfaceView != null) {
+			mTouchSurfaceView.release();
+		}
+		super.onDestroy();
 	}
 	
 	/* Change to immersive mode. Since this is only supported on API 19 (KitKat),
@@ -174,6 +197,45 @@ public class GameActivity extends Activity {
 	private void restartGame() {
         recreate();
     }
+
+	private SoundPool createSoundPool(int maxStreams) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			AudioAttributes audioAttributes = new AudioAttributes.Builder()
+					.setLegacyStreamType(AudioManager.STREAM_MUSIC)
+					.build();
+			return new SoundPool.Builder()
+					.setAudioAttributes(audioAttributes)
+					.setMaxStreams(maxStreams)
+					.build();
+		}
+		return new SoundPool(maxStreams, AudioManager.STREAM_MUSIC, 0);
+	}
+
+	private void applyHudWindowInsets() {
+		if (mHudView == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT_WATCH) {
+			return;
+		}
+
+		final int initialPaddingLeft = mHudView.getPaddingLeft();
+		final int initialPaddingTop = mHudView.getPaddingTop();
+		final int initialPaddingRight = mHudView.getPaddingRight();
+		final int initialPaddingBottom = mHudView.getPaddingBottom();
+
+		mHudView.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
+			@Override
+			public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
+				int topInset = 0;
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && insets.getDisplayCutout() != null) {
+					topInset = insets.getDisplayCutout().getSafeInsetTop();
+				}
+				topInset = Math.max(topInset, insets.getSystemWindowInsetTop());
+				v.setPadding(initialPaddingLeft, initialPaddingTop + topInset,
+						initialPaddingRight, initialPaddingBottom);
+				return insets;
+			}
+		});
+		mHudView.requestApplyInsets();
+	}
 	
 	private void updateUI() {
 		mHandler.post(new Runnable() {
